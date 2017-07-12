@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule }    from '@angular/forms';
+import { FormsModule, ReactiveFormsModule }    from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -9,15 +9,17 @@ import { LoginComponent } from "app/login/login.component";
 import { HomeComponent } from "app/home/home.component";
 
 import { AppRoutingModule } from "app/app.routing";
-import { AuthGuard } from "app/shared/guards/auth.guard";
-import { WateruseService } from "app/shared/services/wateruse.service";
-import { AuthenticationService } from "app/login/authentication.service";
 import { RegionListResolve } from "app/regionList.resolve";
+import { SharedModule } from "app/shared/shared.module";
+import { PipesModule } from "app/shared/pipes/pipes.module";
+import { HomeService } from "app/home/home.service";
+import { EditSourceModal } from "app/home/source.modal";
 
 @NgModule({
-  declarations: [ AppComponent, LoginComponent, HomeComponent ],
-  imports: [ BrowserModule, FormsModule, HttpModule, AppRoutingModule ],
-  providers: [AuthGuard, AuthenticationService, WateruseService, RegionListResolve], //AlertService
+  declarations: [ AppComponent, LoginComponent, HomeComponent, EditSourceModal ],
+  imports: [ BrowserModule, FormsModule, ReactiveFormsModule, HttpModule, AppRoutingModule, PipesModule, SharedModule.forRoot() ],
+  exports: [ReactiveFormsModule],
+  providers: [ RegionListResolve, HomeService], //AlertService
   bootstrap: [AppComponent]
 })
 export class AppModule { }

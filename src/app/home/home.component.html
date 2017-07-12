@@ -1,9 +1,64 @@
-<div class="col-md-6 col-md-offset-3">
-    <h1>Hi User {{currentUser}}!</h1>
-    <p>You're logged in!!</p>
-    <ul>
-        <li *ngFor="let r of regionList">{{r.name}}</li>
-    </ul>
-    
-    <p><a [routerLink]="['/login']">Logout</a></p>
+
+<h1>Hi User {{currentUser}}!</h1>
+<p>Welcome to Wateruse!!</p>
+<div><label><span>Select your Region to get started</span></label></div>
+<select name="chosenRegion" [(ngModel)]="chosenRegion" (ngModelChange)="onRegionSelect($event)">
+    <option value=""></option>
+    <option *ngFor="let r of regionList | sort: 'name'" [ngValue]="r.id">{{r.name}}</option>
+</select>
+<br />
+<div *ngIf="sourceList?.length > 0" class="margin-top--x3">
+    <div class="row bottom-xs">
+        <div class="col-xs-2"><label><span>Filter Sources by:</span></label></div>
+        <div class="col-xs-10 around-xs">
+            <div class="col-xs-3">
+                <label for="facilitycode" class="rdo">  
+                    <input type="radio" id="facilitycode" value="facilityCode" name="choice" [(ngModel)]="Fchoice"><span>Facility Code</span>
+                </label>
+            </div>
+            <div class="col-xs-3">
+                <label for="facilityName" class="rdo">
+                    <input type="radio" id="facilityName" value="facilityName" name="choice" [(ngModel)]="Fchoice"><span>Facility Name</span>
+                </label>
+            </div>
+            <div class="col-xs-3">
+                <label for="name" class="rdo">
+                    <input type="radio" id="name" value="name" name="choice" [(ngModel)]="Fchoice"><span>Source Name</span>
+                </label>
+            </div>
+        </div>
+    </div>    
+    <div class="col-xs-offset-2 col-xs-6">
+        <input type="text" name="Fvalue" [(ngModel)]="Fvalue" />
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th><th>Facility Name</th><th>Facility Code</th><th>Source Name</th><th>Category Type ID</th><th>Source TypeID</th><th>Station ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let s of sourceList | filter: {filterProperty: Fchoice, filterValue: Fvalue} | sort: 'name'">
+                <td>
+                    <i title="Create New Source" (click)="showSourceModal(null)" style="cursor:pointer" class="fa fa-plus" aria-hidden="true"></i>&nbsp;
+                    <i title="Edit Source" (click)="showSourceModal(s)" style="cursor:pointer" class="fa fa-pencil" aria-hidden="true"></i>&nbsp;
+                    <i title="Delete Source" (click)="deleteSource(s)" class="fa fa-times" aria-hidden="true" style="cursor:pointer"></i>
+                </td>
+                <td>{{s.facilityName || "---"}}</td>
+                <td>{{s.facilityCode || "---"}}</td>
+                <td>{{s.name || "---"}}</td>
+                <td>{{s.catagoryTypeID || "---"}}</td>                    
+                <td>{{s.sourceTypeID || "---"}}</td>
+                <td>{{s.stationID || "---"}}</td>
+            </tr>
+        </tbody>            
+    </table>
+</div><!-- end ngIf=SourceList?Length *ngIf="aSource"-->
+
+<div *ngIf="sourceList?.length == 0">
+    There are no sources for this region.
 </div>
+
+<p><a [routerLink]="['/login']">Logout</a></p>
+
+<editsource (updatedVersion)="createEditFinished()"></editsource>

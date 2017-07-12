@@ -1,0 +1,77 @@
+<ng-template #editSource let-c="close" let-d="dismiss">  
+    <div class="modal-header">
+        <h3 class="modal-title">Source Information</h3>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="sourceForm">                
+            <!-- Facility Name* -->
+            <div class="form-group" [ngClass]="{'form-invalid': !sourceForm.get('facilityname').valid && sourceForm.get('facilityname').dirty}">
+                <label class="" for="facilityname">Facility Name:</label>
+                <input class="form-control" type="text" placeholder="Facility Name" formControlName="facilityname" required>
+                <div class="input-invalid-warning" *ngIf="!sourceForm.get('facilityname').valid && sourceForm.get('facilityname').dirty">Facility Name is required</div>
+            </div>
+
+            <!-- Facility Code* -->
+            <div class="form-group" [ngClass]="{'form-invalid': !sourceForm.get('facilitycode').valid && sourceForm.get('facilitycode').dirty}">
+                <label class="" for="facilitycode">Facility Code:</label>
+                <input class="form-control" type="text" placeholder="Facility Code" formControlName="facilitycode" required>
+                <div class="input-invalid-warning" *ngIf="!sourceForm.get('facilitycode').valid && sourceForm.get('facilitycode').dirty">Facility Code is required</div>
+            </div>
+
+            <!-- Source Name* -->
+            <div class="form-group" [ngClass]="{'form-invalid': !sourceForm.get('name').valid && sourceForm.get('name').dirty}">
+                <label class="" for="name">Source Name:</label>
+                <input class="form-control" type="text" placeholder="Source Name" formControlName="name" required>
+                <div [ngClass]="{'input-invalid-warning': !sourceForm.get('name').valid && sourceForm.get('name').dirty}" *ngIf="!sourceForm.get('name').valid && sourceForm.get('name').dirty">Source Name is required</div>
+            </div>
+            
+            <!-- Source Type* -->
+            <div class="form-group" [ngClass]="{'form-invalid': !sourceForm.get('sourceTypeID').valid && sourceForm.get('sourceTypeID').dirty}">
+                <label class="req" for="sourceTypeID">Source Type:</label>
+                <select id="sourceTypeID" formControlName="sourceTypeID" [(ngModel)]="modalSource.sourceTypeID">
+                    <option value=""></option>
+                    <option *ngFor="let st of sourceTypeList | sort:'name'" [ngValue]="st.id">{{st.name}}</option>
+                </select>
+                <div [ngClass]="{'input-invalid-warning': !sourceForm.get('name').valid && sourceForm.get('name').dirty}" *ngIf="!sourceForm.get('name').valid && sourceForm.get('name').dirty">Source Type is required</div>  
+            </div>
+        
+            <!-- Category Type -->
+            <div class="form-group">
+                <label for="catagoryTypeID">Category Type:</label>
+                <select id="catagoryTypeID" formControlName="catagoryTypeID" [(ngModel)]="modalSource.catagoryTypeID">
+                    <option value=""></option>
+                    <option *ngFor="let ct of categoryTypeList | sort:'name'" [ngValue]="ct.id">{{ct.name}}</option>
+                </select>
+            </div>
+        
+            <!-- Station ID -->
+            <div class="form-group">
+                <label for="facilitycode">Station ID:</label>
+                <input class="form-control" type="text" placeholder="Station ID" formControlName="station">
+            </div>
+
+            <!-- Location Parts -->
+            <div class="form-group">
+                <label for="location" class="pull-left">Location:</label>
+                <div class="col-xs-12 bottom-xs">
+                    <div class="col-xs-1 offset-1"><label>X:</label></div>
+                    <div class="col-xs-5"><input class="form-control" type="text" placeholder="" formControlName="LocationX"></div>
+                </div>
+                <div class="col-xs-12 bottom-xs">
+                    <div class="col-xs-1 offset-1"><label>Y:</label></div>
+                    <div class="col-xs-5"><input class="form-control" type="text" placeholder="" formControlName="LocationY"></div>
+                </div>
+                <div class="col-xs-12 bottom-xs">
+                    <div class="col-xs-1 offset-1"><label>SRID:</label></div>
+                    <div class="col-xs-5"><input class="form-control" type="text" placeholder="" formControlName="LocationSRID"></div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" *ngIf="modalSource.id == undefined" (click)="c(sourceForm)">Create</button>
+        <button type="button" (click)="d('clickedCancel')">Cancel</button>
+        <button type="button" [disabled]="!sourceForm.valid" *ngIf="modalSource.id != undefined" (click)="c(sourceForm.valid)">Save</button>
+    </div>
+</ng-template>
