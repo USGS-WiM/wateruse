@@ -1,3 +1,12 @@
+// ------------------------------------------------------------------------------
+// ----- filter.pipe.ts -----------------------------------------------
+// ------------------------------------------------------------------------------
+
+// copyright:   2017 WiM - USGS
+// authors:  Tonia Roddick - USGS Wisconsin Internet Mapping
+// purpose: pipe to filter array of (items) objects and 
+//   return the items with the string value (args.filterValue) present in the property field (args.filterProperty) provided
+
 import { Pipe, PipeTransform } from '@angular/core';
 import { ISource } from "app/shared/interfaces/Source.interface";
 

@@ -1,3 +1,11 @@
+// ------------------------------------------------------------------------------
+// ----- order.pipe.ts -----------------------------------------------
+// ------------------------------------------------------------------------------
+
+// copyright:   2017 WiM - USGS
+// authors:  Tonia Roddick - USGS Wisconsin Internet Mapping
+// purpose: pipe to sort a given array by the property field provided (args)
+
 import { Pipe } from "@angular/core";
 
 @Pipe({

@@ -1,3 +1,11 @@
+// ------------------------------------------------------------------------------
+// ----- app.module.ts -----------------------------------------------
+// ------------------------------------------------------------------------------
+
+// copyright:   2017 WiM - USGS
+// authors:  Tonia Roddick - USGS Wisconsin Internet Mapping
+// purpose: main entry module to the rest of the application
+
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule }    from '@angular/forms';

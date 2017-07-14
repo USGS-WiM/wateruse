@@ -1,3 +1,11 @@
+// ------------------------------------------------------------------------------
+// ----- app.component.ts -----------------------------------------------
+// ------------------------------------------------------------------------------
+
+// copyright:   2017 WiM - USGS
+// authors:  Tonia Roddick - USGS Wisconsin Internet Mapping
+// purpose: main entry component to the rest of the application
+
 import { Component } from '@angular/core';
 import { AuthService } from "app/shared/services/auth.service";
 
@@ -7,19 +15,8 @@ import { AuthService } from "app/shared/services/auth.service";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
- // public loggedIn: boolean;
-  //public loggedInRole: string;
 
-  constructor(private _authService: AuthService){}
-
-  ngOnInit(){
- //   this._authService.loggedInID().subscribe((id: number)=> {
- //     this.loggedIn = localStorage.getItem('credentials') !== null ? true : false;      
- //   });
-  //  this._authService.loggedInRole().subscribe((role: string)=> {
-  //    this.loggedInRole = localStorage.getItem('loggedInRole');
-  //  });
-  }
+  constructor(){}
 
   public loggedIn(){
     return localStorage.getItem('credentials') !== null ? true : false; 

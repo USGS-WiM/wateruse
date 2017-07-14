@@ -2,10 +2,8 @@
 // ----- regionList.resolve ----------------------------------------------------
 // ------------------------------------------------------------------------------
 
-// copyright:   2016 WiM - USGS
-//
-// authors:  Tonia Roddick USGS Wisconsin Internet Mapping             
-//
+// copyright:   2017 WiM - USGS
+// authors:  Tonia Roddick - USGS Wisconsin Internet Mapping
 // purpose: resolver to get the regions once logged in
 
 import { Injectable } from '@angular/core';

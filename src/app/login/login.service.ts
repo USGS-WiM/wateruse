@@ -1,11 +1,17 @@
+// ------------------------------------------------------------------------------
+// ----- login.service.ts -----------------------------------------------
+// ------------------------------------------------------------------------------
+
+// copyright:   2017 WiM - USGS
+// authors:  Tonia Roddick - USGS Wisconsin Internet Mapping
+// purpose: login service that logs user in (http) and stores creds, passes user info on to authservice
+
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response, RequestOptions } from '@angular/http';
+import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/catch';
-import { Subject } from "rxjs/Subject";
 import { CONFIG } from "app/shared/services/CONFIG";
-import { IUser } from "app/shared/interfaces/User.interface";
 import { AuthService } from "app/shared/services/auth.service";
 
 @Injectable()
@@ -14,6 +20,7 @@ export class LoginService {
 
     constructor(private http: Http, private _authService: AuthService) { }
     
+    // log in
     public login(username: string, password: string) {  
         let headers: Headers = new Headers();
 		let creds: string = "Basic " + btoa(username + ":" + password);
@@ -34,7 +41,7 @@ export class LoginService {
 			})
 			.catch(this.handleError);
     }
-
+    // log out and clear everything
     public logout() {
         this.isLoggedIn = false;
 		localStorage.clear();

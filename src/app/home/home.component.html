@@ -29,7 +29,7 @@
         </div>
     </div>    
     <div class="col-xs-offset-2 col-xs-6">
-        <input type="text" name="Fvalue" [(ngModel)]="Fvalue" />
+        <input type="text" name="Fvalue" [disabled]="Fchoice == undefined || Fchoice == ''" [(ngModel)]="Fvalue" />
     </div>
     <table class="table">
         <thead>
@@ -42,7 +42,7 @@
                 <td>
                     <i title="Create New Source" (click)="showSourceModal(null)" style="cursor:pointer" class="fa fa-plus" aria-hidden="true"></i>&nbsp;
                     <i title="Edit Source" (click)="showSourceModal(s)" style="cursor:pointer" class="fa fa-pencil" aria-hidden="true"></i>&nbsp;
-                    <i title="Delete Source" (click)="deleteSource(s)" class="fa fa-times" aria-hidden="true" style="cursor:pointer"></i>
+                    <i title="Delete Source" (click)="deleteSource(s.id)" class="fa fa-times" aria-hidden="true" style="cursor:pointer"></i>
                 </td>
                 <td>{{s.facilityName || "---"}}</td>
                 <td>{{s.facilityCode || "---"}}</td>
@@ -60,5 +60,5 @@
 </div>
 
 
-
+<areYouSureModal #areYouSure (modalResponseEvent)="AreYouSureDialogResponse($event)"></areYouSureModal>
 <editsource [regionID]="chosenRegionID" (updatedSource)="createEditFinished($event)"></editsource>

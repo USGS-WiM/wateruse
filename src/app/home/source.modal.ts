@@ -1,3 +1,11 @@
+// ------------------------------------------------------------------------------
+// ----- source.modal.ts -----------------------------------------------
+// ------------------------------------------------------------------------------
+
+// copyright:   2017 WiM - USGS
+// authors:  Tonia Roddick - USGS Wisconsin Internet Mapping
+// purpose: modal component that opens to allow create/edit of source entity
+
 import { Component, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 import { ISource } from "app/shared/interfaces/Source.interface";
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
@@ -15,8 +23,8 @@ export class EditSourceModal {
     @ViewChild('editSource') public editSourceModal; // modal for validator
     private modalElement: any;
     public modalSource: ISource; // will be the source being edited or 0 for create new
-    @Input() regionID: number;
-    @Output() updatedSource = new EventEmitter<ISource>(); //send back up stuff
+    @Input() regionID: number; // regionID passed in to store before put/post of source
+    @Output() updatedSource = new EventEmitter<ISource>(); //send back up new/edited source
     public sourceForm: FormGroup; //myform
     public sourceTypeList: Array<ISourceType>;
     public categoryTypeList: Array<ICategoryType>;
@@ -42,32 +50,41 @@ export class EditSourceModal {
     }
 
     ngOnInit() {
+        // tooltips on form
         this.sourceTips= {location: "Latitude/Longitude in North American Datum in 1983 and as Decimal Degrees."}
+        // subscribe to know when to show the modal
         this._homeService.showSourceModal.subscribe((show: boolean) => {
             if (show) this.showTheSourceModal();
         });
+        // subscribe to get source to show in the modal
         this._homeService.sourceForModal.subscribe((s: ISource) => {
             this.modalSource = s;
         });
+        // get the sourcetypes
         this._waterService.sourcetypes().subscribe((st: Array<ISourceType>) => {
             this.sourceTypeList = st;            
         });
+        // get the categorytypes
         this._waterService.categorytypes().subscribe((ct: Array<ICategoryType>) => {
             this.categoryTypeList = ct;
         });
+        // set the viewchild modal as the modalelement
         this.modalElement = this.editSourceModal;
     }
 
+    // flag is true to show the modal
     public showTheSourceModal() {
-            this.sourceForm.controls['id'].setValue(this.modalSource.id ? this.modalSource.id : null);
-            this.sourceForm.controls['name'].setValue(this.modalSource.id ? this.modalSource.name : null);
-            this.sourceForm.controls['sourceTypeID'].setValue(this.modalSource.id ? this.modalSource.sourceTypeID : null);
-            this.sourceForm.controls['facilityName'].setValue(this.modalSource.id ? this.modalSource.facilityName : null);        
-            this.sourceForm.controls['facilityCode'].setValue(this.modalSource.id ? this.modalSource.facilityCode : null);
-            this.sourceForm.controls['catagoryTypeID'].setValue(this.modalSource.id ? this.modalSource.catagoryTypeID : null);        
-            this.sourceForm.controls['stationID'].setValue(this.modalSource.id ? this.modalSource.stationID : null);
-            this.sourceForm.controls['regionID'].setValue(this.regionID);
+        // populate controls with value or null (edit/create)
+        this.sourceForm.controls['id'].setValue(this.modalSource.id ? this.modalSource.id : null);
+        this.sourceForm.controls['name'].setValue(this.modalSource.id ? this.modalSource.name : null);
+        this.sourceForm.controls['sourceTypeID'].setValue(this.modalSource.id ? this.modalSource.sourceTypeID : null);
+        this.sourceForm.controls['facilityName'].setValue(this.modalSource.id ? this.modalSource.facilityName : null);        
+        this.sourceForm.controls['facilityCode'].setValue(this.modalSource.id ? this.modalSource.facilityCode : null);
+        this.sourceForm.controls['catagoryTypeID'].setValue(this.modalSource.id ? this.modalSource.catagoryTypeID : null);        
+        this.sourceForm.controls['stationID'].setValue(this.modalSource.id ? this.modalSource.stationID : null);
+        this.sourceForm.controls['regionID'].setValue(this.regionID);
 
+        // location needs to be separate object for proper json formatting on post/put
         let locationControlGrp = <FormArray>this.sourceForm.controls['location'];
         locationControlGrp.controls['x'].setValue(this.modalSource.id ? this.modalSource.location.x : null);
         locationControlGrp.controls['y'].setValue(this.modalSource.id ? this.modalSource.location.y : null);
@@ -82,14 +99,14 @@ export class EditSourceModal {
                 // PUT it (if id exists)
                 if (source.id > 0){
                     this._waterService.putSource(source.id, source).subscribe((response: ISource) => {
-                        this._homeService.setModalSource(null);
-                        this.updatedSource.emit(response);
+                        this._homeService.setModalSource(null); // clear out the service source that this modal needed
+                        this.updatedSource.emit(response); // emit the edited source
                     });
                 } else {
                     // POST it
                     this._waterService.postSource(source).subscribe((response: ISource) => {
-                        this._homeService.setModalSource(null);
-                        this.updatedSource.emit(response);
+                        this._homeService.setModalSource(null); // clear out the service source that this modal needed
+                        this.updatedSource.emit(response); // emit the created source
                     });
                 }
             }

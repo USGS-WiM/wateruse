@@ -1,12 +1,10 @@
 // ------------------------------------------------------------------------------
-// ----- projectdetail.module ---------------------------------------------------
+// ----- pipes.module ---------------------------------------------------
 // ------------------------------------------------------------------------------
 
-// copyright:   2016 WiM - USGS
-//
-// authors:  Tonia Roddick USGS Wisconsin Internet Mapping             
-//
-// purpose: handles all the project's details (info, contacts, data, cooperators, publications, and sites)
+// copyright:   2017 WiM - USGS
+// authors:  Tonia Roddick USGS Wisconsin Internet Mapping
+// purpose: Module for the Pipes used in the app
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';

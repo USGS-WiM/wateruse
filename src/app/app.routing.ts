@@ -1,8 +1,15 @@
+// ------------------------------------------------------------------------------
+// ----- app.routing.ts -----------------------------------------------
+// ------------------------------------------------------------------------------
+
+// copyright:   2017 WiM - USGS
+// authors:  Tonia Roddick - USGS Wisconsin Internet Mapping
+// purpose: routing for the application (home, settings, login)
+
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes  } from '@angular/router';
 
 import { AuthGuard } from "app/shared/guards/auth.guard";
-import { AppComponent } from "app/app.component";
 import { LoginComponent } from "app/login/login.component";
 import { HomeComponent } from "app/home/home.component";
 import { RegionListResolve } from "app/regionList.resolve";

@@ -1,3 +1,11 @@
+// ------------------------------------------------------------------------------
+// ----- CONFIG.ts -----------------------------------------------
+// ------------------------------------------------------------------------------
+
+// copyright:   2017 WiM - USGS
+// authors:  Tonia Roddick - USGS Wisconsin Internet Mapping
+// purpose: configuration file containing static url strings and the baseURL for the REST services being accessed
+
 import {Injectable} from "@angular/core";
 import {Headers}    from "@angular/http";
 

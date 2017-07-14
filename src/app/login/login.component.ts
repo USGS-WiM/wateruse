@@ -1,10 +1,15 @@
+// ------------------------------------------------------------------------------
+// ----- login.component.ts -----------------------------------------------
+// ------------------------------------------------------------------------------
+
+// copyright:   2017 WiM - USGS
+// authors:  Tonia Roddick - USGS Wisconsin Internet Mapping
+// purpose: login page
+
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IUser } from "app/shared/interfaces/User.interface";
 import { LoginService } from "app/login/login.service";
-
-// import { AlertService, AuthenticationService } from '../_services/index';
-//http://jasonwatmore.com/post/2016/09/29/angular-2-user-registration-and-login-example-tutorial
 
 @Component({
     moduleId: module.id,
@@ -17,9 +22,7 @@ export class LoginComponent implements OnInit {
     returnUrl: string;
 
     constructor(
-        private _route: ActivatedRoute, private _router: Router, private _loginService: LoginService
-    //    private alertService: AlertService
-    ) { }
+        private _route: ActivatedRoute, private _router: Router, private _loginService: LoginService) { }
 
     ngOnInit() {
         this.user = { username: '', password: ''};
@@ -30,12 +33,9 @@ export class LoginComponent implements OnInit {
         // get return url from route parameters or default to '/'
         this.returnUrl = this._route.snapshot.queryParams['returnUrl'] || '/';
     }
-
-    login() {
-        this.loading = true;
-        let creds: string = "Basic " + btoa(this.user.username + ":" + this.user.password);
-        localStorage.setItem('credentials', creds);
-        
+    // log user in, navigate to home
+    public login() {
+        this.loading = true; // not using this yet
         this._loginService.login(this.user.username, this.user.password).subscribe(() => {
             if (this._loginService.isLoggedIn) {
                  this._router.navigate([this.returnUrl]);

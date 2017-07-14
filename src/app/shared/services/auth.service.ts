@@ -2,10 +2,8 @@
 // ----- auth.service -----------------------------------------------------------
 // ------------------------------------------------------------------------------
 
-// copyright:   2016 WiM - USGS
-//
+// copyright:   2017 WiM - USGS
 // authors:  Tonia Roddick USGS Wisconsin Internet Mapping             
-//
 // purpose: store and retrieve loggedIn properties service (global)
 
 import { Injectable } from '@angular/core';

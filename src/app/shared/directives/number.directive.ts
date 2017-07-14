@@ -1,3 +1,11 @@
+// ------------------------------------------------------------------------------
+// ----- number.directive.ts -----------------------------------------------
+// ------------------------------------------------------------------------------
+
+// copyright:   2017 WiM - USGS
+// authors:  Tonia Roddick - USGS Wisconsin Internet Mapping
+// purpose: directive to ensure input is a number only with optional negative sign
+
 import { Directive } from "@angular/core";
 import { NgControl } from "@angular/forms";
 
@@ -15,6 +23,11 @@ export class numberFormat {
     constructor(public model: NgControl) {}
 
     onInputChange(event, backspace) {
+        this.newVal = event;
+
+        if (backspace) {
+            this.newVal = this.newVal.substring(0, this.newVal.length - 1);
+        } 
         // remove all mask characters (keep only numeric)
         if (event != null) {
             //let reg = /(?!^-)[0-9]?[0-9][\.][0-9]/g;

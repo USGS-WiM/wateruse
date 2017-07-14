@@ -1,11 +1,17 @@
+// ------------------------------------------------------------------------------
+// ----- wateruse.service..ts -----------------------------------------------
+// ------------------------------------------------------------------------------
+
+// copyright:   2017 WiM - USGS
+// authors:  Tonia Roddick - USGS Wisconsin Internet Mapping
+// purpose: services to get/store/post/put/delete via http and subjects used throughout the application
+
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response, URLSearchParams } from '@angular/http';
-
 import { Observable } from "rxjs/Observable";
 import { Subject } from "rxjs/Subject";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
-import { IUser } from "app/shared/interfaces/User.interface";
 import { CONFIG } from "app/shared/services/CONFIG";
 import { IRegion } from "app/shared/interfaces/Region.interface";
 import { ISource } from "app/shared/interfaces/Source.interface";
@@ -83,6 +89,13 @@ export class WateruseService {
         let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
         return this._http.post(CONFIG.SOURCES_URL, aSource, options)
             .map(res => <ISource>res.json())
+            .catch(this.errorHandler);
+    }
+    
+    // DELETE Source
+    public deleteSource(sourceID: number) {
+        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
+        return this._http.delete(CONFIG.SOURCES_URL + '/' + sourceID, options)
             .catch(this.errorHandler);
     }
         
