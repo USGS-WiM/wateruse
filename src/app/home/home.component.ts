@@ -17,7 +17,7 @@ import { HomeService } from "app/home/home.service";
 })
 
 export class HomeComponent implements OnInit {   
-    public chosenRegion: number; 
+    public chosenRegionID: number; 
     public Fchoice: string;
     public Fvalue: string;
     public currentUser: string;
@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.chosenRegion = -1;
+        this.chosenRegionID = -1;
         this.regionList = this._route.snapshot.data['regions'];   
         // sources update when user choses region
         this._waterService.sources().subscribe((s: Array<ISource>) => {
@@ -42,26 +42,22 @@ export class HomeComponent implements OnInit {
 
     // region selected, go get the sources for this region
     public onRegionSelect(e){
-        this.chosenRegion = e;
+        this.chosenRegionID = e;
         this._waterService.getSources(e);
     }
 
     // source name clicked, show details area
     public showSourceModal(s: ISource) {
-        if (s !== null) {
-            // until location is added....
-            s.location = { x: 1, y: 2, srid: 3};
+        if (s !== null) {            
             this._homeService.setModalSource(s);
             this._homeService.setSourceModal(true);
         } else {
             //creating new one
             let source: ISource = {
-                name: "",
                 facilityName: "",
                 facilityCode: "",
-                catagoryTypeID: 0,
                 sourceTypeID: 0,
-                regionID: this.chosenRegion,
+                regionID: this.chosenRegionID,
                 location: {x: null, y: null, srid: null }
             }
             this._homeService.setModalSource(source);
@@ -75,7 +71,9 @@ export class HomeComponent implements OnInit {
             if (source.id === e.id) ind = index;
             return source.id === e.id;
         });
-        this.sourceList[ind] = e;
+        // post or put
+        if (ind > -1) this.sourceList[ind] = e;
+        else this.sourceList.push(e);
         this._waterService.setSources(this.sourceList);
     }
 

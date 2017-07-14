@@ -78,6 +78,14 @@ export class WateruseService {
             .catch(this.errorHandler);
     }
 
+    // POST Source
+    public postSource(aSource: ISource){
+        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
+        return this._http.post(CONFIG.SOURCES_URL, aSource, options)
+            .map(res => <ISource>res.json())
+            .catch(this.errorHandler);
+    }
+        
     private errorHandler(error: any) {
         let errMsg = (error.message) ? error.message :
             error.status ? `${error.status} - ${error.statusText}` : 'Server error';

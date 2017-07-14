@@ -59,6 +59,6 @@
     There are no sources for this region.
 </div>
 
-<p><a [routerLink]="['/login']">Logout</a></p>
 
-<editsource (updatedVersion)="createEditFinished()"></editsource>
+
+<editsource [regionID]="chosenRegionID" (updatedSource)="createEditFinished($event)"></editsource>
