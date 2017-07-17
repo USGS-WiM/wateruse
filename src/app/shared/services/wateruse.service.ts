@@ -17,6 +17,7 @@ import { IRegion } from "app/shared/interfaces/Region.interface";
 import { ISource } from "app/shared/interfaces/Source.interface";
 import { ISourceType } from "app/shared/interfaces/SourceType.interface";
 import { ICategoryType } from "app/shared/interfaces/Category.interface";
+import { ITimeseries } from "app/shared/interfaces/Timeseries.interface";
 
 @Injectable()
 export class WateruseService {
@@ -76,6 +77,22 @@ export class WateruseService {
             error => this.errorHandler);
     }
 
+    // POST Source
+    public postSource(aSource: ISource){
+        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
+        return this._http.post(CONFIG.SOURCES_URL, aSource, options)
+            .map(res => <ISource>res.json())
+            .catch(this.errorHandler);
+    }
+    
+    // POST timeseries Batch
+    public postBatchTimeseries(regionId: number, timeseries: Array<ITimeseries>) {
+        let options = new RequestOptions({headers:CONFIG.JSON_AUTH_HEADERS});
+        return this._http.post(CONFIG.REGIONS_URL + '/' + regionId + '/timeseries/batch', timeseries, options)
+            .map(res=> <Array<ITimeseries>>res.json())
+            .catch(this.errorHandler);
+    }
+
     // PUT Source
     public putSource(id: number, aSource: ISource) {
         let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
@@ -84,13 +101,7 @@ export class WateruseService {
             .catch(this.errorHandler);
     }
 
-    // POST Source
-    public postSource(aSource: ISource){
-        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.post(CONFIG.SOURCES_URL, aSource, options)
-            .map(res => <ISource>res.json())
-            .catch(this.errorHandler);
-    }
+    
     
     // DELETE Source
     public deleteSource(sourceID: number) {

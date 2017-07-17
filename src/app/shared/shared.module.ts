@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
 import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotTableModule } from 'ng2-handsontable';
 
 import { AuthGuard } from 'app/shared/guards/auth.guard';
 import { WateruseService } from 'app/shared/services/wateruse.service';
@@ -23,8 +24,8 @@ import { AreYouSureModal } from "app/shared/modals/areYouSure.modal";
 
 @NgModule({
   declarations: [numberFormat, AreYouSureModal ],
-  exports: [ NgbModule,numberFormat, AreYouSureModal ],
-  imports: [ CommonModule, NgbModule.forRoot(), FormsModule, PipesModule ]
+  exports: [ NgbModule,numberFormat, AreYouSureModal, HotTableModule ],
+  imports: [ CommonModule, NgbModule.forRoot(), FormsModule, PipesModule, HotTableModule ]
 })
 
 export class SharedModule {

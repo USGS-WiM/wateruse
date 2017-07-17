@@ -33,4 +33,15 @@ export class HomeService {
     public get sourceForModal(): any {
         return this._modalSourceSubj.asObservable();
     }
+
+    // boolean for valid table for handsontable upload button disabled prop
+    private _validTableSubj: BehaviorSubject<boolean> = <BehaviorSubject<boolean>>new BehaviorSubject(true);
+    // setter
+    public setInvalidTable(val: any) {
+        this._validTableSubj.next(val);
+    }
+    // getter
+    public get validTableVal(): any {
+        return this._validTableSubj.asObservable();
+    }
 }
