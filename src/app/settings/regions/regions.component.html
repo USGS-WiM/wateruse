@@ -1,0 +1,21 @@
+<button type="button" (click)="showRegionModal(null)"><i class="fa fa-plus" aria-hidden="tru"></i>  Add New Region</button>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th></th><th>Name</th><th>Description</th><th>Short Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let r of regionList | sort: 'name'">
+            <td>
+                <i title="Edit Region" (click)="showRegionModal(r)" style="cursor:pointer" class="fa fa-pencil" aria-hidden="true"></i>&nbsp;
+                <i title="Delete Region" (click)="deleteRegion(r.id)" class="fa fa-times" aria-hidden="true" style="cursor:pointer"></i>
+            </td>
+            <td>{{r.name || "---"}}</td><td>{{r.description || "---"}}</td><td>{{r.shortName || "---"}}</td>
+        </tr>
+    </tbody>
+</table>
+
+<areYouSureModal #areYouSure (modalResponseEvent)="AreYouSureDialogResponse($event)"></areYouSureModal>
+<editregion (updatedRegion)="createEditFinished($event)"></editregion>

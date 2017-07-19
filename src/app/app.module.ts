@@ -22,10 +22,14 @@ import { SharedModule } from "app/shared/shared.module";
 import { PipesModule } from "app/shared/pipes/pipes.module";
 import { HomeService } from "app/home/home.service";
 import { EditSourceModal } from "app/home/source.modal";
+import { TimeseriesComponent } from "app/home/timeseries.component";
+import { SourceListComponent } from "app/home/sourcelist.component";
+import { SourceBulkComponent } from "app/home/sourcebulk.component";
+import { SettingsModule } from "app/settings/settings.module";
 
 @NgModule({
-  declarations: [ AppComponent, LoginComponent, HomeComponent, EditSourceModal ],
-  imports: [ BrowserModule, FormsModule, ReactiveFormsModule, HttpModule, AppRoutingModule, PipesModule, SharedModule.forRoot() ],
+  declarations: [ AppComponent, LoginComponent, HomeComponent, SourceListComponent, SourceBulkComponent, EditSourceModal, TimeseriesComponent ],
+  imports: [ BrowserModule, FormsModule, ReactiveFormsModule, HttpModule, AppRoutingModule, PipesModule, SharedModule.forRoot(), SettingsModule ],
   exports: [ReactiveFormsModule],
   providers: [ RegionListResolve, HomeService], //AlertService
   bootstrap: [AppComponent]

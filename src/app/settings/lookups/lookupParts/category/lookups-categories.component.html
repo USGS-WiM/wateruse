@@ -1,0 +1,76 @@
+<div>
+    <legend style="margin-bottom:25px;margin-top:0;">Category Types</legend>
+</div>
+
+<form #CategoryForm="ngForm">
+    <div class="form-group" *ngIf="categoryTypes">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="col-xs-1"></th><th class="col-xs-4">Name</th><th>Description</th><th class="col-xs-1">Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let c of categoryTypes | sort: 'name'; let i = index">
+                    <td>
+                        <div class="data-controls">
+                            <i *ngIf="!c.isEditing" title="Edit Category Type" (click)="EditRowClicked(i)"  class="fa fa-pencil" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>&nbsp;
+                            <i *ngIf="!c.isEditing" title="Delete Category Type" (click)="deleteCategory(c.id)" class="fa fa-times" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>
+                            <i *ngIf="c.isEditing" title="Save Category Type" (click)="saveCategory(c,i)" class="fa fa-floppy-o" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>
+                            <i *ngIf="c.isEditing" title="Cancel Edit" (click)="CancelEditRowClicked(i)" class="fa fa-history" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>
+                        </div>
+                    </td>
+                    <td>
+                        <span *ngIf="!c.isEditing">{{ c.name }}</span>
+                        <span *ngIf="c.isEditing"><input type="text"name="name" [(ngModel)]="c.name" required></span>
+                    </td>
+                    <td>
+                        <span *ngIf="!c.isEditing">{{ c.description }}</span> 
+                        <span *ngIf="c.isEditing"><textarea rows="3" [(ngModel)]="c.description" name="description"></textarea></span>
+                    </td>
+                    <td>
+                        <span *ngIf="!c.isEditing">{{ c.code }}</span>
+                        <span *ngIf="c.isEditing"><input type="text" name="code" [(ngModel)]="c.code" required></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+<br />
+<button *ngIf="!showNewCatForm" type="button" (click)="showNewCategoryForm()"><i class="fa fa-plus" aria-hidden="tru"></i>  Add New Category Type</button>
+
+<!-- new category type form -->
+<div *ngIf="showNewCatForm">
+    <h3 class="modal-title">New Category Type</h3>
+    <form [formGroup]="newCatForm">                
+        <!-- Category Type Name* -->
+        <div class="form-group required" [ngClass]="{'form-invalid': !newCatForm.get('name').valid && newCatForm.get('name').dirty}">
+            <label class="req" for="name">Name:</label>
+            <input class="form-control" type="text" formControlName="name" required>
+            <div class="input-invalid-warning" *ngIf="!newCatForm.get('name').valid && newCatForm.get('name').dirty">Category Name is required</div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea class="form-control" rows="3" placeholder="" formControlName="description"></textarea>                
+        </div>
+
+        <!-- Short Name -->
+        <div class="form-group required" [ngClass]="{'form-invalid': !newCatForm.get('code').valid && newCatForm.get('code').dirty}">
+            <label class="req" for="code">Code:</label>
+            <input class="form-control" type="text" formControlName="code">
+            <div class="input-invalid-warning" *ngIf="!newCatForm.get('code').valid && newCatForm.get('code').dirty">Code is required</div>
+        </div>
+            
+    </form>
+
+    <div class="modal-footer">
+        <button type="button" (click)="cancelCreateCategory()">Cancel</button>
+        <button type="button" (click)="createNewCategory()" [disabled]="!newCatForm.valid">Create</button>
+    </div>
+</div>
+
+<infoModal #info></infoModal>
+<areYouSureModal #areYouSure (modalResponseEvent)="AreYouSureDialogResponse($event)"></areYouSureModal>

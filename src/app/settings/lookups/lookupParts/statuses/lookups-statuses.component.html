@@ -1,0 +1,76 @@
+<div>
+    <legend style="margin-bottom:25px;margin-top:0;">Status Types</legend>
+</div>
+
+<form #StatusTypeForm="ngForm">
+    <div class="form-group" *ngIf="statusTypes">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="col-xs-1"></th><th class="col-xs-4">Name</th><th>Description</th><th class="col-xs-1">Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let c of statusTypes | sort: 'name'; let i = index">
+                    <td>
+                        <div class="data-controls">
+                            <i *ngIf="!c.isEditing" title="Edit Status Type" (click)="EditRowClicked(i)"  class="fa fa-pencil" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>&nbsp;
+                            <i *ngIf="!c.isEditing" title="Delete Status Type" (click)="deleteStatusType(c.id)" class="fa fa-times" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>
+                            <i *ngIf="c.isEditing" title="Save Status Type" (click)="saveStatusType(c,i)" class="fa fa-floppy-o" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>
+                            <i *ngIf="c.isEditing" title="Cancel Edit" (click)="CancelEditRowClicked(i)" class="fa fa-history" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>
+                        </div>
+                    </td>
+                    <td>
+                        <span *ngIf="!c.isEditing">{{ c.name }}</span>
+                        <span *ngIf="c.isEditing"><input type="text"name="name" [(ngModel)]="c.name" required></span>
+                    </td>
+                    <td>
+                        <span *ngIf="!c.isEditing">{{ c.description }}</span> 
+                        <span *ngIf="c.isEditing"><textarea rows="3" [(ngModel)]="c.description" name="description"></textarea></span>
+                    </td>
+                    <td>
+                        <span *ngIf="!c.isEditing">{{ c.code }}</span>
+                        <span *ngIf="c.isEditing"><input type="text" name="code" [(ngModel)]="c.code" required></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+<br />
+<button *ngIf="!showNewStatusTypeForm" type="button" (click)="showNewStatForm()"><i class="fa fa-plus" aria-hidden="tru"></i>  Add New Status Type</button>
+
+<!-- new Status type form -->
+<div *ngIf="showNewStatusTypeForm">
+    <h3 class="modal-title">New Status Type</h3>
+    <form [formGroup]="newStatusTypeForm">                
+        <!-- Status Type Name* -->
+        <div class="form-group required" [ngClass]="{'form-invalid': !newStatusTypeForm.get('name').valid && newStatusTypeForm.get('name').dirty}">
+            <label class="req" for="name">Name:</label>
+            <input class="form-control" type="text" formControlName="name" required>
+            <div class="input-invalid-warning" *ngIf="!newStatusTypeForm.get('name').valid && newStatusTypeForm.get('name').dirty">Status Name is required</div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea class="form-control" rows="3" placeholder="" formControlName="description"></textarea>                
+        </div>
+
+        <!-- Short Name -->
+        <div class="form-group required" [ngClass]="{'form-invalid': !newStatusTypeForm.get('code').valid && newStatusTypeForm.get('code').dirty}">
+            <label class="req" for="code">Code:</label>
+            <input class="form-control" type="text" formControlName="code">
+            <div class="input-invalid-warning" *ngIf="!newStatusTypeForm.get('code').valid && newStatusTypeForm.get('code').dirty">Code is required</div>
+        </div>
+            
+    </form>
+
+    <div class="modal-footer">
+        <button type="button" (click)="cancelCreateStatusType()">Cancel</button>
+        <button type="button" (click)="createNewStatusType()" [disabled]="!newStatusTypeForm.valid">Create</button>
+    </div>
+</div>
+
+<infoModal #info></infoModal>
+<areYouSureModal #areYouSure (modalResponseEvent)="AreYouSureDialogResponse($event)"></areYouSureModal>

@@ -20,7 +20,10 @@ export class CONFIG {
     public static get REGIONS_URL(): string { return this.baseURL + "Regions" };
     public static get SOURCES_URL(): string { return this.baseURL + "Sources" };
     public static get SOURCETYPES_URL(): string { return this.baseURL + "SourceTypes" };
-    public static get CATEGORYTYPES_URL(): string { return this.baseURL + "Categories" };
+    public static get CATEGORYTYPES_URL(): string { return this.baseURL + "Categories" };    
+    public static get UNITTYPES_URL(): string { return this.baseURL + "Units" };
+    public static get STATUSTYPES_URL(): string { return this.baseURL + "Status" };
+    public static get ROLES_URL(): string { return this.baseURL + "Roles" };
 
     // headers
     public static get MIN_JSON_HEADERS() { return new Headers({ "Accept": "application/json" }); };

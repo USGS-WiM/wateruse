@@ -1,5 +1,6 @@
-<h1>
-    Hi User {{currentUser}}!</h1>
+<!--<toaster-container></toaster-container>-->
+
+<h1>Hi User {{currentUser}}!</h1>
 <p>Welcome to Wateruse!!</p>
 <div><label><span>Select your Region to get started</span></label></div>
 <select name="chosenRegion" [(ngModel)]="chosenRegion" (ngModelChange)="onRegionSelect($event)">
@@ -11,83 +12,38 @@
 <!-- SOURCES -->
     <ngb-tab title="Sources">
         <ng-template ngbTabContent>
-            <div  class="margin-top--x3">
-                <div class="row bottom-xs">
-                    <div class="col-xs-2"><label><span>Filter Sources by:</span></label></div>
-                    <div class="col-xs-10 around-xs">
-                        <div class="col-xs-3">
-                            <label for="facilitycode" class="rdo">  
-                    <input type="radio" id="facilitycode" value="facilityCode" name="choice" [(ngModel)]="Fchoice"><span>Facility Code</span>
-                </label>
-                        </div>
-                        <div class="col-xs-3">
-                            <label for="facilityName" class="rdo">
-                    <input type="radio" id="facilityName" value="facilityName" name="choice" [(ngModel)]="Fchoice"><span>Facility Name</span>
-                </label>
-                        </div>
-                        <div class="col-xs-3">
-                            <label for="name" class="rdo">
-                    <input type="radio" id="name" value="name" name="choice" [(ngModel)]="Fchoice"><span>Source Name</span>
-                </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xs-offset-2 col-xs-6">
-                    <input type="text" name="Fvalue" [disabled]="Fchoice == undefined || Fchoice == ''" [(ngModel)]="Fvalue" />
-                </div>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Facility Name</th>
-                            <th>Facility Code</th>
-                            <th>Source Name</th>
-                            <th>Category Type ID</th>
-                            <th>Source TypeID</th>
-                            <th>Station ID</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let s of sourceList | filter: {filterProperty: Fchoice, filterValue: Fvalue} | sort: 'name'">
-                            <td>
-                                <i title="Create New Source" (click)="showSourceModal(null)" style="cursor:pointer" class="fa fa-plus" aria-hidden="true"></i>&nbsp;
-                                <i title="Edit Source" (click)="showSourceModal(s)" style="cursor:pointer" class="fa fa-pencil" aria-hidden="true"></i>&nbsp;
-                                <i title="Delete Source" (click)="deleteSource(s.id)" class="fa fa-times" aria-hidden="true" style="cursor:pointer"></i>
-                            </td>
-                            <td>{{s.facilityName || "---"}}</td>
-                            <td>{{s.facilityCode || "---"}}</td>
-                            <td>{{s.name || "---"}}</td>
-                            <td>{{s.catagoryTypeID || "---"}}</td>
-                            <td>{{s.sourceTypeID || "---"}}</td>
-                            <td>{{s.stationID || "---"}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <!-- end ngIf=SourceList?Length *ngIf="aSource"-->
-
-            <div *ngIf="sourceList?.length == 0">
-                There are no sources for this region.
-            </div>
+            <ng-container *ngTemplateOutlet="innerTabset"></ng-container>            
         </ng-template>
     </ngb-tab>
 <!-- TIMESERIES -->
     <ngb-tab title="Time Series">
         <ng-template ngbTabContent>
-            <p>
-                Copy (ctrl+c) time series data from your spreadsheet and paste (ctrl+v) into the table below.<br/>
-                All <b>dates</b> will be saved as the first of the month (ex: 'MM/01/YYYY') <b>Facility Codes</b> must start with 'FC'.<br/>
-                The table is sortable by clicking on the header column name. Click Validate Table to ensure proper data formatting before uploading the time series data.
-            </p>
-            <p><button [disabled]="invalids.length >= 1" type="button" (click)="submitTable()">Upload</button></p>
-
-            <hotTable [data]="timeseriesdata"
-                [colHeaders]="colHeaders" [columns]="columns" [options]="options" [colWidths]="colWidths">
-            </hotTable>
+            <timeseries [regionId]="chosenRegionID"></timeseries>         
         </ng-template>
     </ngb-tab>
 </ngb-tabset>
 
+<!-- inner source tabset for Sources List and Sources Batch Upload-->
+<ng-template #innerTabset>
+    <ngb-tabset>
+        <ngb-tab>
+            <ng-template ngbTabTitle>
+                Sources List
+            </ng-template>
+            <ng-template ngbTabContent>
+                <sourcelist [regionId]="chosenRegionID" [sourceList]="sourceList"></sourcelist>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab>
+            <ng-template ngbTabTitle>
+                Sources Batch Upload
+            </ng-template>
+            <ng-template ngbTabContent>
+                <sourcebulk [regionId]="chosenRegionID"></sourcebulk>
+            </ng-template>
+        </ngb-tab>
 
-<areYouSureModal #areYouSure (modalResponseEvent)="AreYouSureDialogResponse($event)"></areYouSureModal>
+    </ngb-tabset>
+</ng-template>
+
 <editsource [regionID]="chosenRegionID" (updatedSource)="createEditFinished($event)"></editsource>

@@ -1,0 +1,39 @@
+#resource-list {
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+}
+#resource-list #sidebar-wrapper {
+    display: inline-block;
+    width: 20%;
+    width: calc(0px + 200px);
+    vertical-align: top;
+    left: 0;
+    margin: 0 auto;
+    background-color: transparent;
+    background: none;
+    background-image: none;
+    position: relative !important;
+}
+#resource-list #sidebar-wrapper ul.sidebar-list-links {
+    list-style-type: none;
+    margin: 0;
+    padding: 13px 0 0 0;
+}
+#resource-list #sidebar-wrapper ul.sidebar-list-links li a {
+    display: block;
+    font-size: 9pt;
+    box-sizing: border-box;
+    padding: 5px 0 5px 25px;
+    color: #0A354D;
+    font-weight: 500 !important;
+    font-family: 'Open Sans', sans-serif;
+}
+#resource-list #page-content-wrapper {
+    width: 80%;
+    width: calc(100% - 200px);
+    display: inline-block;
+    vertical-align: top;
+    padding: 20px;
+    position: relative;
+}

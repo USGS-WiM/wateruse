@@ -7,8 +7,9 @@
 // purpose: interface for category type
 
 export interface ICategoryType {
-    id: number;
+    id?: number;
     name: string;
     code: string;
     description: string;
+    isEditing?:boolean;
 }

@@ -19,6 +19,9 @@ export class AuthGuard implements CanActivate {
         
         return this.checkLogin();  
     }
+    canActivateChild(_actRoute: ActivatedRouteSnapshot, _state: RouterStateSnapshot): boolean {
+        return this.canActivate(_actRoute, _state);
+    }
     
     private checkLogin():boolean {
         if (localStorage.getItem("credentials") && localStorage.getItem('setupTime') !== null && !this.checkSetupTime()) {   

@@ -1,0 +1,16 @@
+<div id="resource-list">
+    <div id="sidebar-wrapper">
+        <h1>Lookups</h1>
+        <ul class="sidebar-list-links">
+            <li><a [routerLink]="['categories']" routerLinkActive="active">Category Types</a></li>
+            <li><a [routerLink]="['roles']"  routerLinkActive="active">Roles</a></li>
+            <li><a [routerLink]="['sourcetypes']" routerLinkActive="active">Source Types</a></li>
+            <li><a [routerLink]="['status']" routerLinkActive="active">Status Types</a></li>
+            <li><a [routerLink]="['unittypes']" routerLinkActive="active">Unit Types</a></li>
+        </ul>
+    </div>
+
+    <div id="page-content-wrapper" class="pull-right">
+          <router-outlet></router-outlet>
+    </div>
+</div>

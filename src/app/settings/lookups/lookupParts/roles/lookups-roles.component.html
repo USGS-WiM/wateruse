@@ -1,0 +1,65 @@
+<div>
+    <legend style="margin-bottom:25px;margin-top:0;">Roles</legend>
+</div>
+
+<form #RolesForm="ngForm">
+    <div class="form-group" *ngIf="rolesList">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="col-xs-1"></th><th class="col-xs-4">Name</th><th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let r of rolesList | sort: 'name'; let i = index">
+                    <td>
+                        <div class="data-controls">
+                            <i *ngIf="!r.isEditing" title="Edit Role" (click)="EditRowClicked(i)"  class="fa fa-pencil" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>&nbsp;
+                            <i *ngIf="!r.isEditing" title="Delete Role" (click)="deleteRole(r.id)" class="fa fa-times" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>
+                            <i *ngIf="r.isEditing" title="Save Role" (click)="saveRole(r,i)" class="fa fa-floppy-o" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>
+                            <i *ngIf="r.isEditing" title="Cancel Edit" (click)="CancelEditRowClicked(i)" class="fa fa-history" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>
+                        </div>
+                    </td>
+                    <td>
+                        <span *ngIf="!r.isEditing">{{ r.name }}</span>
+                        <span *ngIf="r.isEditing"><input type="text" name="name" [(ngModel)]="r.name" required></span>
+                    </td>
+                    <td>
+                        <span *ngIf="!r.isEditing">{{ r.description }}</span> 
+                        <span *ngIf="r.isEditing"><textarea rows="3" [(ngModel)]="r.description" name="description" required></textarea></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+<br />
+<button *ngIf="!showNewRoleForm" type="button" (click)="showTheNewRoleForm()"><i class="fa fa-plus" aria-hidden="tru"></i>  Add New Role</button>
+
+<!-- new category type form -->
+<div *ngIf="showNewRoleForm">
+    <h3 class="modal-title">New Role</h3>
+    <form [formGroup]="newRoleForm">                
+        <!-- Name* -->
+        <div class="form-group required" [ngClass]="{'form-invalid': !newRoleForm.get('name').valid && newRoleForm.get('name').dirty}">
+            <label class="req" for="name">Name:</label>
+            <input class="form-control" type="text" formControlName="name" required>
+            <div class="input-invalid-warning" *ngIf="!newRoleForm.get('name').valid && newRoleForm.get('name').dirty">Name is required</div>
+        </div>
+
+        <!-- Description* -->
+        <div class="form-group required" [ngClass]="{'form-invalid': !newRoleForm.get('description').valid && newRoleForm.get('description').dirty}">
+            <label for="description">Description:</label>
+            <textarea class="form-control" rows="3" placeholder="" formControlName="description"></textarea>                
+            <div class="input-invalid-warning" *ngIf="!newRoleForm.get('description').valid && newRoleForm.get('description').dirty">Description is required</div>
+        </div>            
+    </form>
+
+    <div class="modal-footer">
+        <button type="button" (click)="cancelCreateRole()">Cancel</button>
+        <button type="button" (click)="createNewRole()" [disabled]="!newRoleForm.valid">Create</button>
+    </div>
+</div>
+
+<infoModal #info></infoModal>
+<areYouSureModal #areYouSure (modalResponseEvent)="AreYouSureDialogResponse($event)"></areYouSureModal>

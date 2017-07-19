@@ -12,6 +12,8 @@ import { FormsModule } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
 import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { HotTableModule } from 'ng2-handsontable';
+import {ToasterModule, ToasterService} from 'angular2-toaster';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AuthGuard } from 'app/shared/guards/auth.guard';
 import { WateruseService } from 'app/shared/services/wateruse.service';
@@ -20,12 +22,13 @@ import { PipesModule } from 'app/shared/pipes/pipes.module';
 import { AuthService } from 'app/shared/services/auth.service';
 import { numberFormat } from "app/shared/directives/number.directive";
 import { AreYouSureModal } from "app/shared/modals/areYouSure.modal";
+import { InfoModal } from "app/shared/modals/info.modal";
 
 
 @NgModule({
-  declarations: [numberFormat, AreYouSureModal ],
-  exports: [ NgbModule,numberFormat, AreYouSureModal, HotTableModule ],
-  imports: [ CommonModule, NgbModule.forRoot(), FormsModule, PipesModule, HotTableModule ]
+  declarations: [numberFormat, AreYouSureModal, InfoModal ],
+  exports: [ NgbModule,numberFormat, AreYouSureModal, InfoModal, HotTableModule, ToasterModule ],
+  imports: [ CommonModule, BrowserAnimationsModule, NgbModule.forRoot(), FormsModule, PipesModule, HotTableModule, ToasterModule ]
 })
 
 export class SharedModule {

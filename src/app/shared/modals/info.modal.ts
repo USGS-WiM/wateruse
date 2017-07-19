@@ -4,55 +4,49 @@
 
 // copyright:   2017 WiM - USGS
 // authors:  Tonia Roddick - USGS Wisconsin Internet Mapping
-// purpose: modal used to make sure they want to delete something
+// purpose: modal used to provide information through a provided message
 
 import { Component, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 // import { DialogService } from "app/shared/services/dialog.service";
 
 @Component({
-  selector: 'areYouSureModal',
+  selector: 'infoModal',
   template: `  
-    <ng-template #areYouSure  id="sureModal" let-c="close" let-d="dismiss">  
+    <ng-template #info  id="infoModal" let-c="close" let-d="dismiss">  
         <div class="modal-header">
-            <h4 class="modal-title">WARNING</h4>            
+            <h4 class="modal-title">Info</h4>            
         </div>
         <div class="modal-body">
-            <p>{{ModalMessage}}</p>
-            <!--<p>Are you sure you want to delete this Source and all the timeseries associated with it?</p>-->
+            <p>{{modalMessage}}</p>
         </div>
         <div class="modal-footer">
-            <button type="button" class="sigl-btn" (click)="c('Yes')">Yes</button>
             <button type="button" class="sigl-btn btn-orange" (click)="c('Cancel')">Cancel</button>
         </div>
     </ng-template>
     `
 })
 
-export class AreYouSureModal {    
-    @ViewChild('areYouSure') public areYouSureModal;    
+export class InfoModal {    
+    @ViewChild('info') public infoModal;    
     @Output() modalResponseEvent = new EventEmitter<boolean>(); // when they hit save, emit to projectdata.component
-
+    public modalMessage: string;
     private modalElement: any;
     public CloseResult:any;
-    public ModalMessage: string;
 
     constructor(private _modalService: NgbModal){ }
     
     ngOnInit() {        
-        this.modalElement = this.areYouSureModal;
+        this.modalElement = this.infoModal;
     }
      
-    public showSureModal(m: string): void {
-        this.ModalMessage = m;
-        this._modalService.open(this.modalElement, {backdrop: 'static', keyboard: false} ).result.then((result) =>{
+    public showInfoModal(mes: string): void {
+        this.modalMessage = mes;
+        this._modalService.open(this.modalElement).result.then((result) =>{
             // this is the solution for the first modal losing scrollability
             if (document.querySelector('body > .modal')) {
                 document.body.classList.add('modal-open');
             }
-            if (result == "Yes")
-                this.modalResponseEvent.emit(true);
-            else this.modalResponseEvent.emit(false);
         }, (reason) => {
             this.CloseResult = `Dismissed ${this.getDismissReason(reason)}`
         });

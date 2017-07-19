@@ -18,6 +18,9 @@ import { ISource } from "app/shared/interfaces/Source.interface";
 import { ISourceType } from "app/shared/interfaces/SourceType.interface";
 import { ICategoryType } from "app/shared/interfaces/Category.interface";
 import { ITimeseries } from "app/shared/interfaces/Timeseries.interface";
+import { IUnitType } from "app/shared/interfaces/UnitType.interface";
+import { IStatusType } from "app/shared/interfaces/StatusType.interface";
+import { IRoles } from "app/shared/interfaces/Roles.interface";
 
 @Injectable()
 export class WateruseService {
@@ -30,11 +33,17 @@ export class WateruseService {
     private _sourcesSubject: Subject<Array<ISource>> = new Subject<Array<ISource>>();
     private _sourceTypesSubject: BehaviorSubject<Array<ISourceType>> = <BehaviorSubject<ISourceType[]>>new BehaviorSubject([]);
     private _categoryTypesSubject: BehaviorSubject<Array<ICategoryType>> = <BehaviorSubject<ICategoryType[]>>new BehaviorSubject([]);
+    private _unitTypesSubject: BehaviorSubject<Array<IUnitType>> = <BehaviorSubject<IUnitType[]>>new BehaviorSubject([]);
+    private _statusTypesSubject: BehaviorSubject<Array<IStatusType>> = <BehaviorSubject<IStatusType[]>>new BehaviorSubject([]);
+    private _rolesSubject: BehaviorSubject<Array<IRoles>> = <BehaviorSubject<IRoles[]>>new BehaviorSubject([]);
 
     // GETTERS /////////////////////////////////////////////
     public sources(): Observable<Array<ISource>> { return this._sourcesSubject.asObservable(); }
     public sourcetypes(): Observable<Array<ISourceType>> { return this._sourceTypesSubject.asObservable(); }
-    public categorytypes(): Observable<Array<ICategoryType>> { return this._categoryTypesSubject.asObservable(); }
+    public categorytypes(): Observable<Array<ICategoryType>> { return this._categoryTypesSubject.asObservable(); }    
+    public unittypes(): Observable<Array<IUnitType>> { return this._unitTypesSubject.asObservable(); }
+    public statustypes(): Observable<Array<IStatusType>> { return this._statusTypesSubject.asObservable(); }
+    public roles(): Observable<Array<IRoles>> { return this._rolesSubject.asObservable(); }
     
     // SETTERS ///////////////////////////////////////////
     public setSources(s:Array<ISource>) {
@@ -76,7 +85,7 @@ export class WateruseService {
             .subscribe(c => {this._categoryTypesSubject.next(c);},
             error => this.errorHandler);
     }
-
+   
     // POST Source
     public postSource(aSource: ISource){
         let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
@@ -84,7 +93,13 @@ export class WateruseService {
             .map(res => <ISource>res.json())
             .catch(this.errorHandler);
     }
-    
+    // POST source Batch
+    public postBatchSources(regionId: number, sources: Array<any>) {
+        let options = new RequestOptions({headers:CONFIG.JSON_AUTH_HEADERS});
+        return this._http.post(CONFIG.REGIONS_URL + '/' + regionId + '/sources/batch', sources, options)
+            .map(res=> <Array<ITimeseries>>res.json())
+            .catch(this.errorHandler);
+    }
     // POST timeseries Batch
     public postBatchTimeseries(regionId: number, timeseries: Array<ITimeseries>) {
         let options = new RequestOptions({headers:CONFIG.JSON_AUTH_HEADERS});

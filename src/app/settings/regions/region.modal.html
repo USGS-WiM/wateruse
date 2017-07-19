@@ -1,0 +1,33 @@
+<ng-template #editRegion let-c="close" let-d="dismiss">  
+    <div class="modal-header">
+        <h3 class="modal-title">Region Information</h3>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="regionForm">                
+            <!-- Region Name* -->
+            <div class="form-group required" [ngClass]="{'form-invalid': !regionForm.get('name').valid && regionForm.get('name').dirty}">
+                <label class="req" for="name">Region Name:</label>
+                <input class="form-control" type="text" formControlName="name" required>
+                <div class="input-invalid-warning" *ngIf="!regionForm.get('name').valid && regionForm.get('name').dirty">Region Name is required</div>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group">
+                <label class="req" for="facilityCode">Description:</label>
+                <textarea class="form-control" rows="3" placeholder="" formControlName="description"></textarea>                
+            </div>
+
+            <!-- Short Name -->
+            <div class="form-group">
+                <label for="name">Short Name:</label>
+                <input class="form-control" type="text" formControlName="shortName">
+            </div>
+            
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" (click)="d('clickedCancel')">Cancel</button>
+        <button type="button" *ngIf="modalRegion.id == undefined" (click)="c(regionForm)" [disabled]="!regionForm.valid">Create</button>        
+        <button type="button" [disabled]="!regionForm.valid" *ngIf="modalRegion.id != undefined" (click)="c(regionForm.valid)">Save</button>
+    </div>
+</ng-template>

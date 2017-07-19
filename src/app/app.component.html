@@ -6,7 +6,7 @@
     <nav *ngIf="loggedIn()" class="nav-main">
         <div class="nav-links">
             <a routerLink="/" routerLinkActive="active">Home</a>
-            <a href="">Settings</a>
+            <a [routerLink]="['/settings']">Settings</a>
 <!--            <span *ngIf="loggedInRole() == 'Administrator'"><!--<a routerLink="/settings" routerLinkActive="active">Settings</a>Settings</li>-->
             <!--<li><a routerLink="/account" routerLinkActive="active">Your account</a></li> -->
             <a [routerLink]="['/login']">Log out</a>
@@ -14,7 +14,10 @@
     </nav>
 </div>
 <br clear="all"/>
+
 <div class="container" style="margin-top:65px">
+<toaster-container></toaster-container>
+
     <!--    <alert></alert> -->
     <router-outlet></router-outlet>
 </div>

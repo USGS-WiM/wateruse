@@ -14,11 +14,13 @@ import { WateruseService } from "app/shared/services/wateruse.service";
 import { ISourceType } from "app/shared/interfaces/SourceType.interface";
 import { ICategoryType } from "app/shared/interfaces/Category.interface";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { ToasterService } from "angular2-toaster/angular2-toaster";
 
 @Component({
   selector: 'editsource',
   templateUrl: './source.modal.html'
 })
+
 export class EditSourceModal {
     @ViewChild('editSource') public editSourceModal; // modal for validator
     private modalElement: any;
@@ -31,7 +33,8 @@ export class EditSourceModal {
     public CloseResult: any; //why the close the modal (not sure if I need this yet)
     public sourceTips: any; // tooltips
 
-    constructor(private _fb: FormBuilder, private _homeService: HomeService, private _waterService: WateruseService, private _modalService: NgbModal){
+    constructor(private _fb: FormBuilder, private _homeService: HomeService, private _waterService: WateruseService, 
+        private _modalService: NgbModal, private _toastService: ToasterService){
         this.sourceForm = _fb.group({
             'id': new FormControl(null),
             'name': new FormControl(null),
@@ -99,14 +102,22 @@ export class EditSourceModal {
                 // PUT it (if id exists)
                 if (source.id > 0){
                     this._waterService.putSource(source.id, source).subscribe((response: ISource) => {
+                        this._toastService.pop('success', 'Success', 'Source was updated.'); 
                         this._homeService.setModalSource(null); // clear out the service source that this modal needed
                         this.updatedSource.emit(response); // emit the edited source
+                    }, error => {                        
+                        this._toastService.pop('error', 'Error', 'Source was not updated.'); 
+                        console.log("Error");
                     });
                 } else {
                     // POST it
                     this._waterService.postSource(source).subscribe((response: ISource) => {
+                        this._toastService.pop('success', 'Success', 'Source was created.'); 
                         this._homeService.setModalSource(null); // clear out the service source that this modal needed
                         this.updatedSource.emit(response); // emit the created source
+                    }, error => {                        
+                        this._toastService.pop('error', 'Error', 'Source was not created.'); 
+                        console.log("error");
                     });
                 }
             }

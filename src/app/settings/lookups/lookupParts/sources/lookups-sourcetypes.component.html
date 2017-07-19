@@ -1,0 +1,76 @@
+<div>
+    <legend style="margin-bottom:25px;margin-top:0;">Source Types</legend>
+</div>
+
+<form #SourceForm="ngForm">
+    <div class="form-group" *ngIf="sourceTypes">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="col-xs-1"></th><th class="col-xs-4">Name</th><th>Description</th><th class="col-xs-1">Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let s of sourceTypes | sort: 'name'; let i = index">
+                    <td>
+                        <div class="data-controls">
+                            <i *ngIf="!s.isEditing" title="Edit Source Type" (click)="EditRowClicked(i)"  class="fa fa-pencil" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>&nbsp;
+                            <i *ngIf="!s.isEditing" title="Delete Source Type" (click)="deleteSourceType(s.id)" class="fa fa-times" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>
+                            <i *ngIf="s.isEditing" title="Save Source Type" (click)="saveSourceType(s,i)" class="fa fa-floppy-o" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>
+                            <i *ngIf="s.isEditing" title="Cancel Edit" (click)="CancelEditRowClicked(i)" class="fa fa-history" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>
+                        </div>
+                    </td>
+                    <td>
+                        <span *ngIf="!s.isEditing">{{ s.name }}</span>
+                        <span *ngIf="s.isEditing"><input type="text"name="name" [(ngModel)]="s.name" required></span>
+                    </td>
+                    <td>
+                        <span *ngIf="!s.isEditing">{{ s.description }}</span> 
+                        <span *ngIf="s.isEditing"><textarea rows="3" [(ngModel)]="s.description" name="description"></textarea></span>
+                    </td>
+                    <td>
+                        <span *ngIf="!s.isEditing">{{ s.code }}</span>
+                        <span *ngIf="s.isEditing"><input type="text" name="code" [(ngModel)]="s.code" required></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+<br />
+<button *ngIf="!showNewSTForm" type="button" (click)="showNewSourceTypeForm()"><i class="fa fa-plus" aria-hidden="tru"></i>  Add New Source Type</button>
+
+<!-- new category type form -->
+<div *ngIf="showNewSTForm">
+    <h3 class="modal-title">New Source Type</h3>
+    <form [formGroup]="newSourceTypeForm">                
+        <!-- Category Type Name* -->
+        <div class="form-group required" [ngClass]="{'form-invalid': !newSourceTypeForm.get('name').valid && newSourceTypeForm.get('name').dirty}">
+            <label class="req" for="name">Name:</label>
+            <input class="form-control" type="text" formControlName="name" required>
+            <div class="input-invalid-warning" *ngIf="!newSourceTypeForm.get('name').valid && newSourceTypeForm.get('name').dirty">Name is required</div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea class="form-control" rows="3" placeholder="" formControlName="description"></textarea>                
+        </div>
+
+        <!-- Short Name -->
+        <div class="form-group required" [ngClass]="{'form-invalid': !newSourceTypeForm.get('code').valid && newSourceTypeForm.get('code').dirty}">
+            <label class="req" for="code">Code:</label>
+            <input class="form-control" type="text" formControlName="code">
+            <div class="input-invalid-warning" *ngIf="!newSourceTypeForm.get('code').valid && newSourceTypeForm.get('code').dirty">Code is required</div>
+        </div>
+            
+    </form>
+
+    <div class="modal-footer">
+        <button type="button" (click)="cancelCreateSourceType()">Cancel</button>
+        <button type="button" (click)="createNewSourceType()" [disabled]="!newSourceTypeForm.valid">Create</button>
+    </div>
+</div>
+
+<infoModal #info></infoModal>
+<areYouSureModal #areYouSure (modalResponseEvent)="AreYouSureDialogResponse($event)"></areYouSureModal>

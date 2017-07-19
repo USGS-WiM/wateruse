@@ -1,0 +1,65 @@
+<div>
+    <legend style="margin-bottom:25px;margin-top:0;">Unit Types</legend>
+</div>
+
+<form #UnitsForm="ngForm">
+    <div class="form-group" *ngIf="unitTypes">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="col-xs-1"></th><th class="col-xs-4">Name</th><th>Abbreviation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let u of unitTypes | sort: 'name'; let i = index">
+                    <td>
+                        <div class="data-controls">
+                            <i *ngIf="!u.isEditing" title="Edit Role" (click)="EditRowClicked(i)"  class="fa fa-pencil" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>&nbsp;
+                            <i *ngIf="!u.isEditing" title="Delete Role" (click)="deleteUnitType(u.id)" class="fa fa-times" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>
+                            <i *ngIf="u.isEditing" title="Save Role" (click)="saveUnitType(u,i)" class="fa fa-floppy-o" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>
+                            <i *ngIf="u.isEditing" title="Cancel Edit" (click)="CancelEditRowClicked(i)" class="fa fa-history" aria-hidden="true" style="cursor:pointer;padding:5px;"></i>
+                        </div>
+                    </td>
+                    <td>
+                        <span *ngIf="!u.isEditing">{{ u.name }}</span>
+                        <span *ngIf="u.isEditing"><input type="text" name="name" [(ngModel)]="u.name" required></span>
+                    </td>
+                    <td>
+                        <span *ngIf="!u.isEditing">{{ u.abbreviation }}</span> 
+                        <span *ngIf="u.isEditing"><input type="text" name="abbreviation" [(ngModel)]="u.abbreviation" required></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+<br />
+<button *ngIf="!showNewUnitForm" type="button" (click)="showTheNewUnitTypeForm()"><i class="fa fa-plus" aria-hidden="tru"></i>  Add New Unit Type</button>
+
+<!-- new category type form -->
+<div *ngIf="showNewUnitForm">
+    <h3 class="modal-title">New Unit Type</h3>
+    <form [formGroup]="newUnitForm">                
+        <!-- Name* -->
+        <div class="form-group required" [ngClass]="{'form-invalid': !newUnitForm.get('name').valid && newUnitForm.get('name').dirty}">
+            <label class="req" for="name">Name:</label>
+            <input class="form-control" type="text" formControlName="name" required>
+            <div class="input-invalid-warning" *ngIf="!newUnitForm.get('name').valid && newUnitForm.get('name').dirty">Name is required</div>
+        </div>
+
+        <!-- Abbreviation* -->
+        <div class="form-group required" [ngClass]="{'form-invalid': !newUnitForm.get('abbreviation').valid && newUnitForm.get('abbreviation').dirty}">
+            <label class="req" for="abbreviation">Abbreviation:</label>
+            <input class="form-control" type="text" formControlName="abbreviation" required>            
+            <div class="input-invalid-warning" *ngIf="!newUnitForm.get('abbreviation').valid && newUnitForm.get('abbreviation').dirty">Abbreviation is required</div>
+        </div>            
+    </form>
+
+    <div class="modal-footer">
+        <button type="button" (click)="cancelCreateUnitType()">Cancel</button>
+        <button type="button" (click)="createNewUnitType()" [disabled]="!newUnitForm.valid">Create</button>
+    </div>
+</div>
+
+<infoModal #info></infoModal>
+<areYouSureModal #areYouSure (modalResponseEvent)="AreYouSureDialogResponse($event)"></areYouSureModal>

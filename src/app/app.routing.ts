@@ -13,6 +13,7 @@ import { AuthGuard } from "app/shared/guards/auth.guard";
 import { LoginComponent } from "app/login/login.component";
 import { HomeComponent } from "app/home/home.component";
 import { RegionListResolve } from "app/regionList.resolve";
+import { SettingsComponent } from "app/settings/settings.component";
 
 const appRoutes: Routes = [
     { 
@@ -26,6 +27,11 @@ const appRoutes: Routes = [
     { 
         path: 'login', 
         component: LoginComponent 
+    },
+    {
+        path: 'settings',
+        component: SettingsComponent,
+        canLoad: [AuthGuard]
     },
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
