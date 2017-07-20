@@ -117,3 +117,26 @@ nav.nav-main div.nav-links a {
     font-weight: 500;
     letter-spacing: 2px;
 }
+.pageloader {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 210px 0 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10000000;
+    background-color: rgba(16,21,44,.72);
+    font-weight: 400;
+    background-image: url(https://wim.usgs.gov/styleguide/images/usgsanimated.svg);
+    background-position: center center;
+    background-size: 80px auto;
+    font-size: 16px;
+    letter-spacing: .5px;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    color: #FFF;
+}

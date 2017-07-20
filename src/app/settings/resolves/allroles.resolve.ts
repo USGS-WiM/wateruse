@@ -23,6 +23,6 @@ export class AllRolesResolve implements Resolve<Array<IRoles>> {
   // this resolver is not working. I don't know if its the service or the resolver, but the subscribe is returning nothing even though service
   //is getting the full project properly. either keep digging or remove resolver...
   resolve(route: ActivatedRouteSnapshot): Observable<Array<IRoles>> {
-     return this._settingsService.getRoles();
+     return this._settingsService.getEntities('ROLES_URL');
   }
 }

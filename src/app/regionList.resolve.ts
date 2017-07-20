@@ -1,15 +1,15 @@
 // ------------------------------------------------------------------------------
-// ----- regionList.resolve ----------------------------------------------------
+// ----- categoryTypeList.resolve ----------------------------------------------------
 // ------------------------------------------------------------------------------
 
 // copyright:   2017 WiM - USGS
 // authors:  Tonia Roddick - USGS Wisconsin Internet Mapping
-// purpose: resolver to get the regions once logged in
+// purpose: resolver to get the category types once logged in
 
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
-import { IRegion } from "app/shared/interfaces/Region.interface";
 import { WateruseService } from "app/shared/services/wateruse.service";
+import { IRegion } from "app/shared/interfaces/Region.interface";
 
 @Injectable()
 export class RegionListResolve implements Resolve<Array<IRegion>> {

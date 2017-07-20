@@ -23,6 +23,7 @@ import { AuthService } from 'app/shared/services/auth.service';
 import { numberFormat } from "app/shared/directives/number.directive";
 import { AreYouSureModal } from "app/shared/modals/areYouSure.modal";
 import { InfoModal } from "app/shared/modals/info.modal";
+import { LoadingService } from "app/shared/services/loading.service";
 
 
 @NgModule({
@@ -35,7 +36,7 @@ export class SharedModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: SharedModule,
-      providers: [ AuthGuard, WateruseService, LoginService, AuthService, NgbActiveModal ]
+      providers: [ AuthGuard, WateruseService, LoginService, AuthService, NgbActiveModal, LoadingService ]
     }
   }
 

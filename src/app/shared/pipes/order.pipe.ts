@@ -9,19 +9,19 @@
 import { Pipe } from "@angular/core";
 
 @Pipe({
-  name: "sort"
+	name: "sort"
 })
 export class ArraySortPipe {
-  transform(array: Array<string>, args: string): Array<string> {
-    array.sort((a: any, b: any) => {
-      if (a[args].toLowerCase() < b[args].toLowerCase()) {
-        return -1;
-      } else if (a[args].toLowerCase() > b[args].toLowerCase()) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
-    return array;
-  }
+	transform(array: Array<string>, args: string): Array<string> {
+		array.sort((a: any, b: any) => {
+			if (a[args].toLowerCase() < b[args].toLowerCase()) {
+				return -1;
+			} else if (a[args].toLowerCase() > b[args].toLowerCase()) {
+				return 1;
+			} else {
+				return 0;
+			}
+		});
+		return array;
+	}
 }

@@ -8,6 +8,7 @@
 
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { AuthService } from "app/shared/services/auth.service";
+import { LoadingService } from "app/shared/services/loading.service";
 
 @Component({
 	selector: 'app-root',
@@ -16,17 +17,23 @@ import { AuthService } from "app/shared/services/auth.service";
 })
 export class AppComponent {
 	//public loggedIn: boolean;
+	public showPageLoading: boolean;
 
-	constructor(private _authService: AuthService, private cdRef:ChangeDetectorRef) { }
+	constructor(private _authService: AuthService, private cdRef:ChangeDetectorRef, private _loadingService: LoadingService) { }
 
 	ngOnInit() {
+		this.showPageLoading = false;
 		this._authService.loggedInID().subscribe((id: number)=> {
 			this.loggedIn();
-    });
+    	});
 	    this._authService.loggedInRole().subscribe((role: string)=> {
     		this.loggedInRole()
-    	});
+		});
+		this._loadingService.getLoading.subscribe((load:boolean) =>{
+			this.showPageLoading = load;
+		})
 	}
+
 	public loggedIn() {
 		return localStorage.getItem('credentials') !== null ? true : false;
 

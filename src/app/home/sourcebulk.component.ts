@@ -75,14 +75,7 @@ export class SourceBulkComponent {
         });
         this.SourceInvalids = [];
         this.sourcedata = [];
-        this.ScolHeaders = ['Facility Name *', 'Facility Code *', 'Source Name', 'Source Type *', 'Category Type', 'Latitude *', 'Longitude *'];
-         /*   '<span title="Required">Facility Name <span style="color:#de5030">*</span>', 
-            '<span title="Required">Facility Code <span style="color:#de5030">*</span>', 
-            'Source Name',
-            '<span title="Required">Source Type <span style="color:#de5030">*</span>', 
-            'Category Type', 'Station ID',
-            '<span title="Required">Location Latitude <span style="color:#de5030">*</span>',
-            '<span title="Required">Location Longitude <span style="color:#de5030">*</span>' ];*/
+        this.ScolHeaders = ['Facility Name *', 'Facility Code *', 'Source Name', 'Source Type *', 'Category Type','Station ID', 'Latitude *', 'Longitude *'];
         this.ScolWidths = [120, 120, 120, 160, 160, 120, 120, 120];
         this.Scolumns = [
             { data: 'facilityName', validator: this.reqValidator}, 
@@ -91,30 +84,7 @@ export class SourceBulkComponent {
             { data: 'sourceTypeID', type: 'autocomplete', source: this.sourceTypeNameArray, strict: true}, 
             { data: 'categoryTypeID', type: 'autocomplete', source: this.categoryTypeNameArray, strict: true}, 
             { data: 'stationID' },
-            { data: 'location.y', type: 'numeric', /*validator: (value, callback) =>{ 
-                let row = this['row']; let col = this['col'];
-                let dataAtRow = this['instance'].getDataAtRow(row);
-                let otherDataInRow = false;
-                dataAtRow.forEach((d, index) => {
-                    //need the col too because right after removing req value, it's still in the .getDataAtRow..
-                    if (d !== null && d !== "" && index !== col)
-                        otherDataInRow = true;
-                });
-                
-                if (((value < 22 || value > 55) || isNaN(value))){//  && otherDataInRow) {
-                    setTimeout(()=> { this['instance'].deselectCell(); }, 100);    
-                    alert("Latitude must be between 22.0 and 55.0 (dec deg).");                             
-                    // this._toastService.pop('warning', 'Warning', 'Latitude must be between 22.0 and 55.0 (dec deg)')
-                    callback(false);
-                } else if (!value && otherDataInRow) {
-                    let whichOne = this['instance'].getColHeader(col);
-                    alert("Latitude is required.");
-                    // this._toastService.pop('warning', 'Warning', 'Latitude is required')           
-                    callback(false);
-                } else {
-                    callback(true);
-                }
-            }},*/ format: '0,0.00[0000]'},
+            { data: 'location.y', type: 'numeric',  format: '0,0.00[0000]'},
             { data: 'location.x', type: 'numeric', format: '0,0.00[0000]'}
         ];
         

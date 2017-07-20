@@ -2,48 +2,44 @@
 
 <h1>Hi User {{currentUser}}!</h1>
 <p>Welcome to Wateruse!!</p>
+
 <div><label><span>Select your Region to get started</span></label></div>
 <select name="chosenRegion" [(ngModel)]="chosenRegion" (ngModelChange)="onRegionSelect($event)">
     <option value=""></option>
     <option *ngFor="let r of regionList | sort: 'name'" [ngValue]="r.id">{{r.name}}</option>
 </select>
 <br />
-<ngb-tabset *ngIf="sourceList?.length > 0">
-<!-- SOURCES -->
-    <ngb-tab title="Sources">
-        <ng-template ngbTabContent>
-            <ng-container *ngTemplateOutlet="innerTabset"></ng-container>            
-        </ng-template>
-    </ngb-tab>
-<!-- TIMESERIES -->
-    <ngb-tab title="Time Series">
-        <ng-template ngbTabContent>
-            <timeseries [regionId]="chosenRegionID"></timeseries>         
-        </ng-template>
-    </ngb-tab>
-</ngb-tabset>
-
+<div *ngIf="sourceList?.length >0">
+    <ngb-tabset #mainTabs (tabChange)="beforeMainTabChange($event)" [activeId]="selectedMainTab">
+    <!-- SOURCES -->
+        <ngb-tab title="Sources" id="sources">
+            <ng-template ngbTabContent>
+                <ng-container *ngTemplateOutlet="innerTabset"></ng-container>            
+            </ng-template>
+        </ngb-tab>
+    <!-- TIMESERIES -->
+        <ngb-tab title="Time Series" id="timeseries">
+            <ng-template ngbTabContent>
+                <timeseries [regionId]="chosenRegionID"></timeseries>         
+            </ng-template>
+        </ngb-tab>
+    </ngb-tabset>
+</div>
 <!-- inner source tabset for Sources List and Sources Batch Upload-->
 <ng-template #innerTabset>
-    <ngb-tabset>
-        <ngb-tab>
-            <ng-template ngbTabTitle>
-                Sources List
-            </ng-template>
+    <ngb-tabset #sourceSubTabs (tabChange)="beforeSourceTabChange($event)" [activeId]="selectedTab">
+        <ngb-tab title="Sources List" id="sourceList">            
             <ng-template ngbTabContent>
                 <sourcelist [regionId]="chosenRegionID" [sourceList]="sourceList"></sourcelist>
             </ng-template>
         </ngb-tab>
-        <ngb-tab>
-            <ng-template ngbTabTitle>
-                Sources Batch Upload
-            </ng-template>
+        <ngb-tab title="Sources Batch Upload" id="sourceBulk">
             <ng-template ngbTabContent>
                 <sourcebulk [regionId]="chosenRegionID"></sourcebulk>
             </ng-template>
         </ngb-tab>
-
     </ngb-tabset>
 </ng-template>
 
+<areYouSureModal #areYouSure (modalResponseEvent)="AreYouSureDialogResponse($event)"></areYouSureModal>
 <editsource [regionID]="chosenRegionID" (updatedSource)="createEditFinished($event)"></editsource>

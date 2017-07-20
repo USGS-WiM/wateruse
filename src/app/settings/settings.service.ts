@@ -22,10 +22,7 @@ import { IRoles } from "app/shared/interfaces/Roles.interface";
 
 @Injectable()
 export class SettingsService {
-    constructor(private _http: Http) {
-        this.getSourceTypes();
-        this.getCategoryTypes();
-     }
+    constructor(private _http: Http) {}
 
     // SUBJECTS //////////////////////////////////////
     private _regionSubject: BehaviorSubject<Array<IRegion>> = <BehaviorSubject<IRegion[]>>new BehaviorSubject([]);
@@ -44,149 +41,38 @@ export class SettingsService {
     public roles(): Observable<Array<IRoles>> { return this._rolesSubject.asObservable(); }
     
     // HTTP REQUESTS ////////////////////////////////////
+    
     // ------------ GETS ---------------------------
-    public getRegions() {
-        //return regions for logged in user
+    public getEntities(url:string){
         let options = new RequestOptions({headers: CONFIG.JSON_AUTH_HEADERS});
-        return this._http.get(CONFIG.REGIONS_URL, options)
-            .map(r => <Array<IRegion>>r.json())
+        return this._http.get(CONFIG[url], options)
+            .map(response => <Array<any>>response.json())
     }
-    public getSourceTypes() {
-        let options = new RequestOptions({headers: CONFIG.JSON_HEADERS});
-        return this._http.get(CONFIG.SOURCETYPES_URL, options)
-            .map(res => <Array<ISourceType>>res.json())            
-            .catch(this.errorHandler);
-    }
-    public getCategoryTypes() {
-        let options = new RequestOptions({headers: CONFIG.JSON_AUTH_HEADERS});
-        return this._http.get(CONFIG.CATEGORYTYPES_URL, options)
-            .map(res => <Array<ICategoryType>>res.json())
-            .catch(this.errorHandler);
-    }
-    public getUnitTypes() {
-        let options = new RequestOptions({headers: CONFIG.JSON_AUTH_HEADERS});
-        return this._http.get(CONFIG.UNITTYPES_URL, options)
-            .map(res => <Array<IUnitType>>res.json())
-            .catch(this.errorHandler);
-    }
-    public getStatusTypes() {
-        let options = new RequestOptions({headers: CONFIG.JSON_AUTH_HEADERS});
-        return this._http.get(CONFIG.STATUSTYPES_URL, options)
-            .map(res => <Array<IStatusType>>res.json())
-            .catch(this.errorHandler);
-    }
-    public getRoles() {
-        let options = new RequestOptions({headers: CONFIG.JSON_AUTH_HEADERS});
-        return this._http.get(CONFIG.ROLES_URL, options)
-            .map(res => <Array<IRoles>>res.json())
-            .catch(this.errorHandler);
-    }        
+    
 
     // ------------ POSTS ------------------------------    
-    public postRegion(aRegion: IRegion){
+    public postEntity(entity: object, url: string){
         let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.post(CONFIG.REGIONS_URL, aRegion, options)
-            .map(res => <IRegion>res.json())
+        return this._http.post(CONFIG[url], entity, options)
+            .map(res => <any>res.json())
             .catch(this.errorHandler);
     }
-    public postCategory(aCategory: ICategoryType){
-        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.post(CONFIG.CATEGORYTYPES_URL, aCategory, options)
-            .map(res => <ICategoryType>res.json())
-            .catch(this.errorHandler);
-    }
-    public postSourceType(aSourceType: ISourceType){
-        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.post(CONFIG.SOURCETYPES_URL, aSourceType, options)
-            .map(res => <ISourceType>res.json())
-            .catch(this.errorHandler);
-    }
-    public postRole(aRole: IRoles){
-        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.post(CONFIG.ROLES_URL, aRole, options)
-            .map(res => <IRoles>res.json())
-            .catch(this.errorHandler);
-    }
-    public postUnitType(aUType: IUnitType){
-        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.post(CONFIG.UNITTYPES_URL, aUType, options)
-            .map(res => <IUnitType>res.json())
-            .catch(this.errorHandler);
-    }
-    public postStatusType(aSType: IUnitType){
-        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.post(CONFIG.STATUSTYPES_URL, aSType, options)
-            .map(res => <IStatusType>res.json())
-            .catch(this.errorHandler);
-    }
+
     // ------------ PUTS --------------------------------    
-    public putRegion(id: number, aRegion: IRegion) {
+    public putEntity(id: number, entity: any, url: string){
         let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.put(CONFIG.REGIONS_URL + '/' + id, aRegion, options)
-            .map(res => <IRegion>res.json())
+        return this._http.put(CONFIG[url] + '/' + id, entity, options)
+            .map(res => <any>res.json())
             .catch(this.errorHandler);
     }
-    public putCategory(id: number, aCatgory: ICategoryType) {
-        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.put(CONFIG.CATEGORYTYPES_URL + '/' + id, aCatgory, options)
-            .map(res => <ICategoryType>res.json())
-            .catch(this.errorHandler);
-    }
-    public putSourceType(id: number, aSourceType: ISourceType) {
-        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.put(CONFIG.SOURCETYPES_URL + '/' + id, aSourceType, options)
-            .map(res => <ISourceType>res.json())
-            .catch(this.errorHandler);
-    }
-    public putRole(id: number, aRole: IRoles) {
-        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.put(CONFIG.ROLES_URL + '/' + id, aRole, options)
-            .map(res => <IRoles>res.json())
-            .catch(this.errorHandler);
-    }
-    public putUnitType(id: number, auType: IUnitType) {
-        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.put(CONFIG.UNITTYPES_URL + '/' + id, auType, options)
-            .map(res => <IUnitType>res.json())
-            .catch(this.errorHandler);
-    }
-    public putStatusType(id: number, stType: IStatusType) {
-        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.put(CONFIG.STATUSTYPES_URL + '/' + id, stType, options)
-            .map(res => <IStatusType>res.json())
-            .catch(this.errorHandler);
-    }
+        
     // ------------ DELETES ------------------------------
-    public deleteRegion(regionID: number) {
+    public deleteEntity(id: number, url: string){
         let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.delete(CONFIG.REGIONS_URL + '/' + regionID, options)
+        return this._http.delete(CONFIG[url] + '/' + id, options)
             .catch(this.errorHandler);
     }
-    public deleteCategory(categoryID: number) {
-        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.delete(CONFIG.CATEGORYTYPES_URL + '/' + categoryID, options)
-            .catch(this.errorHandler);
-    }
-    public deleteSourceType(sourceTypeId: number) {
-        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.delete(CONFIG.SOURCETYPES_URL + '/' + sourceTypeId, options)
-            .catch(this.errorHandler);
-    }
-    public deleteRole(roleId: number) {
-        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.delete(CONFIG.ROLES_URL + '/' + roleId, options)
-            .catch(this.errorHandler);
-    }
-    public deleteUnitType(utID: number) {
-        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.delete(CONFIG.UNITTYPES_URL + '/' + utID, options)
-            .catch(this.errorHandler);
-    }
-    public deleteStatusType(stID: number) {
-        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.delete(CONFIG.STATUSTYPES_URL + '/' + stID, options)
-            .catch(this.errorHandler);
-    }
+        
     
     private errorHandler(error: any) {
         let errMsg = (error.message) ? error.message :

@@ -90,7 +90,7 @@ export class CategoriesComponent implements OnInit {
             this.infomodal.showInfoModal(infoMessage);
 		} else {
 			delete c.isEditing;
-			this._settingsService.putCategory(c.id, c).subscribe((resp: ICategoryType) => {
+			this._settingsService.putEntity(c.id, c, 'CATEGORYTYPES_URL').subscribe((resp: ICategoryType) => {
 				this._toastService.pop('success', 'Success', 'Category Type was updated')
 				c.isEditing = false;
 				this.categoryTypes[i] = c;
@@ -114,7 +114,7 @@ export class CategoriesComponent implements OnInit {
     //post new category type
     public createNewCategory(){
         let category = this.newCatForm.value;
-        this._settingsService.postCategory(category).subscribe((response: ICategoryType) => {
+        this._settingsService.postEntity(category, 'CATEGORYTYPES_URL').subscribe((response: ICategoryType) => {
             response.isEditing = false;
             this.categoryTypes.push(response);
             this._settingsService.setCategories(this.categoryTypes);
@@ -140,7 +140,7 @@ export class CategoriesComponent implements OnInit {
             // get the index to be deleted by the id
             let ind: number = this.getCategoryIndex(this.deleteID);
             //delete it
-            this._settingsService.deleteCategory(this.deleteID).subscribe(
+            this._settingsService.deleteEntity(this.deleteID, 'CATEGORYTYPES_URL').subscribe(
                 result => {         
                     this._toastService.pop('success', 'Success', 'Category Type deleted.');           
                     this.categoryTypes.splice(ind, 1); //delete from array

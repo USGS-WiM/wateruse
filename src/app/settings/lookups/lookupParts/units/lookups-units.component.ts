@@ -89,7 +89,7 @@ export class UnitTypesComponent implements OnInit {
             this.infomodal.showInfoModal(infoMessage);
 		} else {
 			delete u.isEditing;
-			this._settingsService.putUnitType(u.id, u).subscribe((resp: IUnitType) => {
+			this._settingsService.putEntity(u.id, u, 'UNITTYPES_URL').subscribe((resp: IUnitType) => {
 				this._toastService.pop('success', 'Success', 'Unit Type was updated')
 				u.isEditing = false;
 				this.unitTypes[i] = u;
@@ -112,7 +112,7 @@ export class UnitTypesComponent implements OnInit {
     //post new category type
     public createNewUnitType(){
         let utype = this.newUnitForm.value;
-        this._settingsService.postUnitType(utype).subscribe((response: IUnitType) => {
+        this._settingsService.postEntity(utype, 'UNITTYPES_URL').subscribe((response: IUnitType) => {
             response.isEditing = false;
             this.unitTypes.push(response);
             this._settingsService.setUnitTypes(this.unitTypes);
@@ -138,7 +138,7 @@ export class UnitTypesComponent implements OnInit {
             // get the index to be deleted by the id
             let ind: number = this.getUnitTypeIndex(this.deleteID);
             //delete it
-            this._settingsService.deleteUnitType(this.deleteID).subscribe(
+            this._settingsService.deleteEntity(this.deleteID, 'UNITTYPES_URL').subscribe(
                 result => {         
                     this._toastService.pop('success', 'Success', 'Unit Type deleted.');           
                     this.unitTypes.splice(ind, 1); //delete from array

@@ -88,7 +88,7 @@ export class RolesComponent implements OnInit {
             this.infomodal.showInfoModal(infoMessage);
 		} else {
 			delete r.isEditing;
-			this._settingsService.putRole(r.id, r).subscribe((resp: IRoles) => {
+			this._settingsService.putEntity(r.id, r, 'ROLES_URL').subscribe((resp: IRoles) => {
 				this._toastService.pop('success', 'Success', 'Role was updated')
 				r.isEditing = false;
 				this.rolesList[i] = r;
@@ -111,7 +111,7 @@ export class RolesComponent implements OnInit {
     //post new category type
     public createNewRole(){
         let role = this.newRoleForm.value;
-        this._settingsService.postRole(role).subscribe((response: IRoles) => {
+        this._settingsService.postEntity(role, 'ROLES_URL').subscribe((response: IRoles) => {
             response.isEditing = false;
             this.rolesList.push(response);
             this._settingsService.setRoles(this.rolesList);
@@ -137,7 +137,7 @@ export class RolesComponent implements OnInit {
             // get the index to be deleted by the id
             let ind: number = this.getRoleIndex(this.deleteID);
             //delete it
-            this._settingsService.deleteRole(this.deleteID).subscribe(
+            this._settingsService.deleteEntity(this.deleteID, 'ROLES_URL').subscribe(
                 result => {         
                     this._toastService.pop('success', 'Success', 'Role deleted.');           
                     this.rolesList.splice(ind, 1); //delete from array

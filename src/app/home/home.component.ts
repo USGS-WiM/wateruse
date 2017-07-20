@@ -6,41 +6,57 @@
 // authors:  Tonia Roddick - USGS Wisconsin Internet Mapping
 // purpose: main page after login showing selection of region and list of sources for that region , ChangeDetectorRef
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { WateruseService } from "app/shared/services/wateruse.service";
 import { IRegion } from "app/shared/interfaces/Region.interface";
 import { ActivatedRoute } from "@angular/router";
 import { ISource } from "app/shared/interfaces/Source.interface";
+import { AreYouSureModal } from "app/shared/modals/areYouSure.modal";
+import { NgbTabChangeEvent, NgbTabset } from "@ng-bootstrap/ng-bootstrap";
+import { LoadingService } from "app/shared/services/loading.service";
 
 @Component({
     moduleId: module.id,
     templateUrl: 'home.component.html'
 })
 
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit {    
+    @ViewChild('areYouSure') areYouSure: AreYouSureModal;    
+    @ViewChild('mainTabs') outerTabs: NgbTabset;
+    @ViewChild('sourceSubTabs') innerTabs: NgbTabset;
+
     public chosenRegionID: number;  // store regionID chosen to use in post/put
     public currentUser: string; // current user logged in right now
     public regionList: Array<IRegion>; // list of regions for user to choose from
     public sourceList: Array<ISource>; // list of sources that returns once they chose a region
-
-    constructor(private _waterService: WateruseService, private _route: ActivatedRoute) {
+    public tabChangeEvent: NgbTabChangeEvent;
+    public selectedMainTab: string;
+    public selectedSubTab: string;
+    public nosources: boolean;
+    constructor(private _waterService: WateruseService, private _route: ActivatedRoute, private _loadingService: LoadingService) {
         // get current user from localstorage private _cdRef:ChangeDetectorRef,
         this.currentUser = localStorage.getItem('loggedInName');
     }
 
     ngOnInit() {
+        this.nosources = true;
+        this.selectedMainTab = "sources";
+        this.selectedSubTab = "sourceList";
         this.chosenRegionID = -1;
         this.regionList = this._route.snapshot.data['regions'];
         // sources update when user choses region
         this._waterService.sources().subscribe((s: Array<ISource>) => {
             this.sourceList = s;
+           this.nosources = false;
+           this._loadingService.setLoading(false);
         });
     }
-
+   
     // region selected, store regionID (e), and go get the sources for this region
     public onRegionSelect(e) {
         this.chosenRegionID = e;
+        this._loadingService.setLoading(true);
         this._waterService.getSources(e);
     }
 
@@ -62,5 +78,27 @@ export class HomeComponent implements OnInit {
             return source.id === sID;
         });
         return ind;
+    }
+    public beforeMainTabChange(e: NgbTabChangeEvent){
+        if (e.activeId == 'timeseries'){
+            e.preventDefault();
+            this.areYouSure.showSureModal('Are you sure you want to change tabs? You will lose any work done on this tab.'); // listener is AreYouSureDialogResponse()
+        }
+    }
+    public beforeSourceTabChange(e:NgbTabChangeEvent) {
+        if (e.activeId == 'sourceBulk'){
+            e.preventDefault();
+            this.areYouSure.showSureModal('Are you sure you want to change tabs? You will lose any work done on this tab.'); // listener is AreYouSureDialogResponse()
+        }
+    }
+    // output emitter function when areYouSure is closed
+    public AreYouSureDialogResponse(val: boolean) {
+        //stop if they hit cancel
+        if (val) {
+            this.selectedMainTab = "sources";
+            this.selectedSubTab = "sourceList";
+            if (this.innerTabs) this.innerTabs.activeId = this.selectedSubTab;
+            else this.outerTabs.activeId = this.selectedMainTab;
+        }
     }
 }

@@ -31,7 +31,7 @@ import { SettingsModule } from "app/settings/settings.module";
   declarations: [ AppComponent, LoginComponent, HomeComponent, SourceListComponent, SourceBulkComponent, EditSourceModal, TimeseriesComponent ],
   imports: [ BrowserModule, FormsModule, ReactiveFormsModule, HttpModule, AppRoutingModule, PipesModule, SharedModule.forRoot(), SettingsModule ],
   exports: [ReactiveFormsModule],
-  providers: [ RegionListResolve, HomeService], //AlertService
+  providers: [ RegionListResolve, HomeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

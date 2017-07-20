@@ -90,7 +90,7 @@ export class StatusesComponent implements OnInit {
             this.infomodal.showInfoModal(infoMessage);
 		} else {
 			delete c.isEditing;
-			this._settingsService.putStatusType(c.id, c).subscribe((resp: IStatusType) => {
+			this._settingsService.putEntity(c.id, c, 'STATUSTYPES_URL').subscribe((resp: IStatusType) => {
 				this._toastService.pop('success', 'Success', 'Status Type was updated')
 				c.isEditing = false;
 				this.statusTypes[i] = c;
@@ -114,7 +114,7 @@ export class StatusesComponent implements OnInit {
     //post new category type
     public createNewStatusType(){
         let stat = this.newStatusTypeForm.value;
-        this._settingsService.postStatusType(stat).subscribe((response: IStatusType) => {
+        this._settingsService.postEntity(stat, 'STATUSTYPES_URL').subscribe((response: IStatusType) => {
             response.isEditing = false;
             this.statusTypes.push(response);
             this._settingsService.setStatusTypes(this.statusTypes);
@@ -140,7 +140,7 @@ export class StatusesComponent implements OnInit {
             // get the index to be deleted by the id
             let ind: number = this.getStatusIndex(this.deleteID);
             //delete it
-            this._settingsService.deleteStatusType(this.deleteID).subscribe(
+            this._settingsService.deleteEntity(this.deleteID, 'STATUSTYPES_URL').subscribe(
                 result => {         
                     this._toastService.pop('success', 'Success', 'Status Type deleted.');           
                     this.statusTypes.splice(ind, 1); //delete from array

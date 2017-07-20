@@ -66,7 +66,7 @@ export class EditRegionModal {
                 let region: IRegion = this.regionForm.value;
                 // PUT it (if id exists)
                 if (region.id > 0){
-                    this._settingsService.putRegion(region.id, region).subscribe((response: IRegion) => {
+                    this._settingsService.putEntity(region.id, region, 'REGIONS_URL').subscribe((response: IRegion) => {
                         this._toastService.pop('success', 'Success', 'Region was updated.'); 
                         this._settingsService.setModalRegion(null); // clear out the service source that this modal needed
                         this.updatedRegion.emit(response); // emit the edited source
@@ -76,7 +76,7 @@ export class EditRegionModal {
                     });
                 } else {
                     // POST it
-                    this._settingsService.postRegion(region).subscribe((response: IRegion) => {
+                    this._settingsService.postEntity(region, 'REGIONS_URL').subscribe((response: IRegion) => {
                         this._toastService.pop('success', 'Success', 'Region was created.'); 
                         this._settingsService.setModalRegion(null); // clear out the service source that this modal needed
                         this.updatedRegion.emit(response); // emit the created source

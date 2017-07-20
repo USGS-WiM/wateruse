@@ -24,39 +24,41 @@ import { IRoles } from "app/shared/interfaces/Roles.interface";
 
 @Injectable()
 export class WateruseService {
+
     constructor(private _http: Http) {
-        this.getSourceTypes();
-        this.getCategoryTypes();
-     }
+        this.getSourceTypes().subscribe(stypes => {
+            this._sourceTypesSubject.next(stypes);
+        });
+        
+        this.getCategoryTypes().subscribe(ctypes => {
+            this._categoryTypesSubject.next(ctypes);
+        });
+    }
 
     // SUBJECTS //////////////////////////////////////
     private _sourcesSubject: Subject<Array<ISource>> = new Subject<Array<ISource>>();
     private _sourceTypesSubject: BehaviorSubject<Array<ISourceType>> = <BehaviorSubject<ISourceType[]>>new BehaviorSubject([]);
     private _categoryTypesSubject: BehaviorSubject<Array<ICategoryType>> = <BehaviorSubject<ICategoryType[]>>new BehaviorSubject([]);
-    private _unitTypesSubject: BehaviorSubject<Array<IUnitType>> = <BehaviorSubject<IUnitType[]>>new BehaviorSubject([]);
-    private _statusTypesSubject: BehaviorSubject<Array<IStatusType>> = <BehaviorSubject<IStatusType[]>>new BehaviorSubject([]);
-    private _rolesSubject: BehaviorSubject<Array<IRoles>> = <BehaviorSubject<IRoles[]>>new BehaviorSubject([]);
-
+    
     // GETTERS /////////////////////////////////////////////
     public sources(): Observable<Array<ISource>> { return this._sourcesSubject.asObservable(); }
     public sourcetypes(): Observable<Array<ISourceType>> { return this._sourceTypesSubject.asObservable(); }
     public categorytypes(): Observable<Array<ICategoryType>> { return this._categoryTypesSubject.asObservable(); }    
-    public unittypes(): Observable<Array<IUnitType>> { return this._unitTypesSubject.asObservable(); }
-    public statustypes(): Observable<Array<IStatusType>> { return this._statusTypesSubject.asObservable(); }
-    public roles(): Observable<Array<IRoles>> { return this._rolesSubject.asObservable(); }
     
     // SETTERS ///////////////////////////////////////////
     public setSources(s:Array<ISource>) {
         this._sourcesSubject.next(s);
     }
+
+    // http GET //////////////////////////////////////////////
     // gets resolved when coming to this route (home)
     public getRegions() {
         //return regions for logged in user
         let options = new RequestOptions({headers: CONFIG.JSON_AUTH_HEADERS});
         return this._http.get(CONFIG.REGIONS_URL, options)
             .map(r => <Array<IRegion>>r.json())
+            .catch(this.errorHandler);
     }
-
     // gets all sources after region is chosen
     public getSources(regionId: string) {
         let sourceParam: URLSearchParams = new URLSearchParams();
@@ -67,25 +69,22 @@ export class WateruseService {
             .subscribe(s => {this._sourcesSubject.next(s);},
             error => this.errorHandler);
     }
-
     // dropdown values for source types for filtering
     public getSourceTypes() {
         let options = new RequestOptions({headers: CONFIG.JSON_HEADERS});
         return this._http.get(CONFIG.SOURCETYPES_URL, options)
-            .map(res => <Array<ISourceType>>res.json())
-            .subscribe(st => {this._sourceTypesSubject.next(st);},
-            error => this.errorHandler);
+            .map(res => <Array<ISourceType>>res.json())            
+            .catch(this.errorHandler);
     }
-
     // dropdown values for category types for filtering
     public getCategoryTypes() {
         let options = new RequestOptions({headers: CONFIG.JSON_AUTH_HEADERS});
         return this._http.get(CONFIG.CATEGORYTYPES_URL, options)
             .map(res => <Array<ICategoryType>>res.json())
-            .subscribe(c => {this._categoryTypesSubject.next(c);},
-            error => this.errorHandler);
+            .catch(this.errorHandler);
     }
-   
+        
+    
     // POST Source
     public postSource(aSource: ISource){
         let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
@@ -96,7 +95,7 @@ export class WateruseService {
     // POST source Batch
     public postBatchSources(regionId: number, sources: Array<any>) {
         let options = new RequestOptions({headers:CONFIG.JSON_AUTH_HEADERS});
-        return this._http.post(CONFIG.REGIONS_URL + '/' + regionId + '/sources/batch', sources, options)
+        return this._http.post(CONFIG.SOURCES_URL + '/batch', sources, options)
             .map(res=> <Array<ITimeseries>>res.json())
             .catch(this.errorHandler);
     }
@@ -114,10 +113,8 @@ export class WateruseService {
         return this._http.put(CONFIG.SOURCES_URL + '/' + id, aSource, options)
             .map(res => <ISource>res.json())
             .catch(this.errorHandler);
-    }
+    }    
 
-    
-    
     // DELETE Source
     public deleteSource(sourceID: number) {
         let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
