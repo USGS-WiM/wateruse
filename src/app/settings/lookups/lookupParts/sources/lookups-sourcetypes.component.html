@@ -38,7 +38,7 @@
     </div>
 </form>
 <br />
-<button *ngIf="!showNewSTForm" type="button" (click)="showNewSourceTypeForm()"><i class="fa fa-plus" aria-hidden="tru"></i>  Add New Source Type</button>
+<button *ngIf="!showNewSTForm" type="button" class="btn-blue" (click)="showNewSourceTypeForm()"><i class="fa fa-plus" aria-hidden="tru"></i>  Add New Source Type</button>
 
 <!-- new category type form -->
 <div *ngIf="showNewSTForm">
@@ -67,8 +67,8 @@
     </form>
 
     <div class="modal-footer">
-        <button type="button" (click)="cancelCreateSourceType()">Cancel</button>
-        <button type="button" (click)="createNewSourceType()" [disabled]="!newSourceTypeForm.valid">Create</button>
+        <button type="button" (click)="cancelCreateSourceType()" class="btn-black">Cancel</button>
+        <button type="button" (click)="createNewSourceType()" [disabled]="!newSourceTypeForm.valid" class="btn-blue">Create</button>
     </div>
 </div>
 

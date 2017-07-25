@@ -22,8 +22,8 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
             <!--<p>Are you sure you want to delete this Source and all the timeseries associated with it?</p>-->
         </div>
         <div class="modal-footer">
-            <button type="button" class="sigl-btn" (click)="c('Yes')">Yes</button>
-            <button type="button" class="sigl-btn btn-orange" (click)="c('Cancel')">Cancel</button>
+            <button type="button" (click)="c('Yes')" class="btn-blue">Yes</button>
+            <button type="button" (click)="c('Cancel')" class="btn-black">Cancel</button>
         </div>
     </ng-template>
     `

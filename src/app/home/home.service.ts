@@ -13,6 +13,7 @@ import { IToast } from "app/shared/interfaces/Toast.interface";
 
 @Injectable()
 export class HomeService {
+
     // modal for editing source
     private _sourceModalSubj: BehaviorSubject<boolean> = <BehaviorSubject<boolean>>new BehaviorSubject(false);
     // setter
@@ -33,6 +34,17 @@ export class HomeService {
     // getter
     public get sourceForModal(): any {
         return this._modalSourceSubj.asObservable();
+    }
+
+    // modal for bulk upload sources
+    private _bulkSourceModalSubj: BehaviorSubject<boolean> = <BehaviorSubject<boolean>>new BehaviorSubject(false);
+    // setter
+    public setbulkSourceModal(val: any) {
+        this._bulkSourceModalSubj.next(val);
+    }
+    //getter
+    public get showbulkSourceModal(): any {
+        return this._bulkSourceModalSubj.asObservable();
     }
 
     // boolean for valid table for handsontable upload button disabled prop

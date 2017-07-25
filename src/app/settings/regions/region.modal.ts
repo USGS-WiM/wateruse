@@ -31,7 +31,7 @@ export class EditRegionModal {
         this.regionForm = _fb.group({
             'id': new FormControl(null),
             'name': new FormControl(null, Validators.required),
-            'description': new FormControl(null),
+            'description': new FormControl(null, Validators.required),
             'shortName': new FormControl(null)
         });
     }

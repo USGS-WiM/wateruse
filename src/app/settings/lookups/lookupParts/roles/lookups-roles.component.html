@@ -34,7 +34,7 @@
     </div>
 </form>
 <br />
-<button *ngIf="!showNewRoleForm" type="button" (click)="showTheNewRoleForm()"><i class="fa fa-plus" aria-hidden="tru"></i>  Add New Role</button>
+<button *ngIf="!showNewRoleForm" type="button" class="btn-blue" (click)="showTheNewRoleForm()"><i class="fa fa-plus" aria-hidden="tru"></i>  Add New Role</button>
 
 <!-- new category type form -->
 <div *ngIf="showNewRoleForm">
@@ -49,15 +49,15 @@
 
         <!-- Description* -->
         <div class="form-group required" [ngClass]="{'form-invalid': !newRoleForm.get('description').valid && newRoleForm.get('description').dirty}">
-            <label for="description">Description:</label>
+            <label class="req" for="description">Description:</label>
             <textarea class="form-control" rows="3" placeholder="" formControlName="description"></textarea>                
             <div class="input-invalid-warning" *ngIf="!newRoleForm.get('description').valid && newRoleForm.get('description').dirty">Description is required</div>
         </div>            
     </form>
 
     <div class="modal-footer">
-        <button type="button" (click)="cancelCreateRole()">Cancel</button>
-        <button type="button" (click)="createNewRole()" [disabled]="!newRoleForm.valid">Create</button>
+        <button type="button" (click)="cancelCreateRole()" class="btn-black">Cancel</button>
+        <button type="button" (click)="createNewRole()" [disabled]="!newRoleForm.valid" class="btn-blue">Create</button>
     </div>
 </div>
 

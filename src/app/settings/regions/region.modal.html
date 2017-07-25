@@ -14,7 +14,7 @@
             <!-- Description -->
             <div class="form-group">
                 <label class="req" for="facilityCode">Description:</label>
-                <textarea class="form-control" rows="3" placeholder="" formControlName="description"></textarea>                
+                <textarea class="form-control" rows="3" placeholder="" formControlName="description" required></textarea>                
             </div>
 
             <!-- Short Name -->
@@ -26,8 +26,8 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" (click)="d('clickedCancel')">Cancel</button>
-        <button type="button" *ngIf="modalRegion.id == undefined" (click)="c(regionForm)" [disabled]="!regionForm.valid">Create</button>        
-        <button type="button" [disabled]="!regionForm.valid" *ngIf="modalRegion.id != undefined" (click)="c(regionForm.valid)">Save</button>
+        <button type="button" (click)="d('clickedCancel')" class="btn-black">Cancel</button>
+        <button type="button" *ngIf="modalRegion.id == undefined" (click)="c(regionForm)" [disabled]="!regionForm.valid" class="btn-blue">Create</button>        
+        <button type="button" [disabled]="!regionForm.valid" *ngIf="modalRegion.id != undefined" (click)="c(regionForm.valid)" class="btn-blue">Save</button>
     </div>
 </ng-template>

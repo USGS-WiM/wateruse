@@ -9,12 +9,13 @@
     <option *ngFor="let r of regionList | sort: 'name'" [ngValue]="r.id">{{r.name}}</option>
 </select>
 <br />
-<div *ngIf="sourceList?.length >0">
+<div *ngIf="chosenRegionID > 0">
     <ngb-tabset #mainTabs (tabChange)="beforeMainTabChange($event)" [activeId]="selectedMainTab">
     <!-- SOURCES -->
         <ngb-tab title="Sources" id="sources">
             <ng-template ngbTabContent>
-                <ng-container *ngTemplateOutlet="innerTabset"></ng-container>            
+                <sourcelist [regionId]="chosenRegionID" [sourceList]="sourceList"></sourcelist>
+<!--                <ng-container *ngTemplateOutlet="innerTabset"></ng-container>            -->
             </ng-template>
         </ngb-tab>
     <!-- TIMESERIES -->
@@ -25,7 +26,7 @@
         </ngb-tab>
     </ngb-tabset>
 </div>
-<!-- inner source tabset for Sources List and Sources Batch Upload-->
+<!-- inner source tabset for Sources List and Sources Batch Upload
 <ng-template #innerTabset>
     <ngb-tabset #sourceSubTabs (tabChange)="beforeSourceTabChange($event)" [activeId]="selectedTab">
         <ngb-tab title="Sources List" id="sourceList">            
@@ -39,7 +40,7 @@
             </ng-template>
         </ngb-tab>
     </ngb-tabset>
-</ng-template>
+</ng-template>-->
 
 <areYouSureModal #areYouSure (modalResponseEvent)="AreYouSureDialogResponse($event)"></areYouSureModal>
 <editsource [regionID]="chosenRegionID" (updatedSource)="createEditFinished($event)"></editsource>

@@ -38,7 +38,7 @@
     </div>
 </form>
 <br />
-<button *ngIf="!showNewStatusTypeForm" type="button" (click)="showNewStatForm()"><i class="fa fa-plus" aria-hidden="tru"></i>  Add New Status Type</button>
+<button *ngIf="!showNewStatusTypeForm" type="button" class="btn-blue" (click)="showNewStatForm()"><i class="fa fa-plus" aria-hidden="tru"></i>  Add New Status Type</button>
 
 <!-- new Status type form -->
 <div *ngIf="showNewStatusTypeForm">
@@ -67,8 +67,8 @@
     </form>
 
     <div class="modal-footer">
-        <button type="button" (click)="cancelCreateStatusType()">Cancel</button>
-        <button type="button" (click)="createNewStatusType()" [disabled]="!newStatusTypeForm.valid">Create</button>
+        <button type="button" (click)="cancelCreateStatusType()" class="btn-black">Cancel</button>
+        <button type="button" (click)="createNewStatusType()" [disabled]="!newStatusTypeForm.valid" class="btn-blue">Create</button>
     </div>
 </div>
 

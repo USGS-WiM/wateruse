@@ -38,7 +38,7 @@
     </div>
 </form>
 <br />
-<button *ngIf="!showNewCatForm" type="button" (click)="showNewCategoryForm()"><i class="fa fa-plus" aria-hidden="tru"></i>  Add New Category Type</button>
+<button *ngIf="!showNewCatForm" type="button" class="btn-blue" (click)="showNewCategoryForm()"><i class="fa fa-plus" aria-hidden="tru"></i>  Add New Category Type</button>
 
 <!-- new category type form -->
 <div *ngIf="showNewCatForm">
@@ -67,8 +67,8 @@
     </form>
 
     <div class="modal-footer">
-        <button type="button" (click)="cancelCreateCategory()">Cancel</button>
-        <button type="button" (click)="createNewCategory()" [disabled]="!newCatForm.valid">Create</button>
+        <button type="button" (click)="cancelCreateCategory()" class="btn-black">Cancel</button>
+        <button type="button" (click)="createNewCategory()" [disabled]="!newCatForm.valid" class="btn-blue">Create</button>
     </div>
 </div>
 

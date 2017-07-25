@@ -34,7 +34,7 @@
     </div>
 </form>
 <br />
-<button *ngIf="!showNewUnitForm" type="button" (click)="showTheNewUnitTypeForm()"><i class="fa fa-plus" aria-hidden="tru"></i>  Add New Unit Type</button>
+<button *ngIf="!showNewUnitForm" type="button" class="btn-blue" (click)="showTheNewUnitTypeForm()"><i class="fa fa-plus" aria-hidden="tru"></i>  Add New Unit Type</button>
 
 <!-- new category type form -->
 <div *ngIf="showNewUnitForm">
@@ -56,8 +56,8 @@
     </form>
 
     <div class="modal-footer">
-        <button type="button" (click)="cancelCreateUnitType()">Cancel</button>
-        <button type="button" (click)="createNewUnitType()" [disabled]="!newUnitForm.valid">Create</button>
+        <button type="button" (click)="cancelCreateUnitType()" class="btn-black">Cancel</button>
+        <button type="button" (click)="createNewUnitType()" [disabled]="!newUnitForm.valid" class="btn-blue">Create</button>
     </div>
 </div>
 
