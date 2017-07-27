@@ -31,10 +31,10 @@ export class SourceListComponent {
     @Input() sourceList: Array<ISource>; // list of sources that returns once they chose a region
     @ViewChild('areYouSure') areYouSure: AreYouSureModal;
     @ViewChild('info') infomodal: InfoModal;
-    @ViewChild('bulkSource') bulkSourceModal;
-    //@ViewChild('hotTable') hotSourceTable;    
+    // @ViewChild('bulkSource') bulkSourceModal;
+    @ViewChild('hotTable') hotSourceTable;    
     public modalReference: any;
-    public sourcedata: Array<ISource>; // bulk upload 
+    public sourcedata: Array<ISource> = []; // bulk upload 
     public hot: any;
     public SinvalidTable: boolean;
     private ScolHeaders: Array<string>;
@@ -44,24 +44,24 @@ export class SourceListComponent {
     private SourceInvalids: Array<any>;
     public sourceTypeList: Array<ISourceType>; public sourceTypeNameArray: Array<string>;
     public categoryTypeList: Array<ICategoryType>; public categoryTypeNameArray: Array<string>;
-//    public errorMessage: string;
-//    @ViewChild('sourcebulk') sourcebulk: SourceBulkComponent;
     private deleteID: number; // store source id they want to delete
-    public errorMessage: string; // not sure how to use this yet
     public Fchoice: string;
+    public showBatch: boolean; // flag to swap list with upload
+    private valdTabSub: any;
 
     constructor(private _waterService: WateruseService, private _homeService: HomeService, private _toastService: ToasterService, 
         private _modalService: NgbModal, private _cdRef:ChangeDetectorRef) {}
     
     ngOnInit(){   
-        this.Fchoice = "facilityCode"; 
+        this.Fchoice = "facilityCode";  this.showBatch = false;
         this._waterService.sources().subscribe((s: Array<ISource>) => {
             this.sourceList = s;
         });
-
+        
         this._homeService.setInvalidTable(false);
-        this._homeService.validTableVal.subscribe((i:boolean) => {
+        this. valdTabSub = this._homeService.validTableVal.subscribe((i:boolean) => {
             this.SinvalidTable = i;
+            this._cdRef.detectChanges();
         });
         // get the sourcetypes
         this._waterService.sourcetypes().subscribe((st: Array<ISourceType>) => {
@@ -87,26 +87,26 @@ export class SourceListComponent {
             { data: 'facilityName', validator: this.reqValidator}, 
             { data: 'facilityCode', validator: this.facCodeValidator },
             { data: 'name'}, 
-            { data: 'sourceTypeID', type: 'autocomplete', source: this.sourceTypeNameArray, strict: true}, 
-            { data: 'categoryTypeID', type: 'autocomplete', source: this.categoryTypeNameArray, strict: true}, 
+            { data: 'sourceTypeID', type: 'autocomplete', source: this.sourceTypeNameArray, strict: true, validator: this.ddValidator}, 
+            { data: 'categoryTypeID', type: 'autocomplete', source: this.categoryTypeNameArray, strict: true, validator: this.ddValidator}, 
             { data: 'stationID' },
-            { data: 'location.y', type: 'numeric', format: '0,0.00[0000]'},
-            { data: 'location.x', type: 'numeric', format: '0,0.00[0000]'}
+            { data: 'location.y', type: 'numeric', validator: this.latValidator},
+            { data: 'location.x', type: 'numeric', validator: this.longValidator}
         ];
         
         this.StableOptions = { 
-            columnSorting: true,             
+            columnSorting: true, 
             minSpareRows: 30, 
+            rowHeaders: true,
+            contextMenu: ['remove_row'],
             manualColumnResize: true, 
             width: 'inherit',
             height: 500,
-            //afterInit: this.setHot,
+            outsideClickDeselects: false,
             afterValidate: (isValid, value, row, prop, source) => {
                 if (!isValid)  {
                     this.SourceInvalids.push({ "isValid": isValid, "row": row, "prop": prop });
-                }
-                    
-                if (isValid) {
+                } else {
                     let vIndex = -1;
                     for (let vI = 0; vI < this.SourceInvalids.length; vI++) {
                         if (this.SourceInvalids[vI].row == row && this.SourceInvalids[vI].prop == prop) {
@@ -119,35 +119,76 @@ export class SourceListComponent {
                 }
                 if (this.SourceInvalids.length > 0) {
                     this._homeService.setInvalidTable(true);
-                    this._cdRef.detectChanges();
+                } else {
+                    this._homeService.setInvalidTable(false);
+                }
+            },// end afterValidate
+            afterRemoveRow: (index, amount) => {
+                //if any $scope.invalids[i].row == index then splice it out
+                let selected = this.hotSourceTable.getHandsontableInstance();//.getSelected(); //[startRow, startCol, endRow, endCol]
+                let selectedForRealz = selected.getSelected();
+                let test = this;
+                if (amount > 1) {
+                    //more than 1 row being deleted. 
+                    let eachRowIndexArray = []; //holder for array index to loop thru for splicing invalids
+                    let cnt = (selected[2] - selected[0] + 1); //gives me count of selected rows
+                    eachRowIndexArray.push(selected[0]);
+                    for (let c = 1; c < cnt; c++)
+                        eachRowIndexArray.push(selected[0] + 1);
+                    //loop thru invalids to see if any are in the deleting rows
+                    for (let Mi = this.SourceInvalids.length; Mi--;) {
+                        if (eachRowIndexArray.indexOf(this.SourceInvalids[Mi].row) > -1)
+                            this.SourceInvalids.splice(Mi, 1);
+                    }
+                } else {
+                    //just 1 row selected
+                    for (let i = this.SourceInvalids.length; i--;) {
+                        if (this.SourceInvalids[i].row == index)
+                            this.SourceInvalids.splice(i, 1);
+                    }
+                }
+                if (this.SourceInvalids.length > 0) {
+                    this._homeService.setInvalidTable(true);
                 }
                 else {
                     this._homeService.setInvalidTable(false);
-                    this._cdRef.detectChanges();
                 }
-            } // end afterValidate
+            }
         };
     }
-    
-    // Validators (TODO) for bulk source table //////////////////////////////////////////////////////////    
-    private finishMatchingDD(prop: string): boolean {
-        let isItGood: boolean = true;
-        switch(prop){
-            case 'SourceTypeID':
-                //loop thru list of sources and make sure name matches
-        }
-        return isItGood;
+    public iSinvalidTable(){
+        return this.SinvalidTable;
     }
-    private matchingDropDownVal(value, callback){
-        let returnBool: boolean = true;
+    // Validators (TODO) for bulk source table //////////////////////////////////////////////////////////    
+    private ddValidator(value, callback){
+        let row = this['row']; let col = this['col']; // get row and col
+        let dataAtRow = this['instance'].getDataAtRow(row); // get this row's data
+        let otherDataInRow = false; //flag for if other data exist at this row
+        dataAtRow.forEach((d, index) => {
+            //need the col too because right after removing req value, it's still in the .getDataAtRow..
+            if (d !== null && d !== "" && index !== col)
+                otherDataInRow = true;
+        });
+        let hasError: boolean = false;
+        let sourceCol: Array<string> = this['instance'].getSettings().columns[col].source; //get array of sources used for autocomplete        
         if (value !== "" && value !== null) {
-            let prop = this['prop'];
-            returnBool = this.finishMatchingDD(prop);
-        }
-        return returnBool;
+            if (sourceCol.map(function (s) { return s; }).indexOf(value) < 0) {
+                hasError = true;
+            }
+            if (hasError) {                    
+                callback(false);
+                let colHeader: string = col == 3 ? this['instance'].getColHeader(col).substring(0, this['instance'].getColHeader(col).length -1) : this['instance'].getColHeader(col);
+                alert("This " + colHeader + " is not in the dropdown options.");
+                setTimeout(() =>{ this['instance'].deselectCell(); }, 100);  
+            }
+            else callback(true);
+        }  else if (!value && otherDataInRow && col == 3) {
+            callback(false);
+            alert("Source Type is a required field.")
+        } else callback(true);        
     }
     // latitude is required and should be within range
-    private latValidator(value, callback) {
+    private latValidator (value, callback) {
         let row = this['row']; let col = this['col'];
         let dataAtRow = this['instance'].getDataAtRow(row);
         let otherDataInRow = false;
@@ -157,13 +198,12 @@ export class SourceListComponent {
                 otherDataInRow = true;
         });
         
-        if (((value < 22 || value > 55) || isNaN(value))){//  && otherDataInRow) {
+        if (((value < 22 || value > 55) || isNaN(value))  && value !== null) {
             setTimeout(()=> { this['instance'].deselectCell(); }, 100);    
             alert("Latitude must be between 22.0 and 55.0 (dec deg).");                             
             // this._toastService.pop('warning', 'Warning', 'Latitude must be between 22.0 and 55.0 (dec deg)')
             callback(false);
-        } else if (!value && otherDataInRow) {
-            let whichOne = this['instance'].getColHeader(col);
+        } else if (!value && otherDataInRow) {            
             alert("Latitude is required.");
             // this._toastService.pop('warning', 'Warning', 'Latitude is required')           
             callback(false);
@@ -181,13 +221,13 @@ export class SourceListComponent {
             if (d !== null && d !== "" && index !== col)
                 otherDataInRow = true;
         });
-        if (((value < -130 || value > -55) || isNaN(value))){// && otherDataInRow) {
+        if (((value < -130 || value > -55) || isNaN(value)) && value !== null) {
             setTimeout(()=> { this['instance'].deselectCell(); }, 100);    
             alert("Longitude must be between -130.0 and -55.0 (dec deg).");
             // this._toastService.pop('warning', 'Warning', 'Longitude must be between -130.0 and -55.0 (dec deg)')                              
             callback(false);
         } else if (!value && otherDataInRow) {
-            alert("Longitude is a required field.");
+            alert("Longitude is required.");
             // this._toastService.pop('warning', 'Warning', 'Longitude is a required field')  
             callback(false);
         }
@@ -195,32 +235,49 @@ export class SourceListComponent {
             callback(true);
         }    
     }
-     // validator for required 
+    // validator for required 
     public reqValidator(value, callback){
-        if (value == "") callback(false);
+        let dataAtRow = this['instance'].getDataAtRow(this['row']); // get this row's data
+        let otherDataInRow = false; //flag for if other data exist at this row
+        dataAtRow.forEach((d, index) => {
+            //need the col too because right after removing req value, it's still in the .getDataAtRow..
+            if (d !== null && d !== "" && index !== this['col'])
+                otherDataInRow = true;
+        });
+        if ((value == "" || value == null) && otherDataInRow) 
+            callback(false);        
         else callback(true);
-    }
+    }    
     // validator on facility code starting with 'FC'
     public facCodeValidator(value, callback) {
-        if (value == "") callback(false);
-        else if (/^FC/.test(value)) callback(true);
-        else callback(false);        
+        let dataAtRow = this['instance'].getDataAtRow(this['row']); // get this row's data
+        let otherDataInRow = false; //flag for if other data exist at this row
+        dataAtRow.forEach((d, index) => {
+            //need the col too because right after removing req value, it's still in the .getDataAtRow..
+            if (d !== null && d !== "" && index !== this['col'])
+                otherDataInRow = true;
+        });
+        if ((value == "" || value == null) && otherDataInRow) {
+            callback(false); //bad
+            alert("Facility Code is required.");
+        } else if (!/^FC/.test(value) && otherDataInRow) {
+            setTimeout(()=> { this['instance'].deselectCell(); }, 100);
+            callback(false); //bad            
+            alert("Facility Code must start with 'FC'.");
+        } else {
+            callback(true); //good
+        }
     }
     // Done Validators for bulk source table //////////////////////////////////////////////////////////  
-  /*  public testValidate(){
-        let test = this.hotSourceTable;
-        this.hotSourceTable.getHandsontableInstance().validateCells((valid) => {
-            let yep = "yes";
-        });
-}*/
+    
     // post sources batch  (NOT WORKING YET)
     public submitTable(){   
-       /* this.hotSourceTable.getHandsontableInstance().validateCells((valid) => {
-            if (valid){
-                // for each one, add unitTypeID: 1 and pass the regionID
-                let pastedSources:Array<ISource> =  Object.assign([], this.sourcedata);
-                
-                // drop the last 30 since they are empty
+       // for each one, add unitTypeID: 1 and pass the regionID
+        let pastedSources:Array<ISource> =  Object.assign([], this.sourcedata);
+        // LEFT OFF (7/26) with this not applying htInvalid class to the invalid ones
+        this.hotSourceTable.getHandsontableInstance().validateCells((valid) => {
+            if (valid) { 
+                // drop the last 30 since they are empty, TODO swap dropdown name for id
                 for (var i = pastedSources.length; i--;) {
                     if (pastedSources[i].facilityCode === undefined || pastedSources[i].facilityCode === null || pastedSources[i].facilityCode === "") {
                         pastedSources.splice(i, 1);
@@ -230,28 +287,25 @@ export class SourceListComponent {
                         pastedSources[i]['location'].srid = 4269;
                     }
                 }
-                
-                if (pastedSources.length > 0){
+                let test = 'wht';
+                if (pastedSources.length > 0){            
                     this._waterService.postBatchSources(this.regionId, pastedSources).subscribe(
                         response => {
-                            this.modalReference.dismiss();
+                            this.showBatch = false;
                             this._toastService.pop('success', 'Success', 'Sources uploaded.');
                             this.sourcedata = [];
                         }, error => {
-                            this.errorMessage = error;
-                            this._toastService.pop('error', 'Error', 'Sources was not uploaded.');
-                        }
-                    );
+                            this._toastService.pop('error', 'Error', error.statusText);
+                        });
                 } else {
                     let infoMessage = "You must first add sources data before clicking upload."
                     this.infomodal.showInfoModal(infoMessage);
-                }       
-            } // end if valid
-            else {
-
+                }        
+            } else {
+                //not valid
+                this._toastService.pop("error", "Error", "Please fix the invalid entries and try again.");
             }
-        })  */
-        
+        });
     } 
     // source edit/create clicked, show source.modal
     public showSourceModal(s: ISource) {
@@ -303,8 +357,7 @@ export class SourceListComponent {
                     this._waterService.setSources(this.sourceList); // update service
                 },
                 error => {
-                    this._toastService.pop('error', 'Error', 'Source was not deleted.'); 
-                    this.errorMessage = error;                    
+                    this._toastService.pop('error', 'Error', error.statusText); 
                 }
             );
         }
@@ -318,17 +371,29 @@ export class SourceListComponent {
         });
         return ind;
     }
-    public showBatchUploadModal(bulkM) {
-        this._homeService.setbulkSourceModal(true);
-      /*  this.modalReference = this._modalService.open(bulkM, { backdrop: 'static', keyboard: false, size: 'lg'} );
-        this.modalReference.result.then((valid) =>{           
-          //  this.CloseResult = `Closed with: ${valid}`;           
+    public showBatchUpload() {
+        this.showBatch = true;
+        /* this._homeService.setbulkSourceModal(true);
+        this.modalReference = this._modalService.open(bulkM, { backdrop: 'static', keyboard: false, size: 'lg'} );
+        this.modalReference.result.then((valid) =>{     
+            this.showBatch = false;      
+            //  this.CloseResult = `Closed with: ${valid}`;           
             if (valid){
-//                this._homeService.setbulkSourceModal(false);
+                // this._homeService.setbulkSourceModal(false);
             }
         }, (reason) => {
+            this.showBatch = false;  
             //this.CloseResult = `Dismissed ${this.getDismissReason(reason)}`
         });*/
     }
+    public dismiss(){
+        this.showBatch = false;
+        this.sourcedata = []; 
+        this.SourceInvalids = [];        
+    }
     
+    ngOnDestroy() {
+        this.valdTabSub.unsubscribe();
+        this._cdRef.detach(); // try this
+    }
 }

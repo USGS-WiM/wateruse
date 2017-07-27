@@ -31,7 +31,6 @@ export class StatusesComponent implements OnInit {
     public newStatusTypeForm: FormGroup;
     public showNewStatusTypeForm: boolean;
     public deleteID: number;
-    public errorMessage: string;
 
     constructor(private _route: ActivatedRoute, private _settingsService: SettingsService, private _toastService: ToasterService, private _fb: FormBuilder){
         this.newStatusTypeForm = _fb.group({
@@ -90,15 +89,16 @@ export class StatusesComponent implements OnInit {
             this.infomodal.showInfoModal(infoMessage);
 		} else {
 			delete c.isEditing;
-			this._settingsService.putEntity(c.id, c, 'STATUSTYPES_URL').subscribe((resp: IStatusType) => {
-				this._toastService.pop('success', 'Success', 'Status Type was updated')
-				c.isEditing = false;
-				this.statusTypes[i] = c;
-				this._settingsService.setStatusTypes(this.statusTypes);
-				this.rowBeingEdited = -1;
-				this.isEditing = false; // set to true so create new is disabled
-				if (this.statusForm.form.dirty) this.statusForm.reset();
-			});
+            this._settingsService.putEntity(c.id, c, 'STATUSTYPES_URL')
+                .subscribe((resp: IStatusType) => {
+                    this._toastService.pop('success', 'Success', 'Status Type was updated')
+                    c.isEditing = false;
+                    this.statusTypes[i] = c;
+                    this._settingsService.setStatusTypes(this.statusTypes);
+                    this.rowBeingEdited = -1;
+                    this.isEditing = false; // set to true so create new is disabled
+                    if (this.statusForm.form.dirty) this.statusForm.reset();
+                }, error => this._toastService.pop("error", "Error updating Status Type", error.statusText));
 		}
     }
     
@@ -114,16 +114,14 @@ export class StatusesComponent implements OnInit {
     //post new category type
     public createNewStatusType(){
         let stat = this.newStatusTypeForm.value;
-        this._settingsService.postEntity(stat, 'STATUSTYPES_URL').subscribe((response: IStatusType) => {
-            response.isEditing = false;
-            this.statusTypes.push(response);
-            this._settingsService.setStatusTypes(this.statusTypes);
-            this._toastService.pop('success', 'Success', 'Status Type was created.'); 
-            this.cancelCreateStatusType();
-        }, error => {                        
-            this._toastService.pop('error', 'Error', 'Status Type was not created.'); 
-            console.log("error");
-        });
+        this._settingsService.postEntity(stat, 'STATUSTYPES_URL')
+            .subscribe((response: IStatusType) => {            
+                response.isEditing = false;
+                this.statusTypes.push(response);
+                this._settingsService.setStatusTypes(this.statusTypes);
+                this._toastService.pop('success', 'Success', 'Status Type was created.'); 
+                this.cancelCreateStatusType();
+            }, error => this._toastService.pop('error', 'Error creating Statu Type', error.statusText));
     }
 
     // delete category type
@@ -140,17 +138,12 @@ export class StatusesComponent implements OnInit {
             // get the index to be deleted by the id
             let ind: number = this.getStatusIndex(this.deleteID);
             //delete it
-            this._settingsService.deleteEntity(this.deleteID, 'STATUSTYPES_URL').subscribe(
-                result => {         
+            this._settingsService.deleteEntity(this.deleteID, 'STATUSTYPES_URL')
+                .subscribe(result => {         
                     this._toastService.pop('success', 'Success', 'Status Type deleted.');           
                     this.statusTypes.splice(ind, 1); //delete from array
                     this._settingsService.setCategories(this.statusTypes); // update service
-                },
-                error => {
-                    this._toastService.pop('error', 'Error', 'Status Type was not deleted.'); 
-                    this.errorMessage = error;                    
-                }
-            );
+                }, error => this._toastService.pop('error', 'Error deleting Status Type', error.statusText));
         }
     }
 

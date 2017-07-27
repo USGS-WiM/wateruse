@@ -32,6 +32,7 @@ export class EditSourceModal {
     public categoryTypeList: Array<ICategoryType>;
     public CloseResult: any; //why the close the modal (not sure if I need this yet)
     public sourceTips: any; // tooltips
+    private modalReference: any;
 
     constructor(private _fb: FormBuilder, private _homeService: HomeService, private _waterService: WateruseService, 
         private _modalService: NgbModal, private _toastService: ToasterService){
@@ -74,7 +75,36 @@ export class EditSourceModal {
         // set the viewchild modal as the modalelement
         this.modalElement = this.editSourceModal;
     }
-
+    public createSave(valid){
+        if (valid){
+            //all good 
+            let source: ISource = this.sourceForm.value;
+          //  let s:any = {thisthing: "wy", thatsomething: "dls"};
+            // PUT it (if id exists)
+            if (source.id > 0){
+                this._waterService.putSource(source.id, source).subscribe((response: ISource) => {
+                    this._toastService.pop('success', 'Success', 'Source was updated.'); 
+                    this._homeService.setModalSource(null); // clear out the service source that this modal needed
+                    this.modalReference.dismiss();
+                    this.updatedSource.emit(response); // emit the edited source
+                }, error => {                        
+                    this._toastService.pop('error', `Error: ${error.status}`, error.statusText); 
+                    console.log("Error");
+                });
+            } else {
+                // POST it
+                this._waterService.postSource(source).subscribe((response: ISource) => {
+                    this._toastService.pop('success', 'Success', 'Source was created.'); 
+                    this._homeService.setModalSource(null); // clear out the service source that this modal needed
+                    this.modalReference.dismiss();
+                    this.updatedSource.emit(response); // emit the created source
+                }, error => {                        
+                    this._toastService.pop('error', `Error: ${error.status}`, error.statusText); 
+                    console.log("error");
+                });
+            }
+        }
+    }
     // flag is true to show the modal
     public showTheSourceModal() {
         // populate controls with value or null (edit/create)
@@ -94,33 +124,9 @@ export class EditSourceModal {
         locationControlGrp.controls['srid'].setValue(this.modalSource.id ? this.modalSource.location.srid : 4269);
         
         // open the modal now
-        this._modalService.open(this.modalElement, {backdrop: 'static', keyboard: false, size: 'lg'} ).result.then((valid) =>{           
-            this.CloseResult = `Closed with: ${valid}`;           
-            if (valid){
-                //all good 
-                let source: ISource = this.sourceForm.value;
-                // PUT it (if id exists)
-                if (source.id > 0){
-                    this._waterService.putSource(source.id, source).subscribe((response: ISource) => {
-                        this._toastService.pop('success', 'Success', 'Source was updated.'); 
-                        this._homeService.setModalSource(null); // clear out the service source that this modal needed
-                        this.updatedSource.emit(response); // emit the edited source
-                    }, error => {                        
-                        this._toastService.pop('error', 'Error', 'Source was not updated.'); 
-                        console.log("Error");
-                    });
-                } else {
-                    // POST it
-                    this._waterService.postSource(source).subscribe((response: ISource) => {
-                        this._toastService.pop('success', 'Success', 'Source was created.'); 
-                        this._homeService.setModalSource(null); // clear out the service source that this modal needed
-                        this.updatedSource.emit(response); // emit the created source
-                    }, error => {                        
-                        this._toastService.pop('error', 'Error', 'Source was not created.'); 
-                        console.log("error");
-                    });
-                }
-            }
+        this.modalReference = this._modalService.open(this.modalElement, { backdrop: 'static', keyboard: false, size: 'lg'} );
+        this.modalReference.result.then((valid) =>{                 
+            this.CloseResult = `Closed with: ${valid}`;         
         }, (reason) => {
             //this.CloseResult = `Dismissed ${this.getDismissReason(reason)}`
         });

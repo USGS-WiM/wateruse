@@ -23,7 +23,6 @@ export class RegionComponent implements OnInit {
     @ViewChild('areYouSure') areYouSure: AreYouSureModal;
     public regionList: Array<IRegion>;
     private deleteID: number;
-    public errorMessage: string;
 
     constructor(private _route: ActivatedRoute, private _settingsService: SettingsService, private _toastService: ToasterService){}
 
@@ -86,11 +85,7 @@ export class RegionComponent implements OnInit {
                     this.regionList.splice(ind, 1); //delete from array
                     this._settingsService.setRegions(this.regionList); // update service
                 },
-                error => {
-                    this._toastService.pop('error', 'Error', 'Region was not deleted.'); 
-                    this.errorMessage = error;                    
-                }
-            );
+                error => this._toastService.pop('error', 'Error deleting Region', error.statusText));
         }
     }
     //  get index in regionList based on region.id value

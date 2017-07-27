@@ -10,6 +10,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IUser } from "app/shared/interfaces/User.interface";
 import { LoginService } from "app/login/login.service";
+import { ToasterService } from "angular2-toaster/angular2-toaster";
 
 @Component({
     moduleId: module.id,
@@ -22,7 +23,7 @@ export class LoginComponent implements OnInit {
     returnUrl: string;
 
     constructor(
-        private _route: ActivatedRoute, private _router: Router, private _loginService: LoginService) { }
+        private _route: ActivatedRoute, private _router: Router, private _loginService: LoginService, private _toastService: ToasterService) { }
 
     ngOnInit() {
         this.user = { username: '', password: ''};
@@ -40,7 +41,9 @@ export class LoginComponent implements OnInit {
             if (this._loginService.isLoggedIn) {
                  this._router.navigate([this.returnUrl]);
             }
+            this.loading = false; // not using this yet
         }, (error) => {
+            this._toastService.pop('error', 'Error', error.statusText);     
             this.loading = false;
         });
     }

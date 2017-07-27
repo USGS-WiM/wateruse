@@ -31,7 +31,6 @@ export class SourcesComponent implements OnInit {
     public newSourceTypeForm: FormGroup;
     public showNewSTForm: boolean;
     public deleteID: number;
-    public errorMessage: string;
 
     constructor(private _route: ActivatedRoute, private _settingsService: SettingsService, private _toastService: ToasterService, private _fb: FormBuilder){
         this.newSourceTypeForm = _fb.group({
@@ -90,15 +89,17 @@ export class SourcesComponent implements OnInit {
             this.infomodal.showInfoModal(infoMessage);
 		} else {
 			delete stype.isEditing;
-			this._settingsService.putEntity(stype.id, stype, 'SOURCETYPES_URL').subscribe((resp: ISourceType) => {
-				this._toastService.pop('success', 'Success', 'Source Type was updated')
-				stype.isEditing = false;
-				this.sourceTypes[i] = stype;
-				this._settingsService.setSourceTypes(this.sourceTypes);
-				this.rowBeingEdited = -1;
-				this.isEditing = false; // set to true so create new is disabled
-				if (this.sourceForm.form.dirty) this.sourceForm.reset();
-			});
+            this._settingsService.putEntity(stype.id, stype, 'SOURCETYPES_URL')
+                .subscribe((resp: ISourceType) => {
+				    this._toastService.pop('success', 'Success', 'Source Type was updated')
+                    stype.isEditing = false;
+                    this.sourceTypes[i] = stype;
+                    this._settingsService.setSourceTypes(this.sourceTypes);
+                    this.rowBeingEdited = -1;
+                    this.isEditing = false; // set to true so create new is disabled
+                    if (this.sourceForm.form.dirty) this.sourceForm.reset();
+                }, error => this._toastService.pop("error", "Error updating Source Type", error.statusText)
+            );
 		}
     }
     
@@ -114,16 +115,14 @@ export class SourcesComponent implements OnInit {
     //post new source type
     public createNewSourceType(){
         let sourceT = this.newSourceTypeForm.value;
-        this._settingsService.postEntity(sourceT,'SOURCETYPES_URL').subscribe((response: ISourceType) => {
-            response.isEditing = false;
-            this.sourceTypes.push(response);
-            this._settingsService.setSourceTypes(this.sourceTypes);
-            this._toastService.pop('success', 'Success', 'Source Type was created.'); 
-            this.cancelCreateSourceType();
-        }, error => {                        
-            this._toastService.pop('error', 'Error', 'Source Type was not created.'); 
-            console.log("error");
-        });
+        this._settingsService.postEntity(sourceT,'SOURCETYPES_URL')
+            .subscribe((response: ISourceType) => {
+                response.isEditing = false;
+                this.sourceTypes.push(response);
+                this._settingsService.setSourceTypes(this.sourceTypes);
+                this._toastService.pop('success', 'Success', 'Source Type was created.'); 
+                this.cancelCreateSourceType();
+            }, error => this._toastService.pop('error', 'Error creating Source Type', error.statusText));
     }
 
     // delete category type
@@ -140,17 +139,12 @@ export class SourcesComponent implements OnInit {
             // get the index to be deleted by the id
             let ind: number = this.getSourceTypeIndex(this.deleteID);
             //delete it
-            this._settingsService.deleteEntity(this.deleteID, 'SOURCETYPES_URL').subscribe(
-                result => {         
+            this._settingsService.deleteEntity(this.deleteID, 'SOURCETYPES_URL')
+                .subscribe(result => {         
                     this._toastService.pop('success', 'Success', 'Source Type deleted.');           
                     this.sourceTypes.splice(ind, 1); //delete from array
                     this._settingsService.setCategories(this.sourceTypes); // update service
-                },
-                error => {
-                    this._toastService.pop('error', 'Error', 'Source Type was not deleted.'); 
-                    this.errorMessage = error;                    
-                }
-            );
+                }, error => this._toastService.pop('error', 'Error deleting Source Type', error.statusText));
         }
     }
 

@@ -31,7 +31,6 @@ export class UnitTypesComponent implements OnInit {
     public newUnitForm: FormGroup;
     public showNewUnitForm: boolean;
     public deleteID: number;
-    public errorMessage: string;
 
     constructor(private _route: ActivatedRoute, private _settingsService: SettingsService, private _toastService: ToasterService, private _fb: FormBuilder){
         this.newUnitForm = _fb.group({
@@ -89,15 +88,16 @@ export class UnitTypesComponent implements OnInit {
             this.infomodal.showInfoModal(infoMessage);
 		} else {
 			delete u.isEditing;
-			this._settingsService.putEntity(u.id, u, 'UNITTYPES_URL').subscribe((resp: IUnitType) => {
-				this._toastService.pop('success', 'Success', 'Unit Type was updated')
-				u.isEditing = false;
-				this.unitTypes[i] = u;
-				this._settingsService.setUnitTypes(this.unitTypes);
-				this.rowBeingEdited = -1;
-				this.isEditing = false; // set to true so create new is disabled
-				if (this.unitsForm.form.dirty) this.unitsForm.reset();
-			});
+            this._settingsService.putEntity(u.id, u, 'UNITTYPES_URL')
+                .subscribe((resp: IUnitType) => {
+                    this._toastService.pop('success', 'Success', 'Unit Type was updated')
+                    u.isEditing = false;
+                    this.unitTypes[i] = u;
+                    this._settingsService.setUnitTypes(this.unitTypes);
+                    this.rowBeingEdited = -1;
+                    this.isEditing = false; // set to true so create new is disabled
+                    if (this.unitsForm.form.dirty) this.unitsForm.reset();
+                }, error => this._toastService.pop('error', 'Error updating Unit Type', error.statusText));
 		}
     }
     
@@ -112,16 +112,14 @@ export class UnitTypesComponent implements OnInit {
     //post new category type
     public createNewUnitType(){
         let utype = this.newUnitForm.value;
-        this._settingsService.postEntity(utype, 'UNITTYPES_URL').subscribe((response: IUnitType) => {
-            response.isEditing = false;
-            this.unitTypes.push(response);
-            this._settingsService.setUnitTypes(this.unitTypes);
-            this._toastService.pop('success', 'Success', 'Unit Type was created.'); 
-            this.cancelCreateUnitType();
-        }, error => {                        
-            this._toastService.pop('error', 'Error', 'Unit Type was not created.'); 
-            console.log("error");
-        });
+        this._settingsService.postEntity(utype, 'UNITTYPES_URL')
+            .subscribe((response: IUnitType) => {
+                response.isEditing = false;
+                this.unitTypes.push(response);
+                this._settingsService.setUnitTypes(this.unitTypes);
+                this._toastService.pop('success', 'Success', 'Unit Type was created.'); 
+                this.cancelCreateUnitType();
+            }, error => this._toastService.pop('error', 'Error updating Unit Type', error.statusText));
     }
 
     // delete role
@@ -138,17 +136,12 @@ export class UnitTypesComponent implements OnInit {
             // get the index to be deleted by the id
             let ind: number = this.getUnitTypeIndex(this.deleteID);
             //delete it
-            this._settingsService.deleteEntity(this.deleteID, 'UNITTYPES_URL').subscribe(
-                result => {         
+            this._settingsService.deleteEntity(this.deleteID, 'UNITTYPES_URL')
+                .subscribe(result => {         
                     this._toastService.pop('success', 'Success', 'Unit Type deleted.');           
                     this.unitTypes.splice(ind, 1); //delete from array
                     this._settingsService.setUnitTypes(this.unitTypes); // update service
-                },
-                error => {
-                    this._toastService.pop('error', 'Error', 'Unit Type was not deleted.'); 
-                    this.errorMessage = error;                    
-                }
-            );
+                }, error => this._toastService.pop('error', 'Error deleting Unit Type', error.statusText));
         }
     }
 

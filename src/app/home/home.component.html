@@ -1,8 +1,6 @@
-<!--<toaster-container></toaster-container>-->
-
-<h1>Hi User {{currentUser}}!</h1>
+<!-- <h1>Hi User {{currentUser}}!</h1>
 <p>Welcome to Wateruse!!</p>
-
+-->
 <div><label><span>Select your Region to get started</span></label></div>
 <select name="chosenRegion" [(ngModel)]="chosenRegion" (ngModelChange)="onRegionSelect($event)">
     <option value=""></option>
@@ -26,21 +24,6 @@
         </ngb-tab>
     </ngb-tabset>
 </div>
-<!-- inner source tabset for Sources List and Sources Batch Upload
-<ng-template #innerTabset>
-    <ngb-tabset #sourceSubTabs (tabChange)="beforeSourceTabChange($event)" [activeId]="selectedTab">
-        <ngb-tab title="Sources List" id="sourceList">            
-            <ng-template ngbTabContent>
-                <sourcelist [regionId]="chosenRegionID" [sourceList]="sourceList"></sourcelist>
-            </ng-template>
-        </ngb-tab>
-        <ngb-tab title="Sources Batch Upload" id="sourceBulk">
-            <ng-template ngbTabContent>
-                <sourcebulk [regionId]="chosenRegionID"></sourcebulk>
-            </ng-template>
-        </ngb-tab>
-    </ngb-tabset>
-</ng-template>-->
 
 <areYouSureModal #areYouSure (modalResponseEvent)="AreYouSureDialogResponse($event)"></areYouSureModal>
 <editsource [regionID]="chosenRegionID" (updatedSource)="createEditFinished($event)"></editsource>

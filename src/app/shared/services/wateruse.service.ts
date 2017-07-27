@@ -11,7 +11,7 @@ import { Http, Headers, RequestOptions, Response, URLSearchParams } from '@angul
 import { Observable } from "rxjs/Observable";
 import { Subject } from "rxjs/Subject";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
-
+import 'rxjs/add/observable/throw';
 import { CONFIG } from "app/shared/services/CONFIG";
 import { IRegion } from "app/shared/interfaces/Region.interface";
 import { ISource } from "app/shared/interfaces/Source.interface";
@@ -66,8 +66,7 @@ export class WateruseService {
         let options = new RequestOptions({headers: CONFIG.JSON_AUTH_HEADERS, search: sourceParam });
         return this._http.get(CONFIG.SOURCES_URL, options)
             .map(res => <Array<ISource>>res.json())
-            .subscribe(s => {this._sourcesSubject.next(s);},
-            error => this.errorHandler);
+            .catch(this.errorHandler);
     }
     // dropdown values for source types for filtering
     public getSourceTypes() {
@@ -122,10 +121,15 @@ export class WateruseService {
             .catch(this.errorHandler);
     }
         
-    private errorHandler(error: any) {
-        let errMsg = (error.message) ? error.message :
-            error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-        console.error(errMsg);
-        return Observable.throw(errMsg);
+    private errorHandler(error: Response | any) {
+        /* there are 3 types of errors I pass back 
+        1) no body, just error code
+        2) body type "string",
+        3) body type "object" : keyval pair (just used for TS and source batch) */
+        
+        if (error._body !== "")
+            error._body = JSON.parse(error._body);
+
+	    return Observable.throw(error);
     }
 }

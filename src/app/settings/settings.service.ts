@@ -11,6 +11,7 @@ import { Http, Headers, RequestOptions, Response, URLSearchParams } from '@angul
 import { Observable } from "rxjs/Observable";
 import { Subject } from "rxjs/Subject";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import 'rxjs/add/observable/throw';
 
 import { CONFIG } from "app/shared/services/CONFIG";
 import { IRegion } from "app/shared/interfaces/Region.interface";
@@ -47,6 +48,7 @@ export class SettingsService {
         let options = new RequestOptions({headers: CONFIG.JSON_AUTH_HEADERS});
         return this._http.get(CONFIG[url], options)
             .map(response => <Array<any>>response.json())
+            .catch(this.errorHandler)
     }
     
 
@@ -74,13 +76,12 @@ export class SettingsService {
     }
         
     
-    private errorHandler(error: any) {
-        let errMsg = (error.message) ? error.message :
-            error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-        console.error(errMsg);
-        return Observable.throw(errMsg);
-    }
+    private errorHandler(error: Response | any) {        
+        if (error._body !== "")
+            error._body = JSON.parse(error._body);
 
+	    return Observable.throw(error);
+    }
     // SETTERS ///////////////////////////////////////////
     public setRegions(r:Array<IRegion>) {
         this._regionSubject.next(r);

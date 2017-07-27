@@ -11,6 +11,7 @@ import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
 import { CONFIG } from "app/shared/services/CONFIG";
 import { AuthService } from "app/shared/services/auth.service";
 
@@ -48,10 +49,7 @@ export class LoginService {
 		this._authService.removeUserInfo();
     }
 
-    private handleError(error: any) {
-        let errMsg = (error.message) ? error.message :
-            error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-        console.error(errMsg);
-        return Observable.throw(errMsg);
+    private handleError(error: Response | any) {        
+	    return Observable.throw(error);
     }
 }

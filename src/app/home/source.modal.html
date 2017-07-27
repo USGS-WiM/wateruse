@@ -76,7 +76,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" (click)="d('clickedCancel')" class="btn-black">Cancel</button>
-        <button type="button" *ngIf="modalSource.id == undefined" (click)="c(sourceForm)" [disabled]="!sourceForm.valid" class="btn-blue">Create</button>        
-        <button type="button" [disabled]="!sourceForm.valid" *ngIf="modalSource.id != undefined" (click)="c(sourceForm.valid)" class="btn-blue">Save</button>
+        <button type="button" *ngIf="modalSource.id == undefined" (click)="createSave(sourceForm.valid)" [disabled]="!sourceForm.valid" class="btn-blue">Create</button>        
+        <button type="button" [disabled]="!sourceForm.valid" *ngIf="modalSource.id != undefined" (click)="createSave(sourceForm.valid)" class="btn-blue">Save</button>
     </div>
 </ng-template>

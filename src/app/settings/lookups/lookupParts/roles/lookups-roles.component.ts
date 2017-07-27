@@ -30,7 +30,6 @@ export class RolesComponent implements OnInit {
     public newRoleForm: FormGroup;
     public showNewRoleForm: boolean;
     public deleteID: number;
-    public errorMessage: string;
 
     constructor(private _route: ActivatedRoute, private _settingsService: SettingsService, private _toastService: ToasterService, private _fb: FormBuilder){
         this.newRoleForm = _fb.group({
@@ -88,15 +87,17 @@ export class RolesComponent implements OnInit {
             this.infomodal.showInfoModal(infoMessage);
 		} else {
 			delete r.isEditing;
-			this._settingsService.putEntity(r.id, r, 'ROLES_URL').subscribe((resp: IRoles) => {
-				this._toastService.pop('success', 'Success', 'Role was updated')
-				r.isEditing = false;
-				this.rolesList[i] = r;
-				this._settingsService.setRoles(this.rolesList);
-				this.rowBeingEdited = -1;
-				this.isEditing = false; // set to true so create new is disabled
-				if (this.rolesForm.form.dirty) this.rolesForm.reset();
-			});
+            this._settingsService.putEntity(r.id, r, 'ROLES_URL')
+                .subscribe((resp: IRoles) => {
+                    this._toastService.pop('success', 'Success', 'Role was updated')
+                    r.isEditing = false;
+                    this.rolesList[i] = r;
+                    this._settingsService.setRoles(this.rolesList);
+                    this.rowBeingEdited = -1;
+                    this.isEditing = false; // set to true so create new is disabled
+                    if (this.rolesForm.form.dirty) this.rolesForm.reset();
+                }, error => this._toastService.pop("error", "Error updating Role", error.statusText)
+            );
 		}
     }
     
@@ -111,16 +112,14 @@ export class RolesComponent implements OnInit {
     //post new category type
     public createNewRole(){
         let role = this.newRoleForm.value;
-        this._settingsService.postEntity(role, 'ROLES_URL').subscribe((response: IRoles) => {
-            response.isEditing = false;
-            this.rolesList.push(response);
-            this._settingsService.setRoles(this.rolesList);
-            this._toastService.pop('success', 'Success', 'Role was created.'); 
-            this.cancelCreateRole();
-        }, error => {                        
-            this._toastService.pop('error', 'Error', 'Role was not created.'); 
-            console.log("error");
-        });
+        this._settingsService.postEntity(role, 'ROLES_URL')
+            .subscribe((response: IRoles) => {
+                response.isEditing = false;
+                this.rolesList.push(response);
+                this._settingsService.setRoles(this.rolesList);
+                this._toastService.pop('success', 'Success', 'Role was created.'); 
+                this.cancelCreateRole();
+            }, error => this._toastService.pop('error', 'Error creating Role', error.statusText));
     }
 
     // delete role
@@ -142,12 +141,7 @@ export class RolesComponent implements OnInit {
                     this._toastService.pop('success', 'Success', 'Role deleted.');           
                     this.rolesList.splice(ind, 1); //delete from array
                     this._settingsService.setRoles(this.rolesList); // update service
-                },
-                error => {
-                    this._toastService.pop('error', 'Error', 'Role was not deleted.'); 
-                    this.errorMessage = error;                    
-                }
-            );
+                }, error => this._toastService.pop('error', 'Error deleting Role', error.statusText));
         }
     }
 

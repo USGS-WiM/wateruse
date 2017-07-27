@@ -47,7 +47,7 @@ export class HomeService {
         return this._bulkSourceModalSubj.asObservable();
     }
 
-    // boolean for valid table for handsontable upload button disabled prop
+    // boolean for Source bulk valid table for handsontable upload button disabled prop
     private _validTableSubj: BehaviorSubject<boolean> = <BehaviorSubject<boolean>>new BehaviorSubject(true);
     // setter
     public setInvalidTable(val: any) {
@@ -56,6 +56,17 @@ export class HomeService {
     // getter
     public get validTableVal(): any {
         return this._validTableSubj.asObservable();
+    }
+
+        // boolean for Timeseries bulk valid table for handsontable upload button disabled prop
+    private _validTSTableSubj: BehaviorSubject<boolean> = <BehaviorSubject<boolean>>new BehaviorSubject(true);
+    // setter
+    public setInvalidTSTable(val: any) {
+        this._validTSTableSubj.next(val);
+    }
+    // getter
+    public get validTSTableVal(): any {
+        return this._validTSTableSubj.asObservable();
     }
 
 }

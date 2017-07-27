@@ -31,7 +31,6 @@ export class CategoriesComponent implements OnInit {
     public newCatForm: FormGroup;
     public showNewCatForm: boolean;
     public deleteID: number;
-    public errorMessage: string;
 
     constructor(private _route: ActivatedRoute, private _settingsService: SettingsService, private _toastService: ToasterService, private _fb: FormBuilder){
         this.newCatForm = _fb.group({
@@ -89,16 +88,17 @@ export class CategoriesComponent implements OnInit {
             let infoMessage = "Category Type Name and Code are both required."
             this.infomodal.showInfoModal(infoMessage);
 		} else {
-			delete c.isEditing;
-			this._settingsService.putEntity(c.id, c, 'CATEGORYTYPES_URL').subscribe((resp: ICategoryType) => {
-				this._toastService.pop('success', 'Success', 'Category Type was updated')
-				c.isEditing = false;
-				this.categoryTypes[i] = c;
-				this._settingsService.setCategories(this.categoryTypes);
-				this.rowBeingEdited = -1;
-				this.isEditing = false; // set to true so create new is disabled
-				if (this.categoryForm.form.dirty) this.categoryForm.reset();
-			});
+            delete c.isEditing;
+            this._settingsService.putEntity(c.id, c, 'CATEGORYTYPES_URL')
+                .subscribe((resp: ICategoryType) => {
+                    this._toastService.pop('success', 'Success', 'Category Type was updated')
+                    c.isEditing = false;
+                    this.categoryTypes[i] = c;
+                    this._settingsService.setCategories(this.categoryTypes);
+                    this.rowBeingEdited = -1;
+                    this.isEditing = false; // set to true so create new is disabled
+                    if (this.categoryForm.form.dirty) this.categoryForm.reset();
+                }, error => this._toastService.pop("error", "Error updating Category Type", error.statusText));
 		}
     }
     
@@ -114,16 +114,14 @@ export class CategoriesComponent implements OnInit {
     //post new category type
     public createNewCategory(){
         let category = this.newCatForm.value;
-        this._settingsService.postEntity(category, 'CATEGORYTYPES_URL').subscribe((response: ICategoryType) => {
-            response.isEditing = false;
-            this.categoryTypes.push(response);
-            this._settingsService.setCategories(this.categoryTypes);
-            this._toastService.pop('success', 'Success', 'Category Type was created.'); 
-            this.cancelCreateCategory();
-        }, error => {                        
-            this._toastService.pop('error', 'Error', 'Category Type was not created.'); 
-            console.log("error");
-        });
+        this._settingsService.postEntity(category, 'CATEGORYTYPES_URL')
+            .subscribe((response: ICategoryType) => {
+                response.isEditing = false;
+                this.categoryTypes.push(response);
+                this._settingsService.setCategories(this.categoryTypes);
+                this._toastService.pop('success', 'Success', 'Category Type was created.'); 
+                this.cancelCreateCategory();
+            }, error => this._toastService.pop('error', 'Error creating Category Type', error.statusText));
     }
 
     // delete category type
@@ -140,17 +138,12 @@ export class CategoriesComponent implements OnInit {
             // get the index to be deleted by the id
             let ind: number = this.getCategoryIndex(this.deleteID);
             //delete it
-            this._settingsService.deleteEntity(this.deleteID, 'CATEGORYTYPES_URL').subscribe(
-                result => {         
+            this._settingsService.deleteEntity(this.deleteID, 'CATEGORYTYPES_URL')
+                .subscribe(result => {         
                     this._toastService.pop('success', 'Success', 'Category Type deleted.');           
                     this.categoryTypes.splice(ind, 1); //delete from array
                     this._settingsService.setCategories(this.categoryTypes); // update service
-                },
-                error => {
-                    this._toastService.pop('error', 'Error', 'Category Type was not deleted.'); 
-                    this.errorMessage = error;                    
-                }
-            );
+                }, error => this._toastService.pop('error', 'Error Deleting Category Type', error.statusText));
         }
     }
 

@@ -66,24 +66,20 @@ export class EditRegionModal {
                 let region: IRegion = this.regionForm.value;
                 // PUT it (if id exists)
                 if (region.id > 0){
-                    this._settingsService.putEntity(region.id, region, 'REGIONS_URL').subscribe((response: IRegion) => {
-                        this._toastService.pop('success', 'Success', 'Region was updated.'); 
-                        this._settingsService.setModalRegion(null); // clear out the service source that this modal needed
-                        this.updatedRegion.emit(response); // emit the edited source
-                    }, error => {                        
-                        this._toastService.pop('error', 'Error', 'Region was not updated.'); 
-                        console.log("Error");
-                    });
+                    this._settingsService.putEntity(region.id, region, 'REGIONS_URL')
+                        .subscribe((response: IRegion) => {
+                            this._toastService.pop('success', 'Success', 'Region was updated.'); 
+                            this._settingsService.setModalRegion(null); // clear out the service source that this modal needed
+                            this.updatedRegion.emit(response); // emit the edited source
+                        }, error => this._toastService.pop('error', 'Error updating Region', error.statusText));
                 } else {
                     // POST it
-                    this._settingsService.postEntity(region, 'REGIONS_URL').subscribe((response: IRegion) => {
-                        this._toastService.pop('success', 'Success', 'Region was created.'); 
-                        this._settingsService.setModalRegion(null); // clear out the service source that this modal needed
-                        this.updatedRegion.emit(response); // emit the created source
-                    }, error => {                        
-                        this._toastService.pop('error', 'Error', 'Region was not created.'); 
-                        console.log("error");
-                    });
+                    this._settingsService.postEntity(region, 'REGIONS_URL')
+                        .subscribe((response: IRegion) => {
+                            this._toastService.pop('success', 'Success', 'Region was created.'); 
+                            this._settingsService.setModalRegion(null); // clear out the service source that this modal needed
+                            this.updatedRegion.emit(response); // emit the created source
+                        }, error => this._toastService.pop('error', 'Error creating Region', error.statusText));
                 }
             }
         }, (reason) => {

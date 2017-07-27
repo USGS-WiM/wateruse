@@ -1,4 +1,4 @@
-<div  class="margin-top--x3">
+<div *ngIf="!showBatch" class="margin-top--x3">
     <div class="row bottom-xs">
         <div *ngIf="sourceList?.length > 0" class="col-xs-2"><label><span>Filter Sources by:</span></label></div>
         <div *ngIf="sourceList?.length > 0" class="col-xs-9 around-xs">
@@ -18,7 +18,7 @@
                 </label>
             </div>
         </div>
-        <div title="Batch Upload Sources" (click)="showBatchUploadModal(bulkSource)" class="col-xs-1"><i class="fa fa-upload fa-2x"></i></div>
+        <div title="Batch Upload Sources" (click)="showBatchUpload()" class="col-xs-1"><i class="fa fa-upload fa-2x"></i></div>
     </div>
     <div  *ngIf="sourceList?.length > 0" class="col-xs-offset-2 col-xs-6">
         <input type="text" name="Fvalue" [disabled]="Fchoice == undefined || Fchoice == ''" [(ngModel)]="Fvalue" />
@@ -32,14 +32,16 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let s of sourceList | filter: {filterProperty: Fchoice, filterValue: Fvalue} | sort: 'name'">
+            <tr *ngFor="let s of sourceList | filter: {filterProperty: Fchoice, filterValue: Fvalue} | sort: 'facilityName'">
                 <td>
                     <i title="Create New Source" (click)="showSourceModal(null)" style="cursor:pointer" class="fa fa-plus" aria-hidden="true"></i>&nbsp;
                     <i title="Edit Source" (click)="showSourceModal(s)" style="cursor:pointer" class="fa fa-pencil" aria-hidden="true"></i>&nbsp;
                     <i title="Delete Source" (click)="deleteSource(s.id)" class="fa fa-times" aria-hidden="true" style="cursor:pointer"></i>
                 </td>
                 <td>{{s.facilityName || "---"}}</td><td>{{s.facilityCode || "---"}}</td><td>{{s.name || "---"}}</td>
-                <td>{{s.catagoryTypeID || "---"}}</td><td>{{s.sourceTypeID || "---"}}</td><td>{{s.stationID || "---"}}</td>
+                <td><span *ngFor="let ct of categoryTypeList | filterbyid: {id : s.catagoryTypeID}">{{ct.name || "---"}}</span></td>
+                <td><span *ngFor="let st of sourceTypeList | filterbyid: {id : s.sourceTypeID}">{{st.name || "---"}}</span></td>
+                <td>{{s.stationID || "---"}}</td>
             </tr>
         </tbody>
     </table>
@@ -50,27 +52,20 @@
     There are no sources for this region.
 </div>
 
-<!-- BULK SOURCE UPLOAD MODAL 
-<ng-template #bulkSource let-c="close" let-d="dismiss">  
-    <div class="modal-header">
-        <h3 class="modal-title">Bulk Source Upload</h3>
-    </div>
-    <div class="modal-body">
+<div *ngIf="showBatch">
+    <h3>Bulk Source Upload</h3>
         <p>
             Copy (ctrl+c) source data from your spreadsheet and paste (ctrl+v) into the table below.<br/>
-            Required fields are denoted with a *. <b>Facility Codes</b> must start with 'FC'.<br/>
-            The table is sortable by clicking on the header column name. Click Validate Table to ensure proper data formatting before uploading the time series data.
+            <b>Required</b> fields are denoted with a *. <b>Facility Codes</b> must start with 'FC'.<br/>
+            The table is sortable by clicking on the header column name.
         </p>
         
         <hotTable #hotTable [data]="sourcedata" [colHeaders]="ScolHeaders" [columns]="Scolumns" [options]="StableOptions" [colWidths]="ScolWidths"></hotTable>
        
+    <div>        
+        <button [disabled]="iSinvalidTable()" type="button" (click)="submitTable()" class="btn-blue">Upload</button>
+        <button type="button" (click)="dismiss('clickedCancel')" class="btn-black">Cancel / Back to Sources List</button>
     </div>
-    <div class="modal-footer">
-        <button type="button" (click)="testValidate()">Click</button>
-        <button [disabled]="SourceInvalids?.length >= 1" type="button" (click)="submitTable()" class="btn-blue">Upload</button>
-        <button type="button" (click)="d('clickedCancel')" class="btn-black">Cancel</button>
-    </div>
-</ng-template>-->
-<sourcebulk [regionId]="chosenRegionID"></sourcebulk> 
+</div>
 <areYouSureModal #areYouSure (modalResponseEvent)="AreYouSureDialogResponse($event)"></areYouSureModal>
 <infoModal #info></infoModal>

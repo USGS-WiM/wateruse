@@ -16,7 +16,6 @@ import { LoadingService } from "app/shared/services/loading.service";
 	styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-	//public loggedIn: boolean;
 	public showPageLoading: boolean;
 
 	constructor(private _authService: AuthService, private cdRef:ChangeDetectorRef, private _loadingService: LoadingService) { }
