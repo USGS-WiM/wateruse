@@ -11,7 +11,8 @@ import {Headers}    from "@angular/http";
 
 @Injectable()
 export class CONFIG {
-    private static baseURL: string = "https://test.streamstats.usgs.gov/wateruseservices/"; 
+//    private static baseURL: string = "https://test.streamstats.usgs.gov/wateruseservices/"; 
+    private static baseURL: string = "http://localhost:5000/"; 
 
     // login
     public static get LOGIN_URL(): string { return this.baseURL + "login";};

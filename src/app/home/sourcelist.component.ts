@@ -20,6 +20,7 @@ import { AreYouSureModal } from "app/shared/modals/areYouSure.modal";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ISourceType } from "app/shared/interfaces/SourceType.interface";
 import { ICategoryType } from "app/shared/interfaces/Category.interface";
+import { LoadingService } from "app/shared/services/loading.service";
 
 @Component({
   selector: 'sourcelist',
@@ -50,7 +51,7 @@ export class SourceListComponent {
     private valdTabSub: any;
 
     constructor(private _waterService: WateruseService, private _homeService: HomeService, private _toastService: ToasterService, 
-        private _modalService: NgbModal, private _cdRef:ChangeDetectorRef) {}
+        private _modalService: NgbModal, private _cdRef:ChangeDetectorRef, private _loadingService: LoadingService) {}
     
     ngOnInit(){   
         this.Fchoice = "facilityCode";  this.showBatch = false;
@@ -90,8 +91,8 @@ export class SourceListComponent {
             { data: 'sourceTypeID', type: 'autocomplete', source: this.sourceTypeNameArray, strict: true, validator: this.ddValidator}, 
             { data: 'catagoryTypeID', type: 'autocomplete', source: this.categoryTypeNameArray, strict: true, validator: this.ddValidator}, 
             { data: 'stationID' },
-            { data: 'location.y', type: 'numeric', validator: this.latValidator},
-            { data: 'location.x', type: 'numeric', validator: this.longValidator}
+            { data: 'location.y', validator: this.latValidator},
+            { data: 'location.x', validator: this.longValidator}
         ];
         
         this.StableOptions = { 
@@ -104,6 +105,12 @@ export class SourceListComponent {
             height: 500,
             outsideClickDeselects: false,
             afterValidate: (isValid, value, row, prop, source) => {
+                this.hotSourceTable.manipulator = {
+                    colorLine : (line) =>{
+                        let cell = this.hotSourceTable.getHandsontableInstance().getCell(line, 0);
+                        cell.attributes[0].value = 'htInvalid';
+                    }
+                };
                 if (!isValid)  {
                     this.SourceInvalids.push({ "isValid": isValid, "row": row, "prop": prop });
                 } else {
@@ -155,6 +162,7 @@ export class SourceListComponent {
                 }
             }
         };
+        
     }
     public iSinvalidTable(){
         return this.SinvalidTable;
@@ -280,20 +288,31 @@ export class SourceListComponent {
                     } else {
                         //add the srid, TODO swap dropdown name for id
                         pastedSources[i]['location'].srid = 4269;
-                        pastedSources[i].catagoryTypeID = this.categoryTypeList.filter(ct => {return ct.name == pastedSources[i].catagoryTypeID.toString();})[0].id;
+                        pastedSources[i].catagoryTypeID = pastedSources[i].catagoryTypeID.toString() !== "" ? this.categoryTypeList.filter(ct => {return ct.name == pastedSources[i].catagoryTypeID.toString();})[0].id: undefined;
                         pastedSources[i].sourceTypeID = this.sourceTypeList.filter(ct => {return ct.name == pastedSources[i].sourceTypeID.toString();})[0].id;
                     }
                 }
                 let test = 'wht';
                 if (pastedSources.length > 0){            
-                /*    this._waterService.postBatchSources(this.regionId, pastedSources).subscribe(
+                    this._loadingService.setLoading(true);
+                    this._waterService.postBatchSources(this.regionId, pastedSources).subscribe(
                         response => {
+                            this._loadingService.setLoading(false);
+                            response.forEach(s => this.sourceList.push(s));
+                            // update the service sourceList so the home page gets updated with the proper list of sources
+                            this._waterService.setSources(this.sourceList);
                             this.showBatch = false;
                             this._toastService.pop('success', 'Success', 'Sources uploaded.');
                             this.sourcedata = [];
                         }, error => {
+                            this._loadingService.setLoading(false);
+                            let bodArray:boolean = false;
+                            for(let key in error._body) {
+                                if (!isNaN(Number(key)))
+                                    this.hotSourceTable.manipulator.colorLine(Number(key));                                
+                            }
                             this._toastService.pop('error', 'Error Uploading Sources', error.statusText);
-                        });*/
+                        });
                 } else {
                     let infoMessage = "You must first add sources data before clicking upload."
                     this.infomodal.showInfoModal(infoMessage);

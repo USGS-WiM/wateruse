@@ -8,14 +8,14 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ArraySortPipe } from "app/shared/pipes/order.pipe";
+//import { ArraySortPipe } from "app/shared/pipes/order.pipe";
 import { FilterPipe } from "app/shared/pipes/filter.pipe";
 import { IdFilterPipe } from "app/shared/pipes/filterbyid.pipe";
 
 @NgModule({
   imports: [ CommonModule],
-  declarations: [ ArraySortPipe, FilterPipe, IdFilterPipe ],
-  exports: [ ArraySortPipe, FilterPipe, IdFilterPipe ],
+  declarations: [  FilterPipe, IdFilterPipe ],//ArraySortPipe,
+  exports: [ FilterPipe, IdFilterPipe ],//ArraySortPipe
   providers: []
 })
 export class PipesModule { }
