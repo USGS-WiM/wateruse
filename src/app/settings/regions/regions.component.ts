@@ -79,13 +79,14 @@ export class RegionComponent implements OnInit {
             // get the index to be deleted by the id
             let ind: number = this.getRegionIndex(this.deleteID);
             //delete it
-            this._settingsService.deleteEntity(this.deleteID, 'REGIONS_URL').subscribe(
-                result => {         
+            let fakeID: number = 999;
+            this._settingsService.deleteEntity(this.deleteID, 'REGIONS_URL')
+                .subscribe(result => {         
                     this._toastService.pop('success', 'Success', 'Region deleted.');           
                     this.regionList.splice(ind, 1); //delete from array
                     this._settingsService.setRegions(this.regionList); // update service
                 },
-                error => this._toastService.pop('error', 'Error deleting Region', error.statusText));
+                error => this._toastService.pop('error', 'Error deleting Region', error._body.message || error.statusText));//.statusText));
         }
     }
     //  get index in regionList based on region.id value

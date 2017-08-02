@@ -88,7 +88,7 @@ export class EditSourceModal {
                     this.modalReference.dismiss();
                     this.updatedSource.emit(response); // emit the edited source
                 }, error => {                        
-                    this._toastService.pop('error', `Error: ${error.status}`, error.statusText); 
+                    this._toastService.pop('error', 'Error updating Source', error._body.message || error.statusText); 
                     console.log("Error");
                 });
             } else {
@@ -99,7 +99,7 @@ export class EditSourceModal {
                     this.modalReference.dismiss();
                     this.updatedSource.emit(response); // emit the created source
                 }, error => {                        
-                    this._toastService.pop('error', `Error: ${error.status}`, error.statusText); 
+                    this._toastService.pop('error', 'Error creating source', error._body.message || error.statusText); 
                     console.log("error");
                 });
             }

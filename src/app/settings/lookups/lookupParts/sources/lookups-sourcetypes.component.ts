@@ -98,7 +98,7 @@ export class SourcesComponent implements OnInit {
                     this.rowBeingEdited = -1;
                     this.isEditing = false; // set to true so create new is disabled
                     if (this.sourceForm.form.dirty) this.sourceForm.reset();
-                }, error => this._toastService.pop("error", "Error updating Source Type", error.statusText)
+                }, error => this._toastService.pop("error", "Error updating Source Type", error._body.message || error.statusText)
             );
 		}
     }
@@ -122,7 +122,7 @@ export class SourcesComponent implements OnInit {
                 this._settingsService.setSourceTypes(this.sourceTypes);
                 this._toastService.pop('success', 'Success', 'Source Type was created.'); 
                 this.cancelCreateSourceType();
-            }, error => this._toastService.pop('error', 'Error creating Source Type', error.statusText));
+            }, error => this._toastService.pop('error', 'Error creating Source Type', error._body.message || error.statusText));
     }
 
     // delete category type
@@ -144,7 +144,7 @@ export class SourcesComponent implements OnInit {
                     this._toastService.pop('success', 'Success', 'Source Type deleted.');           
                     this.sourceTypes.splice(ind, 1); //delete from array
                     this._settingsService.setCategories(this.sourceTypes); // update service
-                }, error => this._toastService.pop('error', 'Error deleting Source Type', error.statusText));
+                }, error => this._toastService.pop('error', 'Error deleting Source Type', error._body.message || error.statusText));
         }
     }
 

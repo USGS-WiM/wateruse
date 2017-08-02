@@ -98,7 +98,7 @@ export class CategoriesComponent implements OnInit {
                     this.rowBeingEdited = -1;
                     this.isEditing = false; // set to true so create new is disabled
                     if (this.categoryForm.form.dirty) this.categoryForm.reset();
-                }, error => this._toastService.pop("error", "Error updating Category Type", error.statusText));
+                }, error => this._toastService.pop("error", "Error updating Category Type", error._body.message || error.statusText));
 		}
     }
     
@@ -121,7 +121,7 @@ export class CategoriesComponent implements OnInit {
                 this._settingsService.setCategories(this.categoryTypes);
                 this._toastService.pop('success', 'Success', 'Category Type was created.'); 
                 this.cancelCreateCategory();
-            }, error => this._toastService.pop('error', 'Error creating Category Type', error.statusText));
+            }, error => this._toastService.pop('error', 'Error creating Category Type', error._body.message || error.statusText));
     }
 
     // delete category type
@@ -143,7 +143,7 @@ export class CategoriesComponent implements OnInit {
                     this._toastService.pop('success', 'Success', 'Category Type deleted.');           
                     this.categoryTypes.splice(ind, 1); //delete from array
                     this._settingsService.setCategories(this.categoryTypes); // update service
-                }, error => this._toastService.pop('error', 'Error Deleting Category Type', error.statusText));
+                }, error => this._toastService.pop('error', 'Error Deleting Category Type', error._body.message || error.statusText));
         }
     }
 

@@ -71,7 +71,7 @@ export class EditRegionModal {
                             this._toastService.pop('success', 'Success', 'Region was updated.'); 
                             this._settingsService.setModalRegion(null); // clear out the service source that this modal needed
                             this.updatedRegion.emit(response); // emit the edited source
-                        }, error => this._toastService.pop('error', 'Error updating Region', error.statusText));
+                        }, error => this._toastService.pop('error', 'Error updating Region', error._body.message || error.statusText));
                 } else {
                     // POST it
                     this._settingsService.postEntity(region, 'REGIONS_URL')
@@ -79,7 +79,7 @@ export class EditRegionModal {
                             this._toastService.pop('success', 'Success', 'Region was created.'); 
                             this._settingsService.setModalRegion(null); // clear out the service source that this modal needed
                             this.updatedRegion.emit(response); // emit the created source
-                        }, error => this._toastService.pop('error', 'Error creating Region', error.statusText));
+                        }, error => this._toastService.pop('error', 'Error creating Region', error._body.message || error.statusText));
                 }
             }
         }, (reason) => {

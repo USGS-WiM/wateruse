@@ -65,7 +65,7 @@ export class HomeComponent implements OnInit {
                     this._waterService.setSources(response);
                     this._loadingService.setLoading(false);
                 }, error => { 
-                    this._toastService.pop('error', 'Error', 'Error getting Sources: ' + error.statusText);
+                    this._toastService.pop('error', 'Error Retrieving Sources', error._body.message || error.statusText);
                     this._loadingService.setLoading(false);
                 }
             );

@@ -96,7 +96,7 @@ export class RolesComponent implements OnInit {
                     this.rowBeingEdited = -1;
                     this.isEditing = false; // set to true so create new is disabled
                     if (this.rolesForm.form.dirty) this.rolesForm.reset();
-                }, error => this._toastService.pop("error", "Error updating Role", error.statusText)
+                }, error => this._toastService.pop("error", "Error updating Role", error._body.message || error.statusText)
             );
 		}
     }
@@ -119,7 +119,7 @@ export class RolesComponent implements OnInit {
                 this._settingsService.setRoles(this.rolesList);
                 this._toastService.pop('success', 'Success', 'Role was created.'); 
                 this.cancelCreateRole();
-            }, error => this._toastService.pop('error', 'Error creating Role', error.statusText));
+            }, error => this._toastService.pop('error', 'Error creating Role', error._body.message || error.statusText));
     }
 
     // delete role
@@ -141,7 +141,7 @@ export class RolesComponent implements OnInit {
                     this._toastService.pop('success', 'Success', 'Role deleted.');           
                     this.rolesList.splice(ind, 1); //delete from array
                     this._settingsService.setRoles(this.rolesList); // update service
-                }, error => this._toastService.pop('error', 'Error deleting Role', error.statusText));
+                }, error => this._toastService.pop('error', 'Error deleting Role', error._body.message || error.statusText));
         }
     }
 

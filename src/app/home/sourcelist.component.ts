@@ -88,7 +88,7 @@ export class SourceListComponent {
             { data: 'facilityCode', validator: this.facCodeValidator },
             { data: 'name'}, 
             { data: 'sourceTypeID', type: 'autocomplete', source: this.sourceTypeNameArray, strict: true, validator: this.ddValidator}, 
-            { data: 'categoryTypeID', type: 'autocomplete', source: this.categoryTypeNameArray, strict: true, validator: this.ddValidator}, 
+            { data: 'catagoryTypeID', type: 'autocomplete', source: this.categoryTypeNameArray, strict: true, validator: this.ddValidator}, 
             { data: 'stationID' },
             { data: 'location.y', type: 'numeric', validator: this.latValidator},
             { data: 'location.x', type: 'numeric', validator: this.longValidator}
@@ -200,12 +200,10 @@ export class SourceListComponent {
         
         if (((value < 22 || value > 55) || isNaN(value))  && value !== null) {
             setTimeout(()=> { this['instance'].deselectCell(); }, 100);    
-            alert("Latitude must be between 22.0 and 55.0 (dec deg).");                             
-            // this._toastService.pop('warning', 'Warning', 'Latitude must be between 22.0 and 55.0 (dec deg)')
+            alert("Latitude must be between 22.0 and 55.0 (dec deg).");          
             callback(false);
         } else if (!value && otherDataInRow) {            
             alert("Latitude is required.");
-            // this._toastService.pop('warning', 'Warning', 'Latitude is required')           
             callback(false);
         } else {
             callback(true);
@@ -224,11 +222,9 @@ export class SourceListComponent {
         if (((value < -130 || value > -55) || isNaN(value)) && value !== null) {
             setTimeout(()=> { this['instance'].deselectCell(); }, 100);    
             alert("Longitude must be between -130.0 and -55.0 (dec deg).");
-            // this._toastService.pop('warning', 'Warning', 'Longitude must be between -130.0 and -55.0 (dec deg)')                              
             callback(false);
         } else if (!value && otherDataInRow) {
             alert("Longitude is required.");
-            // this._toastService.pop('warning', 'Warning', 'Longitude is a required field')  
             callback(false);
         }
         else {
@@ -274,29 +270,30 @@ export class SourceListComponent {
     public submitTable(){   
        // for each one, add unitTypeID: 1 and pass the regionID
         let pastedSources:Array<ISource> =  Object.assign([], this.sourcedata);
-        // LEFT OFF (7/26) with this not applying htInvalid class to the invalid ones
+        
         this.hotSourceTable.getHandsontableInstance().validateCells((valid) => {
             if (valid) { 
-                // drop the last 30 since they are empty, TODO swap dropdown name for id
+                // drop the last 30 since they are empty, 
                 for (var i = pastedSources.length; i--;) {
                     if (pastedSources[i].facilityCode === undefined || pastedSources[i].facilityCode === null || pastedSources[i].facilityCode === "") {
                         pastedSources.splice(i, 1);
                     } else {
-                        //add the regionID, srid, 
-                        pastedSources[i].regionID = this.regionId;
+                        //add the srid, TODO swap dropdown name for id
                         pastedSources[i]['location'].srid = 4269;
+                        pastedSources[i].catagoryTypeID = this.categoryTypeList.filter(ct => {return ct.name == pastedSources[i].catagoryTypeID.toString();})[0].id;
+                        pastedSources[i].sourceTypeID = this.sourceTypeList.filter(ct => {return ct.name == pastedSources[i].sourceTypeID.toString();})[0].id;
                     }
                 }
                 let test = 'wht';
                 if (pastedSources.length > 0){            
-                    this._waterService.postBatchSources(this.regionId, pastedSources).subscribe(
+                /*    this._waterService.postBatchSources(this.regionId, pastedSources).subscribe(
                         response => {
                             this.showBatch = false;
                             this._toastService.pop('success', 'Success', 'Sources uploaded.');
                             this.sourcedata = [];
                         }, error => {
-                            this._toastService.pop('error', 'Error', error.statusText);
-                        });
+                            this._toastService.pop('error', 'Error Uploading Sources', error.statusText);
+                        });*/
                 } else {
                     let infoMessage = "You must first add sources data before clicking upload."
                     this.infomodal.showInfoModal(infoMessage);
@@ -357,7 +354,7 @@ export class SourceListComponent {
                     this._waterService.setSources(this.sourceList); // update service
                 },
                 error => {
-                    this._toastService.pop('error', 'Error', error.statusText); 
+                    this._toastService.pop('error', 'Error', error._body.message || error.statusText); 
                 }
             );
         }
@@ -373,18 +370,6 @@ export class SourceListComponent {
     }
     public showBatchUpload() {
         this.showBatch = true;
-        /* this._homeService.setbulkSourceModal(true);
-        this.modalReference = this._modalService.open(bulkM, { backdrop: 'static', keyboard: false, size: 'lg'} );
-        this.modalReference.result.then((valid) =>{     
-            this.showBatch = false;      
-            //  this.CloseResult = `Closed with: ${valid}`;           
-            if (valid){
-                // this._homeService.setbulkSourceModal(false);
-            }
-        }, (reason) => {
-            this.showBatch = false;  
-            //this.CloseResult = `Dismissed ${this.getDismissReason(reason)}`
-        });*/
     }
     public dismiss(){
         this.showBatch = false;

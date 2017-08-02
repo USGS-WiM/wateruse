@@ -94,8 +94,8 @@ export class WateruseService {
     // POST source Batch
     public postBatchSources(regionId: number, sources: Array<any>) {
         let options = new RequestOptions({headers:CONFIG.JSON_AUTH_HEADERS});
-        return this._http.post(CONFIG.SOURCES_URL + '/batch', sources, options)
-            .map(res=> <Array<ITimeseries>>res.json())
+        return this._http.post(CONFIG.REGIONS_URL + "/" + regionId + '/Sources/Batch', sources, options)
+            .map(res=> <any>res.json())
             .catch(this.errorHandler);
     }
     // POST timeseries Batch

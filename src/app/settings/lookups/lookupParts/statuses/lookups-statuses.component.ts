@@ -98,7 +98,7 @@ export class StatusesComponent implements OnInit {
                     this.rowBeingEdited = -1;
                     this.isEditing = false; // set to true so create new is disabled
                     if (this.statusForm.form.dirty) this.statusForm.reset();
-                }, error => this._toastService.pop("error", "Error updating Status Type", error.statusText));
+                }, error => this._toastService.pop("error", "Error updating Status Type", error._body.message || error.statusText));
 		}
     }
     
@@ -121,7 +121,7 @@ export class StatusesComponent implements OnInit {
                 this._settingsService.setStatusTypes(this.statusTypes);
                 this._toastService.pop('success', 'Success', 'Status Type was created.'); 
                 this.cancelCreateStatusType();
-            }, error => this._toastService.pop('error', 'Error creating Statu Type', error.statusText));
+            }, error => this._toastService.pop('error', 'Error creating Statu Type', error._body.message || error.statusText));
     }
 
     // delete category type
@@ -143,7 +143,7 @@ export class StatusesComponent implements OnInit {
                     this._toastService.pop('success', 'Success', 'Status Type deleted.');           
                     this.statusTypes.splice(ind, 1); //delete from array
                     this._settingsService.setCategories(this.statusTypes); // update service
-                }, error => this._toastService.pop('error', 'Error deleting Status Type', error.statusText));
+                }, error => this._toastService.pop('error', 'Error deleting Status Type', error._body.message || error.statusText));
         }
     }
 

@@ -97,7 +97,7 @@ export class UnitTypesComponent implements OnInit {
                     this.rowBeingEdited = -1;
                     this.isEditing = false; // set to true so create new is disabled
                     if (this.unitsForm.form.dirty) this.unitsForm.reset();
-                }, error => this._toastService.pop('error', 'Error updating Unit Type', error.statusText));
+                }, error => this._toastService.pop('error', 'Error updating Unit Type', error._body.message || error.statusText));
 		}
     }
     
@@ -119,7 +119,7 @@ export class UnitTypesComponent implements OnInit {
                 this._settingsService.setUnitTypes(this.unitTypes);
                 this._toastService.pop('success', 'Success', 'Unit Type was created.'); 
                 this.cancelCreateUnitType();
-            }, error => this._toastService.pop('error', 'Error updating Unit Type', error.statusText));
+            }, error => this._toastService.pop('error', 'Error updating Unit Type', error._body.message || error.statusText));
     }
 
     // delete role
@@ -141,7 +141,7 @@ export class UnitTypesComponent implements OnInit {
                     this._toastService.pop('success', 'Success', 'Unit Type deleted.');           
                     this.unitTypes.splice(ind, 1); //delete from array
                     this._settingsService.setUnitTypes(this.unitTypes); // update service
-                }, error => this._toastService.pop('error', 'Error deleting Unit Type', error.statusText));
+                }, error => this._toastService.pop('error', 'Error deleting Unit Type', error._body.message || error.statusText));
         }
     }
 

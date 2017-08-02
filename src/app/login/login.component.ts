@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
             }
             this.loading = false; // not using this yet
         }, (error) => {
-            this._toastService.pop('error', 'Error', error.statusText);     
+            this._toastService.pop('error', 'Error', error._body.message || error.statusText);     
             this.loading = false;
         });
     }
