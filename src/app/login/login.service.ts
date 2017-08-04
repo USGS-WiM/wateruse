@@ -12,15 +12,19 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
-import { CONFIG } from "app/shared/services/CONFIG";
 import { AuthService } from "app/shared/services/auth.service";
+import { ConfigService } from "app/config.service";
+import { IConfig } from "app/shared/interfaces/Config.interface";
 
 @Injectable()
 export class LoginService {
     public isLoggedIn: boolean = false;
-
-    constructor(private http: Http, private _authService: AuthService) { }
-    
+	private configSettings: IConfig;
+	
+    constructor(private http: Http, private _authService: AuthService, private _configService: ConfigService) { 
+		this.configSettings = this._configService.getConfiguration();
+	}
+	
     // log in
     public login(username: string, password: string) {  
         let headers: Headers = new Headers();
@@ -29,7 +33,7 @@ export class LoginService {
 		headers.append("Authorization", creds);
 		headers.append("Accept", "application/json");
 		headers.append("Content-Type", "application/json");
-        return this.http.get(CONFIG.LOGIN_URL, { headers: headers })
+        return this.http.get(this.configSettings.baseUrl + this.configSettings.loginURL, { headers: headers })
             .map((response: Response) => {
 				// login successful if there's a jwt token in the response
 				let user = response.json();

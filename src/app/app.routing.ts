@@ -22,7 +22,7 @@ const appRoutes: Routes = [
         canActivate: [AuthGuard],
         resolve: {
             regions: RegionListResolve
-    }     
+        }     
     },
     { 
         path: 'login', 
@@ -34,7 +34,10 @@ const appRoutes: Routes = [
         canLoad: [AuthGuard]
     },
     // otherwise redirect to home
-    { path: '**', redirectTo: '' }
+    { 
+        path: '**', 
+        redirectTo: ''
+    }
 ];
 
 export const AppRoutingModule = RouterModule.forRoot(appRoutes);

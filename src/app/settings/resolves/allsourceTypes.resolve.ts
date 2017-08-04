@@ -22,6 +22,6 @@ export class AllSourceTypesResolve implements Resolve<Array<ISourceType>> {
   // this resolver is not working. I don't know if its the service or the resolver, but the subscribe is returning nothing even though service
   //is getting the full project properly. either keep digging or remove resolver...
   resolve(route: ActivatedRouteSnapshot): Observable<Array<ISourceType>> {
-     return this._settingsService.getEntities('SOURCETYPES_URL');
+     return this._settingsService.getEntities('sourceTypeURL');
   }
 }

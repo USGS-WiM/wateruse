@@ -8,13 +8,12 @@
 
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Http, Headers, Response, RequestOptions } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Subject }      from 'rxjs/Subject';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-import { CONFIG } from "app/shared/services/CONFIG";
 import { IUser } from "app/shared/interfaces/User.interface";
 import { Router } from "@angular/router";
 

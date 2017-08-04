@@ -46,7 +46,7 @@ export class SourcesComponent implements OnInit {
         this.rowBeingEdited = -1; //start it off neg  
         this.deleteID = -1;
 
-        this._route.parent.data.subscribe((data: { allSourceTypes: Array<ISourceType> }) => {
+        this._route.data.subscribe((data: { allSourceTypes: Array<ISourceType> }) => {
             this.sourceTypes = [];
             data.allSourceTypes.forEach((st: ISourceType) => {
                 st.isEditing = false;
@@ -89,7 +89,7 @@ export class SourcesComponent implements OnInit {
             this.infomodal.showInfoModal(infoMessage);
 		} else {
 			delete stype.isEditing;
-            this._settingsService.putEntity(stype.id, stype, 'SOURCETYPES_URL')
+            this._settingsService.putEntity(stype.id, stype, 'sourceTypeURL')
                 .subscribe((resp: ISourceType) => {
 				    this._toastService.pop('success', 'Success', 'Source Type was updated')
                     stype.isEditing = false;
@@ -115,7 +115,7 @@ export class SourcesComponent implements OnInit {
     //post new source type
     public createNewSourceType(){
         let sourceT = this.newSourceTypeForm.value;
-        this._settingsService.postEntity(sourceT,'SOURCETYPES_URL')
+        this._settingsService.postEntity(sourceT,'sourceTypeURL')
             .subscribe((response: ISourceType) => {
                 response.isEditing = false;
                 this.sourceTypes.push(response);
@@ -139,7 +139,7 @@ export class SourcesComponent implements OnInit {
             // get the index to be deleted by the id
             let ind: number = this.getSourceTypeIndex(this.deleteID);
             //delete it
-            this._settingsService.deleteEntity(this.deleteID, 'SOURCETYPES_URL')
+            this._settingsService.deleteEntity(this.deleteID, 'sourceTypeURL')
                 .subscribe(result => {         
                     this._toastService.pop('success', 'Success', 'Source Type deleted.');           
                     this.sourceTypes.splice(ind, 1); //delete from array

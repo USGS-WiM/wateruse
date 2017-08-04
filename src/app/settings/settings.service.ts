@@ -13,17 +13,22 @@ import { Subject } from "rxjs/Subject";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import 'rxjs/add/observable/throw';
 
-import { CONFIG } from "app/shared/services/CONFIG";
 import { IRegion } from "app/shared/interfaces/Region.interface";
 import { ISourceType } from "app/shared/interfaces/SourceType.interface";
 import { ICategoryType } from "app/shared/interfaces/Category.interface";
 import { IUnitType } from "app/shared/interfaces/UnitType.interface";
 import { IStatusType } from "app/shared/interfaces/StatusType.interface";
 import { IRoles } from "app/shared/interfaces/Roles.interface";
+import { IConfig } from "app/shared/interfaces/Config.interface";
+import { ConfigService } from "app/config.service";
 
 @Injectable()
 export class SettingsService {
-    constructor(private _http: Http) {}
+    public authHeader: Headers = new Headers({"Accept": "application/json", "Content-Type": "application/json", "Authorization": localStorage.getItem("credentials")});
+    private configSettings: IConfig;
+    constructor(private _http: Http, private _configService: ConfigService) {
+        this.configSettings = this._configService.getConfiguration();
+     }
 
     // SUBJECTS //////////////////////////////////////
     private _regionSubject: BehaviorSubject<Array<IRegion>> = <BehaviorSubject<IRegion[]>>new BehaviorSubject([]);
@@ -45,8 +50,8 @@ export class SettingsService {
     
     // ------------ GETS ---------------------------
     public getEntities(url:string){
-        let options = new RequestOptions({headers: CONFIG.JSON_AUTH_HEADERS});
-        return this._http.get(CONFIG[url], options)
+        let options = new RequestOptions({headers: this.authHeader});
+        return this._http.get(this.configSettings.baseUrl + this.configSettings[url], options)
             .map(response => <Array<any>>response.json())
             .catch(this.errorHandler)
     }
@@ -54,24 +59,24 @@ export class SettingsService {
 
     // ------------ POSTS ------------------------------    
     public postEntity(entity: object, url: string){
-        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.post(CONFIG[url], entity, options)
+        let options = new RequestOptions({ headers: this.authHeader});
+        return this._http.post(this.configSettings.baseUrl + this.configSettings[url], entity, options)
             .map(res => <any>res.json())
             .catch(this.errorHandler);
     }
 
     // ------------ PUTS --------------------------------    
     public putEntity(id: number, entity: any, url: string){
-        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.put(CONFIG[url] + '/' + id, entity, options)
+        let options = new RequestOptions({ headers: this.authHeader});
+        return this._http.put(this.configSettings.baseUrl + this.configSettings[url] + '/' + id, entity, options)
             .map(res => <any>res.json())
             .catch(this.errorHandler);
     }
         
     // ------------ DELETES ------------------------------
     public deleteEntity(id: number, url: string){
-        let options = new RequestOptions({ headers: CONFIG.JSON_AUTH_HEADERS });
-        return this._http.delete(CONFIG[url] + '/' + id, options)
+        let options = new RequestOptions({ headers: this.authHeader});
+        return this._http.delete(this.configSettings.baseUrl + this.configSettings[url] + '/' + id, options)
             .catch(this.errorHandler);
     }
         

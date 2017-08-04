@@ -45,7 +45,7 @@ export class UnitTypesComponent implements OnInit {
         this.rowBeingEdited = -1; //start it off neg  
         this.deleteID = -1;
 
-        this._route.parent.data.subscribe((data: { allUnitTypes: Array<IUnitType> }) => {
+        this._route.data.subscribe((data: { allUnitTypes: Array<IUnitType> }) => {
             this.unitTypes = [];
             data.allUnitTypes.forEach((u: IUnitType) => {
                 u.isEditing = false;
@@ -88,7 +88,7 @@ export class UnitTypesComponent implements OnInit {
             this.infomodal.showInfoModal(infoMessage);
 		} else {
 			delete u.isEditing;
-            this._settingsService.putEntity(u.id, u, 'UNITTYPES_URL')
+            this._settingsService.putEntity(u.id, u, 'unitTypesURL')
                 .subscribe((resp: IUnitType) => {
                     this._toastService.pop('success', 'Success', 'Unit Type was updated')
                     u.isEditing = false;
@@ -112,7 +112,7 @@ export class UnitTypesComponent implements OnInit {
     //post new category type
     public createNewUnitType(){
         let utype = this.newUnitForm.value;
-        this._settingsService.postEntity(utype, 'UNITTYPES_URL')
+        this._settingsService.postEntity(utype, 'unitTypesURL')
             .subscribe((response: IUnitType) => {
                 response.isEditing = false;
                 this.unitTypes.push(response);
@@ -136,7 +136,7 @@ export class UnitTypesComponent implements OnInit {
             // get the index to be deleted by the id
             let ind: number = this.getUnitTypeIndex(this.deleteID);
             //delete it
-            this._settingsService.deleteEntity(this.deleteID, 'UNITTYPES_URL')
+            this._settingsService.deleteEntity(this.deleteID, 'unitTypesURL')
                 .subscribe(result => {         
                     this._toastService.pop('success', 'Success', 'Unit Type deleted.');           
                     this.unitTypes.splice(ind, 1); //delete from array
