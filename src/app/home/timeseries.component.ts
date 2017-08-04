@@ -38,10 +38,10 @@ export class TimeseriesComponent {
     public timeseriesdata: Array<ITimeseries> = []; // bulk upload timeseries data
     public hot: any;
     public invalidTable: boolean;
-    private colHeaders: Array<string>;
-    private columns: Array<any>;
-    private colWidths: Array<number>;
-    private tableOptions: any;
+    public colHeaders: Array<string>;
+    public columns: Array<any>;
+    public colWidths: Array<number>;
+    public tableOptions: any;
     private invalids: Array<any>;
     public infoMessage: string; // message to show in info modal
     public validTabSubscript: any;

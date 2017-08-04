@@ -80,7 +80,7 @@ export class RegionComponent implements OnInit {
             let ind: number = this.getRegionIndex(this.deleteID);
             //delete it
             let fakeID: number = 999;
-            this._settingsService.deleteEntity(this.deleteID, 'REGIONS_URL')
+            this._settingsService.deleteEntity(this.deleteID, 'regionsURL')
                 .subscribe(result => {         
                     this._toastService.pop('success', 'Success', 'Region deleted.');           
                     this.regionList.splice(ind, 1); //delete from array

@@ -9,6 +9,7 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { AuthService } from "app/shared/services/auth.service";
 import { LoadingService } from "app/shared/services/loading.service";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
 	selector: 'app-root',
@@ -18,7 +19,8 @@ import { LoadingService } from "app/shared/services/loading.service";
 export class AppComponent {
 	public showPageLoading: boolean;
 
-	constructor(private _authService: AuthService, private cdRef:ChangeDetectorRef, private _loadingService: LoadingService) { }
+	constructor(private _route: ActivatedRoute, private _authService: AuthService, private cdRef:ChangeDetectorRef, 
+		private _loadingService: LoadingService) { }
 
 	ngOnInit() {
 		this.showPageLoading = false;

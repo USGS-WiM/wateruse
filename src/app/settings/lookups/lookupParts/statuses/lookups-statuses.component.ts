@@ -46,7 +46,7 @@ export class StatusesComponent implements OnInit {
         this.rowBeingEdited = -1; //start it off neg  
         this.deleteID = -1;
 
-        this._route.parent.data.subscribe((data: { allStatusTypes: Array<IStatusType> }) => {
+        this._route.data.subscribe((data: { allStatusTypes: Array<IStatusType> }) => {
             this.statusTypes = [];
             data.allStatusTypes.forEach((stat: IStatusType) => {
                 stat.isEditing = false;
@@ -89,7 +89,7 @@ export class StatusesComponent implements OnInit {
             this.infomodal.showInfoModal(infoMessage);
 		} else {
 			delete c.isEditing;
-            this._settingsService.putEntity(c.id, c, 'STATUSTYPES_URL')
+            this._settingsService.putEntity(c.id, c, 'statusTypesURL')
                 .subscribe((resp: IStatusType) => {
                     this._toastService.pop('success', 'Success', 'Status Type was updated')
                     c.isEditing = false;
@@ -114,7 +114,7 @@ export class StatusesComponent implements OnInit {
     //post new category type
     public createNewStatusType(){
         let stat = this.newStatusTypeForm.value;
-        this._settingsService.postEntity(stat, 'STATUSTYPES_URL')
+        this._settingsService.postEntity(stat, 'statusTypesURL')
             .subscribe((response: IStatusType) => {            
                 response.isEditing = false;
                 this.statusTypes.push(response);
@@ -138,7 +138,7 @@ export class StatusesComponent implements OnInit {
             // get the index to be deleted by the id
             let ind: number = this.getStatusIndex(this.deleteID);
             //delete it
-            this._settingsService.deleteEntity(this.deleteID, 'STATUSTYPES_URL')
+            this._settingsService.deleteEntity(this.deleteID, 'statusTypesURL')
                 .subscribe(result => {         
                     this._toastService.pop('success', 'Success', 'Status Type deleted.');           
                     this.statusTypes.splice(ind, 1); //delete from array

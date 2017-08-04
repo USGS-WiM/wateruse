@@ -40,34 +40,41 @@ const settingsRoutes: Routes = [
 	{
 		path: 'settings/lookups',
 		component: LookupsComponent,
-		resolve: {
-			allCategoryTypes: AllCategoryTypesResolve,
-			allRoles: AllRolesResolve,
-			allSourceTypes: AllSourceTypesResolve,
+		/*resolve: {
+			//allCategoryTypes: AllCategoryTypesResolve,
+			//allRoles: AllRolesResolve,
+			//allSourceTypes: AllSourceTypesResolve,
 			allStatusTypes: AllStatusTypesResolve,
 			allUnitTypes: AllUnitTypesResolve
-		},
+		},*/
 		canActivateChild: [AuthGuard],
 		children: [
 			{
 				path: 'categories',
-				component: CategoriesComponent				
+				component: CategoriesComponent,
+				resolve: {
+					allCategoryTypes: AllCategoryTypesResolve
+				}		
 			},
 			{
 				path: 'roles',
-				component: RolesComponent				
+				component: RolesComponent,
+				resolve: {allRoles: AllRolesResolve}			
 			},
 			{
 				path: 'sourcetypes',
-				component: SourcesComponent				
+				component: SourcesComponent,
+				resolve: {allSourceTypes: AllSourceTypesResolve}			
 			},
 			{
 				path: 'status',
-				component: StatusesComponent				
+				component: StatusesComponent,
+				resolve: {allStatusTypes: AllStatusTypesResolve}	
 			},
 			{
 				path: 'unittypes',
-				component: UnitTypesComponent				
+				component: UnitTypesComponent,
+				resolve: {allUnitTypes: AllUnitTypesResolve}					
 			}
     	]
 	}			 

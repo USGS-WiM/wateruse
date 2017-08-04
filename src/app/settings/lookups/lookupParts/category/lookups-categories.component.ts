@@ -46,7 +46,7 @@ export class CategoriesComponent implements OnInit {
         this.rowBeingEdited = -1; //start it off neg  
         this.deleteID = -1;
 
-        this._route.parent.data.subscribe((data: { allCategoryTypes: Array<ICategoryType> }) => {
+        this._route.data.subscribe((data: { allCategoryTypes: Array<ICategoryType> }) => {
             this.categoryTypes = [];
             data.allCategoryTypes.forEach((ct: ICategoryType) => {
                 ct.isEditing = false;
@@ -89,7 +89,7 @@ export class CategoriesComponent implements OnInit {
             this.infomodal.showInfoModal(infoMessage);
 		} else {
             delete c.isEditing;
-            this._settingsService.putEntity(c.id, c, 'CATEGORYTYPES_URL')
+            this._settingsService.putEntity(c.id, c, 'categoryTypeURL')
                 .subscribe((resp: ICategoryType) => {
                     this._toastService.pop('success', 'Success', 'Category Type was updated')
                     c.isEditing = false;
@@ -114,7 +114,7 @@ export class CategoriesComponent implements OnInit {
     //post new category type
     public createNewCategory(){
         let category = this.newCatForm.value;
-        this._settingsService.postEntity(category, 'CATEGORYTYPES_URL')
+        this._settingsService.postEntity(category, 'categoryTypeURL')
             .subscribe((response: ICategoryType) => {
                 response.isEditing = false;
                 this.categoryTypes.push(response);
@@ -138,7 +138,7 @@ export class CategoriesComponent implements OnInit {
             // get the index to be deleted by the id
             let ind: number = this.getCategoryIndex(this.deleteID);
             //delete it
-            this._settingsService.deleteEntity(this.deleteID, 'CATEGORYTYPES_URL')
+            this._settingsService.deleteEntity(this.deleteID, 'categoryTypeURL')
                 .subscribe(result => {         
                     this._toastService.pop('success', 'Success', 'Category Type deleted.');           
                     this.categoryTypes.splice(ind, 1); //delete from array

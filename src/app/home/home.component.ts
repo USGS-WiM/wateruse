@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
     @ViewChild('areYouSure') areYouSure: AreYouSureModal;    
     @ViewChild('mainTabs') outerTabs: NgbTabset;
     @ViewChild('sourceSubTabs') innerTabs: NgbTabset;
-
+    public chosenRegion: any;
     public chosenRegionID: number;  // store regionID chosen to use in post/put
     public currentUser: string; // current user logged in right now
     public regionList: Array<IRegion>; // list of regions for user to choose from

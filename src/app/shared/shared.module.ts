@@ -29,7 +29,7 @@ import { WangularModule } from 'wangular';
 @NgModule({
   declarations: [numberFormat, AreYouSureModal, InfoModal ],
   exports: [ NgbModule,numberFormat, AreYouSureModal, InfoModal, HotTableModule, ToasterModule, WangularModule ],
-  imports: [ CommonModule, BrowserAnimationsModule, NgbModule.forRoot(), FormsModule, PipesModule, HotTableModule, ToasterModule ]
+  imports: [ CommonModule, BrowserAnimationsModule, NgbModule.forRoot(), FormsModule, PipesModule, HotTableModule, ToasterModule, WangularModule ]
 })
 
 export class SharedModule {
