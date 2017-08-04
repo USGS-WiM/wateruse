@@ -25,9 +25,9 @@ import { IConfig } from "app/shared/interfaces/Config.interface";
 
 @Injectable()
 export class WateruseService {
-    public authHeader: Headers = new Headers({"Accept": "application/json", "Content-Type": "application/json", "Authorization": localStorage.getItem("credentials")});
-    public jsonHeader: Headers = new Headers({"Accept": "application/json", "Content-Type": "application/json"});
-    public configSettings: IConfig;
+    private authHeader: Headers = new Headers({"Accept": "application/json", "Content-Type": "application/json", "Authorization": localStorage.getItem("credentials")});
+    private jsonHeader: Headers = new Headers({"Accept": "application/json", "Content-Type": "application/json"});
+    private configSettings: IConfig;
 
     constructor(private _http: Http, private _configService: ConfigService) {
         this.configSettings = this._configService.getConfiguration();
