@@ -24,7 +24,7 @@ import { numberFormat } from "app/shared/directives/number.directive";
 import { AreYouSureModal } from "app/shared/modals/areYouSure.modal";
 import { InfoModal } from "app/shared/modals/info.modal";
 import { LoadingService } from "app/shared/services/loading.service";
-import { WangularModule } from 'wangular';
+import { WangularModule } from 'wangular/src/app/wangular';
 
 @NgModule({
   declarations: [numberFormat, AreYouSureModal, InfoModal ],
