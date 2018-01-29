@@ -86,7 +86,7 @@ export class SourceListComponent {
         this.ScolWidths = [120, 120, 120, 160, 160, 120, 120, 120];
         this.Scolumns = [
             { data: 'facilityName', validator: this.reqValidator}, 
-            { data: 'facilityCode', validator: this.facCodeValidator },
+            { data: 'facilityCode', validator: this.reqValidator },
             { data: 'name'}, 
             { data: 'sourceTypeID', type: 'autocomplete', source: this.sourceTypeNameArray, strict: true, validator: this.ddValidator}, 
             { data: 'catagoryTypeID', type: 'autocomplete', source: this.categoryTypeNameArray, strict: true, validator: this.ddValidator}, 
@@ -252,26 +252,7 @@ export class SourceListComponent {
             callback(false);        
         else callback(true);
     }    
-    // validator on facility code starting with 'FC'
-    public facCodeValidator(value, callback) {
-        let dataAtRow = this['instance'].getDataAtRow(this['row']); // get this row's data
-        let otherDataInRow = false; //flag for if other data exist at this row
-        dataAtRow.forEach((d, index) => {
-            //need the col too because right after removing req value, it's still in the .getDataAtRow..
-            if (d !== null && d !== "" && index !== this['col'])
-                otherDataInRow = true;
-        });
-        if ((value == "" || value == null) && otherDataInRow) {
-            callback(false); //bad
-            alert("Facility Code is required.");
-        } else if (!/^FC/.test(value) && otherDataInRow) {
-            setTimeout(()=> { this['instance'].deselectCell(); }, 100);
-            callback(false); //bad            
-            alert("Facility Code must start with 'FC'.");
-        } else {
-            callback(true); //good
-        }
-    }
+    
     // Done Validators for bulk source table //////////////////////////////////////////////////////////  
     
     // post sources batch  (NOT WORKING YET)

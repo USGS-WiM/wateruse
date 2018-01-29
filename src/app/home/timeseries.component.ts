@@ -61,7 +61,7 @@ export class TimeseriesComponent {
         this.colHeaders = ['Facility Code *', 'Date *', 'Value *'];
         this.colWidths = [120, 120, 120];
         this.columns = [
-            { data: 'FacilityCode', validator: this.facCodeValidator },
+            { data: 'FacilityCode', validator: this.reqValidator },
             { data: 'Date', type: 'date', dateFormat: 'MM/DD/YYYY', correctFormat: true, validator: this.reqValidator },
             { data: 'Value', type: 'numeric', format: '0,0.00[0000]', validator: this.numberValidator}, 
         ];//stretchH: 'all',*/
@@ -157,25 +157,7 @@ export class TimeseriesComponent {
             callback(true);
         }
     }
-    public facCodeValidator(value, callback) {
-        let dataAtRow = this['instance'].getDataAtRow(this['row']); // get this row's data
-        let otherDataInRow = false; //flag for if other data exist at this row
-        dataAtRow.forEach((d, index) => {
-            //need the col too because right after removing req value, it's still in the .getDataAtRow..
-            if (d !== null && d !== "" && index !== this['col'])
-                otherDataInRow = true;
-        });
-        if ((value == "" || value == null) && otherDataInRow) {
-            callback(false); //bad
-            alert("Facility Code is required.");
-        } else if (!/^FC/.test(value) && otherDataInRow) {
-            setTimeout(()=> { this['instance'].deselectCell(); }, 100);
-            callback(false); //bad            
-            alert("Facility Code must start with 'FC'.");
-        } else {
-            callback(true); //good
-        }      
-    }    
+    
     // validator for required 
     public reqValidator(value, callback){
         let dataAtRow = this['instance'].getDataAtRow(this['row']); // get this row's data
