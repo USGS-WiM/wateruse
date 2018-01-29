@@ -3,3 +3,7 @@ label.req:after {
     content: '*';
     color: #de5030;
 }
+.sourceContainer {
+    max-height: 750px;
+    overflow: auto;
+}
