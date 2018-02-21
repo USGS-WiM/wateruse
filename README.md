@@ -1,17 +1,37 @@
-# Wateruse
+![WiM](wimlogo.png)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.2.0.
+# Wateruse
 
 This is a login based client application. Authenticated users can create/edit/delete Sources, bulk upload Sources, bulk upload Timeseries data, and admin can CRUD lookups and regions.
 
-## Development server
-Clone repo and run `npm install`.
+### Prerequisites
+This project has dependencies that require [Node 6.9.0] (https://nodejs.org/en/) or higher, which includes NPM 3 or higher, and Angular CLI.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+```
+npm install -g @angular/cli
+```
+## Getting Started
 
-## Build
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+### Installing
+
+* Clone the repo. 
+* Run `npm install`. 
+
+## Building and testing
+
+Run `ng serve` for a dev server. 
+Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
+## Deployment
+
+Run `ng build -prod` to build a deployed project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+
+## Built With
+
+* [Angular](https://angular.io/) - The main web framework used
+* [NPM](https://www.npmjs.com/) - Dependency Management
 
 ## Contributing
 
@@ -29,7 +49,8 @@ To push tags to remote origin: `git push origin --tags`
 
 ## Authors
 
-* **[Jeremy Newson](https://www.usgs.gov/staff-profiles/jeremy-k-newson)**  - *Lead Developer* - [USGS Web Informatics & Mapping](https://wim.usgs.gov/)
+* **[Tonia Roddick](https://www.usgs.gov/staff-profiles/tonia-m-roddick)**  - *Lead Developer* - [USGS Web Informatics & Mapping](https://wim.usgs.gov/)
+* **[Jeremy Newson](https://www.usgs.gov/staff-profiles/jeremy-k-newson)**  - *Developer* - [USGS Web Informatics & Mapping](https://wim.usgs.gov/)
 
 See also the list of [contributors](../../graphs/contributors) who participated in this project.
 
