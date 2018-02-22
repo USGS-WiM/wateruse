@@ -16,7 +16,7 @@
       ]
     },
 
-    "homepageURL": "test.streamstats.usgs.gov/wu",
+    "homepageURL": "http://test.streamstats.usgs.gov.s3-website-us-east-1.amazonaws.com/wu/login",
     "downloadURL": "https://github.com/USGS-WiM/wateruse/archive/master.zip",
     "disclaimerURL": "https://github.com/USGS-WiM/wateruse/blob/master/DISCLAIMER.md",
     "repositoryUrl": "https://github.com/USGS-WiM/wateruse",
