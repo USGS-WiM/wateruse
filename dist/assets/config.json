@@ -1,0 +1,11 @@
+{
+    "baseUrl": "https://test.streamstats.usgs.gov/wateruseservices/",
+    "loginURL": "login",
+    "regionsURL": "Regions",
+    "sourcesURL": "Sources",
+    "sourceTypeURL": "SourceTypes",
+    "categoryTypeURL": "Categories",
+    "unitTypesURL": "Units",
+    "statusTypesURL": "Status",
+    "rolesURL": "Roles"
+}

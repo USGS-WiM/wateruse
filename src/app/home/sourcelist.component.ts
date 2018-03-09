@@ -269,7 +269,7 @@ export class SourceListComponent {
                     } else {
                         //add the srid, TODO swap dropdown name for id
                         pastedSources[i]['location'].srid = 4269;
-                        pastedSources[i].catagoryTypeID = pastedSources[i].catagoryTypeID.toString() !== "" ? this.categoryTypeList.filter(ct => {return ct.name == pastedSources[i].catagoryTypeID.toString();})[0].id: undefined;
+                        pastedSources[i].catagoryTypeID = pastedSources[i].catagoryTypeID ? this.categoryTypeList.filter(ct => {return ct.name == pastedSources[i].catagoryTypeID.toString();})[0].id: undefined;
                         pastedSources[i].sourceTypeID = this.sourceTypeList.filter(ct => {return ct.name == pastedSources[i].sourceTypeID.toString();})[0].id;
                     }
                 }
