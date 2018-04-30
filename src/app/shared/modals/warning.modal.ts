@@ -1,47 +1,48 @@
 // ------------------------------------------------------------------------------
-// ----- info.modal.ts ----------------------------------------------------
+// ----- warning.modal.ts ----------------------------------------------------
 // ------------------------------------------------------------------------------
 
 // copyright:   2017 WiM - USGS
 // authors:  Tonia Roddick - USGS Wisconsin Internet Mapping
-// purpose: modal used to provide information through a provided message
+// purpose: modal used to make sure they want to delete something
 
 import { Component, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 // import { DialogService } from "app/shared/services/dialog.service";
 
 @Component({
-  selector: 'infoModal',
+  selector: 'warningModal',
   template: `  
-    <ng-template #info  id="infoModal" let-c="close" let-d="dismiss">  
+    <ng-template #warning  id="warnModal" let-c="close" let-d="dismiss">  
         <div class="modal-header">
-            <h4 class="modal-title">Info</h4>            
+            <h4 class="modal-title">WARNING</h4>            
         </div>
         <div class="modal-body">
-            <p>{{modalMessage}}</p>
+            <p>{{ModalMessage}}</p>
         </div>
         <div class="modal-footer">
-            <button type="button" class="sigl-btn btn-orange" (click)="c('Cancel')">Cancel</button>
+            <button type="button" (click)="c('Close')" class="btn-black">Close</button>
         </div>
     </ng-template>
     `
 })
 
-export class InfoModal {    
-    @ViewChild('info') public infoModal;    
+export class WarningModal {    
+    @ViewChild('warning') public warningModal;    
     @Output() modalResponseEvent = new EventEmitter<boolean>(); // when they hit save, emit to projectdata.component
-    public modalMessage: string;
+
     private modalElement: any;
     public CloseResult:any;
+    public ModalMessage: string;
 
     constructor(private _modalService: NgbModal){ }
     
     ngOnInit() {        
-        this.modalElement = this.infoModal;
+        this.modalElement = this.warningModal;
     }
      
-    public showInfoModal(mes: string): void {
-        this.modalMessage = mes;
+    public showWarnModal(m: string): void {
+        this.ModalMessage = m;
         this._modalService.open(this.modalElement).result.then((result) =>{
             // this is the solution for the first modal losing scrollability
             if (document.querySelector('body > .modal')) {

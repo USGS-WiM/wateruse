@@ -42,6 +42,15 @@
                     <option *ngFor="let ct of categoryTypeList | sort:'name'" [ngValue]="ct.id">{{ct.name}}</option>
                 </select>
             </div>
+
+            <!-- Use Type -->
+            <div class="form-group">
+                <label for="useTypeID">Use Type:</label>
+                <select id="useTypeID" formControlName="useTypeID" [(ngModel)]="modalSource.useTypeID">
+                    <option value=""></option>
+                    <option *ngFor="let ut of useTypeList | sort:'name'" [ngValue]="ut.id">{{ut.name}}</option>
+                </select>
+            </div>
         
             <!-- Station ID -->
             <div class="form-group">

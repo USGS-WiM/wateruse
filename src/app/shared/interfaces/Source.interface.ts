@@ -16,6 +16,7 @@ export interface ISource {
     stationID?: string;
     catagoryTypeID?: number;
     sourceTypeID?: number;
+    useTypeID?: number;
     regionID: number;    
     location?: ILocation;
 }

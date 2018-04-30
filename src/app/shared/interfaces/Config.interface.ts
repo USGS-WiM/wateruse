@@ -13,6 +13,7 @@ export interface IConfig {
     sourcesURL:  string;
     sourceTypeURL:  string;
     categoryTypeURL:  string;
+    useTypeURL: string;
     unitTypesURL:  string;
     statusTypesURL:  string;
     rolesURL:  string;

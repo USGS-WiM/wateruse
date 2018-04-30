@@ -13,12 +13,14 @@ import { AuthGuard } from "app/shared/guards/auth.guard";
 import { AllRegionsResolve } from "app/settings/resolves/allregions.resolve";
 import { AllSourceTypesResolve } from "app/settings/resolves/allsourceTypes.resolve";
 import { AllCategoryTypesResolve } from "app/settings/resolves/allcategoryTypes.resolve";
+import { AllUseTypesResolve } from "app/settings/resolves/alluseTypes.resolve";
 import { AllUnitTypesResolve } from "app/settings/resolves/allunitTypes.resolve";
 import { AllStatusTypesResolve } from "app/settings/resolves/allStatusTypes.resolve";
 import { AllRolesResolve } from "app/settings/resolves/allroles.resolve";
 import { LookupsComponent } from "app/settings/lookups/lookups.component";
 import { RegionComponent } from "app/settings/regions/regions.component";
 import { CategoriesComponent } from "app/settings/lookups/lookupParts/category/lookups-categories.component";
+import { UseTypesComponent } from "app/settings/lookups/lookupParts/use/lookups-usetypes.component";
 import { SourcesComponent } from "app/settings/lookups/lookupParts/sources/lookups-sourcetypes.component";
 import { StatusesComponent } from "app/settings/lookups/lookupParts/statuses/lookups-statuses.component";
 import { UnitTypesComponent } from "app/settings/lookups/lookupParts/units/lookups-units.component";
@@ -42,6 +44,7 @@ const settingsRoutes: Routes = [
 		component: LookupsComponent,
 		/*resolve: {
 			//allCategoryTypes: AllCategoryTypesResolve,
+			//allUseTypes: AllUseTypesResolve,
 			//allRoles: AllRolesResolve,
 			//allSourceTypes: AllSourceTypesResolve,
 			allStatusTypes: AllStatusTypesResolve,
@@ -55,7 +58,7 @@ const settingsRoutes: Routes = [
 				resolve: {
 					allCategoryTypes: AllCategoryTypesResolve
 				}		
-			},
+			},	
 			{
 				path: 'roles',
 				component: RolesComponent,
@@ -93,6 +96,7 @@ export class SettingsRoutingModule { }
 				resolve: {
 					allSourceTypes: AllSourceTypesResolve,
 					allCategoryTypes: AllCategoryTypesResolve,
+					allUseTypes: AllUseTypesResolve,
 					allUnitTypes: AllUnitTypesResolve,
 					allStatusTypes: AllStatusTypesResolve,
 					allRoles: AllRolesResolve					

@@ -5,6 +5,7 @@
     "sourcesURL": "Sources",
     "sourceTypeURL": "SourceTypes",
     "categoryTypeURL": "Categories",
+    "useTypeURL": "UseTypes",
     "unitTypesURL": "Units",
     "statusTypesURL": "Status",
     "rolesURL": "Roles"

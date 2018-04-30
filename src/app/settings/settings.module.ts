@@ -19,6 +19,7 @@ import { SettingsComponent } from "app/settings/settings.component";
 import { LookupsComponent } from "app/settings/lookups/lookups.component";
 import { SettingsRoutingModule } from "app/settings/settings-routing.module";
 import { AllCategoryTypesResolve } from "app/settings/resolves/allcategoryTypes.resolve";
+import { AllUseTypesResolve } from "app/settings/resolves/alluseTypes.resolve";
 import { AllRegionsResolve } from "app/settings/resolves/allregions.resolve";
 import { AllRolesResolve } from "app/settings/resolves/allroles.resolve";
 import { AllSourceTypesResolve } from "app/settings/resolves/allsourceTypes.resolve";
@@ -27,6 +28,7 @@ import { AllUnitTypesResolve } from "app/settings/resolves/allunitTypes.resolve"
 import { SettingsService } from "app/settings/settings.service";
 import { EditRegionModal } from "app/settings/regions/region.modal";
 import { CategoriesComponent } from "app/settings/lookups/lookupParts/category/lookups-categories.component";
+import { UseTypesComponent } from "app/settings/lookups/lookupParts/use/lookups-usetypes.component";
 import { RolesComponent } from "app/settings/lookups/lookupParts/roles/lookups-roles.component";
 import { SourcesComponent } from "app/settings/lookups/lookupParts/sources/lookups-sourcetypes.component";
 import { StatusesComponent } from "app/settings/lookups/lookupParts/statuses/lookups-statuses.component";
@@ -34,9 +36,9 @@ import { UnitTypesComponent } from "app/settings/lookups/lookupParts/units/looku
 
 @NgModule({
     declarations: [SettingsComponent, RegionComponent, LookupsComponent, EditRegionModal, 
-        CategoriesComponent, RolesComponent, SourcesComponent, StatusesComponent, UnitTypesComponent ],
+        CategoriesComponent, UseTypesComponent, RolesComponent, SourcesComponent, StatusesComponent, UnitTypesComponent ],
     imports: [CommonModule, FormsModule, ReactiveFormsModule, SharedModule.forRoot(), SettingsRoutingModule, PipesModule],
     exports: [SettingsComponent],
-    providers: [SettingsService, AllCategoryTypesResolve, AllRegionsResolve, AllRolesResolve, AllSourceTypesResolve, AllStatusTypesResolve, AllUnitTypesResolve]
+    providers: [SettingsService, AllCategoryTypesResolve, AllUseTypesResolve, AllRegionsResolve, AllRolesResolve, AllSourceTypesResolve, AllStatusTypesResolve, AllUnitTypesResolve]
 })
 export class SettingsModule { }

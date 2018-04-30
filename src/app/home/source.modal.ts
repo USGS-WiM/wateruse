@@ -13,6 +13,7 @@ import { HomeService } from "app/home/home.service";
 import { WateruseService } from "app/shared/services/wateruse.service";
 import { ISourceType } from "app/shared/interfaces/SourceType.interface";
 import { ICategoryType } from "app/shared/interfaces/Category.interface";
+import { IUseType } from "app/shared/interfaces/Use.interface"
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToasterService } from "angular2-toaster/angular2-toaster";
 
@@ -30,6 +31,7 @@ export class EditSourceModal {
     public sourceForm: FormGroup; //myform
     public sourceTypeList: Array<ISourceType>;
     public categoryTypeList: Array<ICategoryType>;
+    public useTypeList: Array<IUseType>;
     public CloseResult: any; //why the close the modal (not sure if I need this yet)
     public sourceTips: any; // tooltips
     private modalReference: any;
@@ -43,6 +45,7 @@ export class EditSourceModal {
             'facilityName': new FormControl(null, Validators.required),
             'facilityCode': new FormControl(null, Validators.required),
             'catagoryTypeID': new FormControl(null), 
+            'useTypeID': new FormControl(null),
             'stationID': new FormControl(null),
             'regionID': new FormControl(null, Validators.required),
             location: _fb.group({
@@ -71,6 +74,10 @@ export class EditSourceModal {
         // get the categorytypes
         this._waterService.categorytypes().subscribe((ct: Array<ICategoryType>) => {
             this.categoryTypeList = ct;
+        });
+        // get the usetypes
+        this._waterService.usetypes().subscribe((ut: Array<IUseType>) => {
+            this.useTypeList = ut;
         });
         // set the viewchild modal as the modalelement
         this.modalElement = this.editSourceModal;
@@ -113,7 +120,8 @@ export class EditSourceModal {
         this.sourceForm.controls['sourceTypeID'].setValue(this.modalSource.id ? this.modalSource.sourceTypeID : null);
         this.sourceForm.controls['facilityName'].setValue(this.modalSource.id ? this.modalSource.facilityName : null);        
         this.sourceForm.controls['facilityCode'].setValue(this.modalSource.id ? this.modalSource.facilityCode : null);
-        this.sourceForm.controls['catagoryTypeID'].setValue(this.modalSource.id ? this.modalSource.catagoryTypeID : null);        
+        this.sourceForm.controls['catagoryTypeID'].setValue(this.modalSource.id ? this.modalSource.catagoryTypeID : null); 
+        this.sourceForm.controls['useTypeID'].setValue(this.modalSource.id ? this.modalSource.useTypeID : null);       
         this.sourceForm.controls['stationID'].setValue(this.modalSource.id ? this.modalSource.stationID : null);
         this.sourceForm.controls['regionID'].setValue(this.regionID);
 
