@@ -127,7 +127,15 @@ export class HomeComponent implements OnInit {
 			}
 		}
 		return "";
-	}
+    }
+    
+    public isIE() {
+        if (window.navigator.userAgent.includes('Trident') || window.navigator.userAgent.includes('IE')) {
+            return true
+        } else {
+            return false
+        }
+    } 
 	
 	public checkCookie() {
 		var user = "You have returned!";
@@ -138,8 +146,8 @@ export class HomeComponent implements OnInit {
         this.cdRef.detectChanges();
     }
 
-    ngAfterViewInit() {		
-        if (!(document.cookie.includes("SSWUcookie"))){
+    ngAfterViewInit() {	
+        if (!(document.cookie.includes("SSWUcookie")) && this.isIE()){
             this.warning.showWarnModal('This web application functions best in Chrome, Firefox, or Safari. Internet Explorer works but with slower performance.');
             this.checkCookie();
         }
