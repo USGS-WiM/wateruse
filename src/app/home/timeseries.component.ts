@@ -22,7 +22,7 @@ import { InfoModal } from "app/shared/modals/info.modal";
                 Copy (ctrl+c) time series data from your spreadsheet and paste (ctrl+v) into the table below.<br/>
                 <b>Required</b> fields are denoted with a *.<br/>
                 All <b>Dates</b> will be saved as the first of the month (ex: 'MM/01/YYYY').<br/> 
-                <b>Facility Codes</b> must start with 'FC'. The table is sortable by clicking on the header column name.
+                The table is sortable by clicking on the header column name.
             </p>
             <p>
                 <button [disabled]="isInvalidTable()" type="button" (click)="submitTable()" class="btn-blue">Upload</button>

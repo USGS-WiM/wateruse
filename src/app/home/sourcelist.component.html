@@ -42,6 +42,7 @@
                     <th>Facility Code</th>
                     <th>Source Name</th>
                     <th>Category Type ID</th>
+                    <th>Use Type ID</th>
                     <th>Source TypeID</th>
                     <th>Station ID</th>
                 </tr>
@@ -58,6 +59,9 @@
                     <td>{{s.name || "---"}}</td>
                     <td>
                         <span *ngFor="let ct of categoryTypeList | filterbyid: {id : s.catagoryTypeID}">{{ct.name || "---"}}</span>
+                    </td>
+                    <td>
+                        <span *ngFor="let ut of useTypeList | filterbyid: {id : s.useTypeID}">{{ut.name || "---"}}</span>
                     </td>
                     <td>
                         <span *ngFor="let st of sourceTypeList | filterbyid: {id : s.sourceTypeID}">{{st.name || "---"}}</span>
@@ -81,7 +85,6 @@
         Copy (ctrl+c) source data from your spreadsheet and paste (ctrl+v) into the table below.
         <br/>
         <b>Required</b> fields are denoted with a *.
-        <b>Facility Codes</b> must start with 'FC'.
         <br/> The table is sortable by clicking on the header column name.
     </p>
 

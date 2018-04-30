@@ -16,6 +16,7 @@ import 'rxjs/add/observable/throw';
 import { IRegion } from "app/shared/interfaces/Region.interface";
 import { ISourceType } from "app/shared/interfaces/SourceType.interface";
 import { ICategoryType } from "app/shared/interfaces/Category.interface";
+import { IUseType } from "app/shared/interfaces/Use.interface";
 import { IUnitType } from "app/shared/interfaces/UnitType.interface";
 import { IStatusType } from "app/shared/interfaces/StatusType.interface";
 import { IRoles } from "app/shared/interfaces/Roles.interface";
@@ -34,6 +35,7 @@ export class SettingsService {
     private _regionSubject: BehaviorSubject<Array<IRegion>> = <BehaviorSubject<IRegion[]>>new BehaviorSubject([]);
     private _sourceTypesSubject: BehaviorSubject<Array<ISourceType>> = <BehaviorSubject<ISourceType[]>>new BehaviorSubject([]);
     private _categoryTypesSubject: BehaviorSubject<Array<ICategoryType>> = <BehaviorSubject<ICategoryType[]>>new BehaviorSubject([]);
+    private _useTypesSubject: BehaviorSubject<Array<IUseType>> = <BehaviorSubject<IUseType[]>>new BehaviorSubject([]);
     private _unitTypesSubject: BehaviorSubject<Array<IUnitType>> = <BehaviorSubject<IUnitType[]>>new BehaviorSubject([]);
     private _statusTypesSubject: BehaviorSubject<Array<IStatusType>> = <BehaviorSubject<IStatusType[]>>new BehaviorSubject([]);
     private _rolesSubject: BehaviorSubject<Array<IRoles>> = <BehaviorSubject<IRoles[]>>new BehaviorSubject([]);
@@ -41,7 +43,8 @@ export class SettingsService {
     // GETTERS /////////////////////////////////////////////
     public regions(): Observable<Array<IRegion>> { return this._regionSubject.asObservable(); }
     public sourcetypes(): Observable<Array<ISourceType>> { return this._sourceTypesSubject.asObservable(); }
-    public categorytypes(): Observable<Array<ICategoryType>> { return this._categoryTypesSubject.asObservable(); }    
+    public categorytypes(): Observable<Array<ICategoryType>> { return this._categoryTypesSubject.asObservable(); }  
+    public usetypes(): Observable<Array<IUseType>> { return this._useTypesSubject.asObservable(); }  
     public unittypes(): Observable<Array<IUnitType>> { return this._unitTypesSubject.asObservable(); }
     public statustypes(): Observable<Array<IStatusType>> { return this._statusTypesSubject.asObservable(); }
     public roles(): Observable<Array<IRoles>> { return this._rolesSubject.asObservable(); }
@@ -93,6 +96,9 @@ export class SettingsService {
     }
     public setCategories(c: Array<ICategoryType>){
         this._categoryTypesSubject.next(c);
+    }
+    public setUseTypes(u: Array<IUseType>){
+        this._useTypesSubject.next(u);
     }
     public setSourceTypes(s: Array<ISourceType>){
         this._sourceTypesSubject.next(s);

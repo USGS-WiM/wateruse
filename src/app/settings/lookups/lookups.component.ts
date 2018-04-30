@@ -13,6 +13,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ISource } from "app/shared/interfaces/Source.interface";
 import { ISourceType } from "app/shared/interfaces/SourceType.interface";
 import { ICategoryType } from "app/shared/interfaces/Category.interface";
+import { IUseType } from "app/shared/interfaces/Use.interface";
 import { IUnitType } from "app/shared/interfaces/UnitType.interface";
 import { IStatusType } from "app/shared/interfaces/StatusType.interface";
 import { IRoles } from "app/shared/interfaces/Roles.interface";
@@ -25,7 +26,8 @@ import { IRoles } from "app/shared/interfaces/Roles.interface";
 
 export class LookupsComponent implements OnInit {
     public sourceTypes: Array<ISourceType>;
-	public categoryTypes: Array<ICategoryType>;
+    public categoryTypes: Array<ICategoryType>;
+    public useTypes: Array<IUseType>;
 	public unitTypes: Array<IUnitType>;
     public statusTypes: Array<IStatusType>;
     public roles: Array<IRoles>;
@@ -35,6 +37,9 @@ export class LookupsComponent implements OnInit {
     ngOnInit(){
         this._route.data.subscribe((data: { allCategoryTypes: Array<ICategoryType> }) => {
             this.categoryTypes = data.allCategoryTypes;
+        });
+        this._route.data.subscribe((data: { allUseTypes: Array<IUseType> }) => {
+            this.useTypes = data.allUseTypes;
         });
         this._route.data.subscribe((data: { allRoles: Array<IRoles> }) => {
             this.roles = data.allRoles;
