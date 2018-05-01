@@ -24,11 +24,10 @@ import { numberFormat } from "app/shared/directives/number.directive";
 import { AreYouSureModal } from "app/shared/modals/areYouSure.modal";
 import { InfoModal } from "app/shared/modals/info.modal";
 import { LoadingService } from "app/shared/services/loading.service";
-import { WarningModal } from "app/shared/modals/warning.modal";
 
 @NgModule({
-  declarations: [numberFormat, AreYouSureModal, InfoModal, WarningModal ],
-  exports: [ NgbModule,numberFormat, AreYouSureModal, InfoModal, WarningModal, HotTableModule, ToasterModule ],
+  declarations: [numberFormat, AreYouSureModal, InfoModal ],
+  exports: [ NgbModule,numberFormat, AreYouSureModal, InfoModal, HotTableModule, ToasterModule ],
   imports: [ CommonModule, BrowserAnimationsModule, NgbModule.forRoot(), FormsModule, PipesModule, HotTableModule, ToasterModule ]
 })
 

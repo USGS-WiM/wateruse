@@ -13,7 +13,6 @@ import { IRegion } from "app/shared/interfaces/Region.interface";
 import { ActivatedRoute } from "@angular/router";
 import { ISource } from "app/shared/interfaces/Source.interface";
 import { AreYouSureModal } from "app/shared/modals/areYouSure.modal";
-import { WarningModal } from "app/shared/modals/warning.modal";
 import { NgbTabChangeEvent, NgbTabset } from "@ng-bootstrap/ng-bootstrap";
 import { LoadingService } from "app/shared/services/loading.service";
 import { ToasterService } from "angular2-toaster/angular2-toaster";
@@ -25,7 +24,6 @@ import { ToasterService } from "angular2-toaster/angular2-toaster";
 
 export class HomeComponent implements OnInit {    
     @ViewChild('areYouSure') areYouSure: AreYouSureModal;    
-    @ViewChild('warning') warning: WarningModal;
     @ViewChild('mainTabs') outerTabs: NgbTabset;
     @ViewChild('sourceSubTabs') innerTabs: NgbTabset;
     public chosenRegion: any;
@@ -106,50 +104,5 @@ export class HomeComponent implements OnInit {
             this.outerTabs.activeId = this.selectedMainTab;
         }
     }
-
-    public setCookie(cname, cvalue, exdays) {
-		var d = new Date();
-		d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-		var expires = "expires="+d.toUTCString();
-		document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-	}
-	
-	public getCookie(cname) {
-		var name = cname + "=";
-		var ca = document.cookie.split(';');
-		for(var i = 0; i < ca.length; i++) {
-			var c = ca[i];
-			while (c.charAt(0) == ' ') {
-				c = c.substring(1);
-			}
-			if (c.indexOf(name) == 0) {
-				return c.substring(name.length, c.length);
-			}
-		}
-		return "";
-    }
     
-    public isIE() {
-        if (window.navigator.userAgent.includes('Trident') || window.navigator.userAgent.includes('IE')) {
-            return true
-        } else {
-            return false
-        }
-    } 
-	
-	public checkCookie() {
-		var user = "You have returned!";
-		this.setCookie("SSWUcookie", user, 365);
-    }
-    
-    ngAfterViewChecked() {
-        this.cdRef.detectChanges();
-    }
-
-    ngAfterViewInit() {	
-        if (!(document.cookie.includes("SSWUcookie")) && this.isIE()){
-            this.warning.showWarnModal('This web application functions best in Chrome, Firefox, or Safari. Internet Explorer works but with slower performance.');
-            this.checkCookie();
-        }
-    }
 }
