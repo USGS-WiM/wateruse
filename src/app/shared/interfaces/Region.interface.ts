@@ -10,5 +10,6 @@ export interface IRegion {
     id?: number;
     name: string;
     description?: string;
-    shortName?: string;
+    shortName: string;
+    fipsCode: string;
 }

@@ -145,13 +145,10 @@ export class TimeseriesComponent {
             if (d !== null && d !== "" && index !== col)
                 otherDataInRow = true;
         });        
-        if ((isNaN(value)) && value !== null) {
+        //if not a number
+        if (isNaN((value-parseFloat(value)+1)) && otherDataInRow) {
             setTimeout(()=> { this['instance'].deselectCell(); }, 100);    
-            alert("Value must be a number");                             
-            callback(false);
-        } else if (!value && otherDataInRow) {
-            setTimeout(()=> { this['instance'].deselectCell(); }, 100);  
-            alert("Value is required.");        
+            alert("Value must be a number and is required");                             
             callback(false);
         } else {
             callback(true);
