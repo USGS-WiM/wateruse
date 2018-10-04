@@ -41,11 +41,11 @@
                     <th>Facility Name</th>
                     <th>Facility Code</th>
                     <th>Source Name</th>
-                    <th>Category Type ID</th>
-                    <th>Use Type ID</th>
-                    <th>Source TypeID</th>
+                    <th>Category Type</th>
+                    <th>Use Type</th>
+                    <th>Source Type</th>
                     <th>Station ID</th>
-                </tr>
+                </tr> 
             </thead>
             <tbody>
                 <tr *ngFor="let s of sourceList | filter: {filterProperty: Fchoice, filterValue: Fvalue} | sort: 'facilityName'">
