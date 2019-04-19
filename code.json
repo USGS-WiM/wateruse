@@ -4,7 +4,7 @@
     "organization": "U.S. Geological Survey",
     "description": "client application for data management of wateruse data",
     "version": "v0.0.0",
-    "status": "Development",
+    "status": "Beta",
 
     "permissions": {
       "usageType": "openSource",
@@ -16,7 +16,7 @@
       ]
     },
 
-    "homepageURL": "http://test.streamstats.usgs.gov.s3-website-us-east-1.amazonaws.com/wu/login",
+    "homepageURL": "https://streamstats.usgs.gov",
     "downloadURL": "https://github.com/USGS-WiM/wateruse/archive/master.zip",
     "disclaimerURL": "https://github.com/USGS-WiM/wateruse/blob/master/DISCLAIMER.md",
     "repositoryUrl": "https://github.com/USGS-WiM/wateruse",
@@ -25,14 +25,14 @@
     "laborHours": null,
 
     "tags": [
+      "streamstats",
       "wateruse",
       "data management",
       "client"
     ],
 
     "languages": [
-      "typescript",
-      "javascript"
+      "angular"
     ],
 
     "contact": {
@@ -41,7 +41,7 @@
     },
 
     "date": {
-      "metadataLastUpdated": "2018-02-16"
+      "metadataLastUpdated": "2019-04-19"
     }
   }
 ]
