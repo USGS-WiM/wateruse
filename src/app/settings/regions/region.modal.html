@@ -19,8 +19,17 @@
 
             <!-- Short Name -->
             <div class="form-group">
-                <label for="name">Short Name:</label>
-                <input class="form-control" type="text" formControlName="shortName">
+                <label for="shortName">Short Name:</label>
+                <input class="form-control" type="text" formControlName="shortName"required>
+                <div class="input-invalid-warning" *ngIf="!regionForm.get('shortName').valid && regionForm.get('shortName').dirty">Short Name is required</div>
+            </div>
+
+            <!-- FIPS Code -->
+            <div class="form-group required" [ngClass]="{'form-invalid': !regionForm.get('fipsCode').valid && regionForm.get('fipsCode').dirty}">
+                <label class="req" for="fipsCode">FIPS Code:</label>
+                <input class="form-control" type="text" formControlName="fipsCode" required>
+                <a href="https://www.census.gov/geo/reference/ansi_statetables.html">See American National Standards Institute (ANSI) Codes for States</a>
+                <div class="input-invalid-warning" *ngIf="!regionForm.get('fipsCode').valid && regionForm.get('fipsCode').dirty">FIPS code is required</div>
             </div>
             
         </form>

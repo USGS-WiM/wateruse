@@ -1,51 +1,78 @@
 <div *ngIf="!showBatch" class="margin-top--x3">
-    <div class="row bottom-xs">
-        <div *ngIf="sourceList?.length > 0" class="col-xs-2"><label><span>Filter Sources by:</span></label></div>
+    <div style="display:initial;" class="row bottom-xs">
+        <div *ngIf="sourceList?.length > 0" class="col-xs-2">
+            <label>
+                <span>Filter Sources by:</span>
+            </label>
+        </div>
         <div *ngIf="sourceList?.length > 0" class="col-xs-9 around-xs">
             <div class="col-xs-3">
-                <label for="facilitycode" class="rdo">  
-                    <input type="radio" id="facilitycode" value="facilityCode" name="choice" [(ngModel)]="Fchoice"><span>Facility Code</span>
+                <label for="facilitycode" class="rdo">
+                    <input type="radio" id="facilitycode" value="facilityCode" name="choice" [(ngModel)]="Fchoice">
+                    <span>Facility Code</span>
                 </label>
             </div>
             <div class="col-xs-3">
                 <label for="facilityName" class="rdo">
-                    <input type="radio" id="facilityName" value="facilityName" name="choice" [(ngModel)]="Fchoice"><span>Facility Name</span>
+                    <input type="radio" id="facilityName" value="facilityName" name="choice" [(ngModel)]="Fchoice">
+                    <span>Facility Name</span>
                 </label>
             </div>
             <div class="col-xs-3">
                 <label for="name" class="rdo">
-                    <input type="radio" id="name" value="name" name="choice" [(ngModel)]="Fchoice"><span>Source Name</span>
+                    <input type="radio" id="name" value="name" name="choice" [(ngModel)]="Fchoice">
+                    <span>Source Name</span>
                 </label>
             </div>
         </div>
-        <div title="Batch Upload Sources" (click)="showBatchUpload()" class="col-xs-1"><i class="fa fa-upload fa-2x"></i></div>
+        <div title="Batch Upload Sources" (click)="showBatchUpload()" class="col-xs-1">
+            <i class="fa fa-upload fa-2x"></i>
+        </div>
     </div>
-    <div  *ngIf="sourceList?.length > 0" class="col-xs-offset-2 col-xs-6">
+    <div *ngIf="sourceList?.length > 0" class="col-xs-offset-2 col-xs-6">
         <input type="text" name="Fvalue" [disabled]="Fchoice == undefined || Fchoice == ''" [(ngModel)]="Fvalue" />
     </div>
-    
-    <table *ngIf="sourceList?.length > 0" class="table">
-        <thead>
-            <tr>
-                <th class="col-xs-1"></th><th>Facility Name</th><th>Facility Code</th><th>Source Name</th>
-                <th>Category Type ID</th><th>Source TypeID</th><th>Station ID</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let s of sourceList | filter: {filterProperty: Fchoice, filterValue: Fvalue} | sort: 'facilityName'">
-                <td>
-                    <i title="Create New Source" (click)="showSourceModal(null)" style="cursor:pointer" class="fa fa-plus" aria-hidden="true"></i>&nbsp;
-                    <i title="Edit Source" (click)="showSourceModal(s)" style="cursor:pointer" class="fa fa-pencil" aria-hidden="true"></i>&nbsp;
-                    <i title="Delete Source" (click)="deleteSource(s.id)" class="fa fa-times" aria-hidden="true" style="cursor:pointer"></i>
-                </td>
-                <td>{{s.facilityName || "---"}}</td><td>{{s.facilityCode || "---"}}</td><td>{{s.name || "---"}}</td>
-                <td><span *ngFor="let ct of categoryTypeList | filterbyid: {id : s.catagoryTypeID}">{{ct.name || "---"}}</span></td>
-                <td><span *ngFor="let st of sourceTypeList | filterbyid: {id : s.sourceTypeID}">{{st.name || "---"}}</span></td>
-                <td>{{s.stationID || "---"}}</td>
-            </tr>
-        </tbody>
-    </table>
+    <br clear="all" />
+    <div class="sourceContainer">
+        <table *ngIf="sourceList?.length > 0" class="table">
+            <thead>
+                <tr>
+                    <th class="col-xs-1"></th>
+                    <th>Facility Name</th>
+                    <th>Facility Code</th>
+                    <th>Source Name</th>
+                    <th>Category Type</th>
+                    <th>Use Type</th>
+                    <th>Source Type</th>
+                    <th>Station ID</th>
+                </tr> 
+            </thead>
+            <tbody>
+                <tr *ngFor="let s of sourceList | filter: {filterProperty: Fchoice, filterValue: Fvalue} | sort: 'facilityName'">
+                    <td>
+                        <i title="Create New Source" (click)="showSourceModal(null)" style="cursor:pointer" class="fa fa-plus" aria-hidden="true"></i>&nbsp;
+                        <i title="Edit Source" (click)="showSourceModal(s)" style="cursor:pointer" class="fa fa-pencil" aria-hidden="true"></i>&nbsp;
+                        <i title="Delete Source" (click)="deleteSource(s.id)" class="fa fa-times" aria-hidden="true" style="cursor:pointer"></i>
+                    </td>
+                    <td>{{s.facilityName || "---"}}</td>
+                    <td>{{s.facilityCode || "---"}}</td>
+                    <td>{{s.name || "---"}}</td>
+                    <td>
+                        <span *ngFor="let ct of categoryTypeList | filterbyid: {id : s.catagoryTypeID}">{{ct.name || "---"}}</span>
+                    </td>
+                    <td>
+                        <span *ngFor="let ut of useTypeList | filterbyid: {id : s.useTypeID}">{{ut.name || "---"}}</span>
+                    </td>
+                    <td>
+                        <span *ngFor="let st of sourceTypeList | filterbyid: {id : s.sourceTypeID}">{{st.name || "---"}}</span>
+                    </td>
+                    <td>{{s.stationID || "---"}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+
 <!-- end ngIf=SourceList?Length *ngIf="aSource"-->
 
 <div *ngIf="sourceList?.length == 0">
@@ -54,15 +81,16 @@
 
 <div *ngIf="showBatch">
     <h3>Bulk Source Upload</h3>
-        <p>
-            Copy (ctrl+c) source data from your spreadsheet and paste (ctrl+v) into the table below.<br/>
-            <b>Required</b> fields are denoted with a *. <b>Facility Codes</b> must start with 'FC'.<br/>
-            The table is sortable by clicking on the header column name.
-        </p>
-        
-        <hotTable #hotTable [data]="sourcedata" [colHeaders]="ScolHeaders" [columns]="Scolumns" [options]="StableOptions" [colWidths]="ScolWidths"></hotTable>
-       
-    <div>        
+    <p>
+        Copy (ctrl+c) source data from your spreadsheet and paste (ctrl+v) into the table below.
+        <br/>
+        <b>Required</b> fields are denoted with a *.
+        <br/> The table is sortable by clicking on the header column name.
+    </p>
+
+    <hotTable #hotTable [data]="sourcedata" [colHeaders]="ScolHeaders" [columns]="Scolumns" [options]="StableOptions" [colWidths]="ScolWidths"></hotTable>
+
+    <div>
         <button [disabled]="iSinvalidTable()" type="button" (click)="submitTable()" class="btn-blue">Upload</button>
         <button type="button" (click)="dismiss('clickedCancel')" class="btn-black">Cancel / Back to Sources List</button>
     </div>

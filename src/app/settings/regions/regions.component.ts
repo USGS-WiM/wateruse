@@ -47,7 +47,9 @@ export class RegionComponent implements OnInit {
             //creating new one
             let region: IRegion = {
                 name: "",
-                description: ""
+                description: "",
+                shortName:"",
+                fipsCode:""
             }
             this._settingsService.setModalRegion(region);
         }

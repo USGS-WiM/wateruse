@@ -20,6 +20,7 @@ import { AreYouSureModal } from "app/shared/modals/areYouSure.modal";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ISourceType } from "app/shared/interfaces/SourceType.interface";
 import { ICategoryType } from "app/shared/interfaces/Category.interface";
+import { IUseType } from "app/shared/interfaces/Use.interface";
 import { LoadingService } from "app/shared/services/loading.service";
 
 @Component({
@@ -45,6 +46,7 @@ export class SourceListComponent {
     private SourceInvalids: Array<any>;
     public sourceTypeList: Array<ISourceType>; public sourceTypeNameArray: Array<string>;
     public categoryTypeList: Array<ICategoryType>; public categoryTypeNameArray: Array<string>;
+    public useTypeList: Array<IUseType>; public useTypeNameArray: Array<string>;
     private deleteID: number; // store source id they want to delete
     public Fchoice: string;
     public showBatch: boolean; // flag to swap list with upload
@@ -80,16 +82,25 @@ export class SourceListComponent {
                 this.categoryTypeNameArray.push(ctype.name);
             });
         });
+        // get the usetypes
+        this._waterService.usetypes().subscribe((ut: Array<IUseType>) => {
+            this.useTypeList = ut;
+            this.useTypeNameArray = [];
+            ut.forEach((utype: ISourceType) =>{
+                this.useTypeNameArray.push(utype.name);
+            });
+        });
         this.SourceInvalids = [];
         this.sourcedata = [];
-        this.ScolHeaders = ['Facility Name *', 'Facility Code *', 'Source Name', 'Source Type *', 'Category Type','Station ID', 'Latitude *', 'Longitude *'];
+        this.ScolHeaders = ['Facility Name *', 'Facility Code *', 'Source Name', 'Source Type *', 'Category Type', 'Use Type', 'Station ID', 'Latitude *', 'Longitude *'];
         this.ScolWidths = [120, 120, 120, 160, 160, 120, 120, 120];
         this.Scolumns = [
             { data: 'facilityName', validator: this.reqValidator}, 
-            { data: 'facilityCode', validator: this.facCodeValidator },
+            { data: 'facilityCode', validator: this.reqValidator },
             { data: 'name'}, 
             { data: 'sourceTypeID', type: 'autocomplete', source: this.sourceTypeNameArray, strict: true, validator: this.ddValidator}, 
             { data: 'catagoryTypeID', type: 'autocomplete', source: this.categoryTypeNameArray, strict: true, validator: this.ddValidator}, 
+            { data: 'useTypeID', type: 'autocomplete', source: this.useTypeNameArray, strict: true, validator: this.ddValidator},
             { data: 'stationID' },
             { data: 'location.y', validator: this.latValidator},
             { data: 'location.x', validator: this.longValidator}
@@ -252,26 +263,7 @@ export class SourceListComponent {
             callback(false);        
         else callback(true);
     }    
-    // validator on facility code starting with 'FC'
-    public facCodeValidator(value, callback) {
-        let dataAtRow = this['instance'].getDataAtRow(this['row']); // get this row's data
-        let otherDataInRow = false; //flag for if other data exist at this row
-        dataAtRow.forEach((d, index) => {
-            //need the col too because right after removing req value, it's still in the .getDataAtRow..
-            if (d !== null && d !== "" && index !== this['col'])
-                otherDataInRow = true;
-        });
-        if ((value == "" || value == null) && otherDataInRow) {
-            callback(false); //bad
-            alert("Facility Code is required.");
-        } else if (!/^FC/.test(value) && otherDataInRow) {
-            setTimeout(()=> { this['instance'].deselectCell(); }, 100);
-            callback(false); //bad            
-            alert("Facility Code must start with 'FC'.");
-        } else {
-            callback(true); //good
-        }
-    }
+    
     // Done Validators for bulk source table //////////////////////////////////////////////////////////  
     
     // post sources batch  (NOT WORKING YET)
@@ -288,8 +280,9 @@ export class SourceListComponent {
                     } else {
                         //add the srid, TODO swap dropdown name for id
                         pastedSources[i]['location'].srid = 4269;
-                        pastedSources[i].catagoryTypeID = pastedSources[i].catagoryTypeID.toString() !== "" ? this.categoryTypeList.filter(ct => {return ct.name == pastedSources[i].catagoryTypeID.toString();})[0].id: undefined;
+                        pastedSources[i].catagoryTypeID = pastedSources[i].catagoryTypeID ? this.categoryTypeList.filter(ct => {return ct.name == pastedSources[i].catagoryTypeID.toString();})[0].id: undefined;
                         pastedSources[i].sourceTypeID = this.sourceTypeList.filter(ct => {return ct.name == pastedSources[i].sourceTypeID.toString();})[0].id;
+                        pastedSources[i].useTypeID = pastedSources[i].useTypeID ? this.useTypeList.filter(ut => {return ut.name == pastedSources[i].useTypeID.toString();})[0].id: undefined;
                     }
                 }
                 let test = 'wht';

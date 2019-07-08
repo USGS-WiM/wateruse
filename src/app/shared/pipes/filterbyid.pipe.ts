@@ -10,9 +10,10 @@ export class IdFilterPipe implements PipeTransform {
         if (filter.id !== undefined) {
             if (filter && Array.isArray(items)) {
                 let filterKeys = Object.keys(filter);
-                return items.filter(item =>
-                    filterKeys.reduce((memo, keyName) =>
-                        (memo && new RegExp(filter[keyName], 'gi').test(item[keyName])) || filter[keyName] === "", true));
+                let filt = items.filter(function(x) {
+                    return x.id == filter.id
+                })
+                return filt
             } else {
                 return items;
             }

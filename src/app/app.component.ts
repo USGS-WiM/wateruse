@@ -32,10 +32,10 @@ export class AppComponent {
 		});
 		this._loadingService.getLoading.subscribe((load:boolean) =>{
 			this.showPageLoading = load;
-		})
+		})	
 	}
 
-	public loggedIn() {
+	public loggedIn() { 
 		return localStorage.getItem('credentials') !== null ? true : false;
 
 	}

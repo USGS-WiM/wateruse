@@ -22,7 +22,7 @@ import { InfoModal } from "app/shared/modals/info.modal";
                 Copy (ctrl+c) time series data from your spreadsheet and paste (ctrl+v) into the table below.<br/>
                 <b>Required</b> fields are denoted with a *.<br/>
                 All <b>Dates</b> will be saved as the first of the month (ex: 'MM/01/YYYY').<br/> 
-                <b>Facility Codes</b> must start with 'FC'. The table is sortable by clicking on the header column name.
+                The table is sortable by clicking on the header column name.
             </p>
             <p>
                 <button [disabled]="isInvalidTable()" type="button" (click)="submitTable()" class="btn-blue">Upload</button>
@@ -61,7 +61,7 @@ export class TimeseriesComponent {
         this.colHeaders = ['Facility Code *', 'Date *', 'Value *'];
         this.colWidths = [120, 120, 120];
         this.columns = [
-            { data: 'FacilityCode', validator: this.facCodeValidator },
+            { data: 'FacilityCode', validator: this.reqValidator },
             { data: 'Date', type: 'date', dateFormat: 'MM/DD/YYYY', correctFormat: true, validator: this.reqValidator },
             { data: 'Value', type: 'numeric', format: '0,0.00[0000]', validator: this.numberValidator}, 
         ];//stretchH: 'all',*/
@@ -145,37 +145,16 @@ export class TimeseriesComponent {
             if (d !== null && d !== "" && index !== col)
                 otherDataInRow = true;
         });        
-        if ((isNaN(value)) && value !== null) {
+        //if not a number
+        if (isNaN((value-parseFloat(value)+1)) && otherDataInRow) {
             setTimeout(()=> { this['instance'].deselectCell(); }, 100);    
-            alert("Value must be a number");                             
-            callback(false);
-        } else if (!value && otherDataInRow) {
-            setTimeout(()=> { this['instance'].deselectCell(); }, 100);  
-            alert("Value is required.");        
+            alert("Value must be a number and is required");                             
             callback(false);
         } else {
             callback(true);
         }
     }
-    public facCodeValidator(value, callback) {
-        let dataAtRow = this['instance'].getDataAtRow(this['row']); // get this row's data
-        let otherDataInRow = false; //flag for if other data exist at this row
-        dataAtRow.forEach((d, index) => {
-            //need the col too because right after removing req value, it's still in the .getDataAtRow..
-            if (d !== null && d !== "" && index !== this['col'])
-                otherDataInRow = true;
-        });
-        if ((value == "" || value == null) && otherDataInRow) {
-            callback(false); //bad
-            alert("Facility Code is required.");
-        } else if (!/^FC/.test(value) && otherDataInRow) {
-            setTimeout(()=> { this['instance'].deselectCell(); }, 100);
-            callback(false); //bad            
-            alert("Facility Code must start with 'FC'.");
-        } else {
-            callback(true); //good
-        }      
-    }    
+    
     // validator for required 
     public reqValidator(value, callback){
         let dataAtRow = this['instance'].getDataAtRow(this['row']); // get this row's data

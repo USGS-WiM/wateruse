@@ -11,11 +11,12 @@ import { CommonModule } from '@angular/common';
 //import { ArraySortPipe } from "app/shared/pipes/order.pipe";
 import { FilterPipe } from "app/shared/pipes/filter.pipe";
 import { IdFilterPipe } from "app/shared/pipes/filterbyid.pipe";
+import {ArraySortPipe} from "app/shared/pipes/sort.pipe";
 
 @NgModule({
   imports: [ CommonModule],
-  declarations: [  FilterPipe, IdFilterPipe ],//ArraySortPipe,
-  exports: [ FilterPipe, IdFilterPipe ],//ArraySortPipe
+  declarations: [  FilterPipe, IdFilterPipe,ArraySortPipe  ],//ArraySortPipe,
+  exports: [ FilterPipe, IdFilterPipe,ArraySortPipe ],//ArraySortPipe
   providers: []
 })
 export class PipesModule { }

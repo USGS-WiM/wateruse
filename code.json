@@ -1,0 +1,47 @@
+[
+  {
+    "name": "wateruse",
+    "organization": "U.S. Geological Survey",
+    "description": "client application for data management of wateruse data",
+    "version": "v0.0.0",
+    "status": "Beta",
+
+    "permissions": {
+      "usageType": "openSource",
+      "licenses": [
+        {
+          "name": "Public Domain",
+          "URL": "https://github.com/usgs/wateruse/blob/master/LICENSE.md"
+        }
+      ]
+    },
+
+    "homepageURL": "https://streamstats.usgs.gov",
+    "downloadURL": "https://github.com/USGS-WiM/wateruse/archive/master.zip",
+    "disclaimerURL": "https://github.com/USGS-WiM/wateruse/blob/master/DISCLAIMER.md",
+    "repositoryUrl": "https://github.com/USGS-WiM/wateruse",
+    "vcs": "git",
+
+    "laborHours": null,
+
+    "tags": [
+      "streamstats",
+      "wateruse",
+      "data management",
+      "client"
+    ],
+
+    "languages": [
+      "angular"
+    ],
+
+    "contact": {
+      "name": "Jeremy Newson",
+      "email": "jknewson@usgs.gov"
+    },
+
+    "date": {
+      "metadataLastUpdated": "2019-04-19"
+    }
+  }
+]

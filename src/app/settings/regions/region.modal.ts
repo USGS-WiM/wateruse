@@ -31,8 +31,9 @@ export class EditRegionModal {
         this.regionForm = _fb.group({
             'id': new FormControl(null),
             'name': new FormControl(null, Validators.required),
-            'description': new FormControl(null, Validators.required),
-            'shortName': new FormControl(null)
+            'description': new FormControl(null),
+            'shortName': new FormControl(null, Validators.required),
+            'fipsCode': new FormControl(null, Validators.required)
         });
     }
 
@@ -57,7 +58,7 @@ export class EditRegionModal {
         this.regionForm.controls['name'].setValue(this.modalRegion.id ? this.modalRegion.name : null);
         this.regionForm.controls['description'].setValue(this.modalRegion.id ? this.modalRegion.description : null);
         this.regionForm.controls['shortName'].setValue(this.modalRegion.id ? this.modalRegion.shortName : null);    
-        
+        this.regionForm.controls['fipsCode'].setValue(this.modalRegion.id ? this.modalRegion.fipsCode : null)
         // open the modal now
         this._modalService.open(this.modalElement, {backdrop: 'static', keyboard: false, size: 'lg'} ).result.then((valid) =>{           
             this.CloseResult = `Closed with: ${valid}`;           

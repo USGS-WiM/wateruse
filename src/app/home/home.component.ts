@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
     public selectedMainTab: string;
     public selectedSubTab: string;
     public nosources: boolean;
-    constructor(private _waterService: WateruseService, private _route: ActivatedRoute, private _loadingService: LoadingService, private _toastService: ToasterService) {
+    constructor(private _waterService: WateruseService, private _route: ActivatedRoute, private _loadingService: LoadingService, private _toastService: ToasterService, private cdRef:ChangeDetectorRef) {
         // get current user from localstorage 
         this.currentUser = localStorage.getItem('loggedInName');
     }
@@ -104,4 +104,5 @@ export class HomeComponent implements OnInit {
             this.outerTabs.activeId = this.selectedMainTab;
         }
     }
+    
 }
